@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinic_administrator_background_system.dao.doctor.DoctorInformationDao">
+    <resultMap id="BaseResultMap"
+               type="sale.ljw.clinic_administrator_background_system.pojo.doctor.Doctor_information">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="doctorPhone" jdbcType="VARCHAR" property="doctorPhone"/>
+        <result column="doctorName" jdbcType="VARCHAR" property="doctorName"/>
+        <result column="doctorPassword" jdbcType="VARCHAR" property="doctorPassword"/>
+        <result column="avatarUrl" jdbcType="VARCHAR" property="avatarUrl"/>
+        <result column="doctorSex" jdbcType="INTEGER" property="doctorSex"/>
+        <result column="doctorBrith" jdbcType="DATE" property="doctorBirth"/>
+        <result column="doctorAddr" jdbcType="VARCHAR" property="doctorAddr"/>
+        <result column="doctorAge" jdbcType="INTEGER" property="doctorAge"/>
+        <association column="did"
+                     property="department"
+                     javaType="sale.ljw.clinic_administrator_background_system.pojo.doctor.Department"
+                     select="sale.ljw.clinic_administrator_background_system.dao.doctor.DepartmentDao.findById"
+        />
+    </resultMap>
+    <select id="findAllDoctor" resultMap="BaseResultMap">
+        SELECT *
+        FROM doctor_Information
+    </select>
+    <select id="findByNameDoctor" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT *
+        FROM doctor_Information
+        WHERE doctorName LIKE #{doctorName}
+    </select>
+    <delete id="removeDoctorById" parameterType="java.lang.String">
+        DELETE
+        FROM doctor_Information
+        WHERE id = #{id}
+    </delete>
+    <delete id="batchRemoveDoctor" parameterType="java.util.List">
+        DELETE
+        FROM doctor_Information
+        WHERE
+        <if test="ids!= null and ids.size() >0">
+            id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+    <insert id="addOneDoctor"
+            parameterType="sale.ljw.clinic_administrator_background_system.pojo.doctor.Doctor_information">
+        INSERT INTO doctor_Information(id, doctorPhone, doctorName, doctorPassword, avatarUrl, salary, doctorAge,
+                                       doctorSex, doctorBrith, doctorAddr, did)
+        VALUES (#{id}, #{doctorPhone}, #{doctorName}, #{doctorPassword},
+                #{avatarUrl}, #{salary}, #{doctorAge}, #{doctorSex}, #{doctorBirth}, #{doctorAddr}, #{department.id})
+    </insert>
+
+    <update id="editDoctor"
+            parameterType="sale.ljw.clinic_administrator_background_system.pojo.doctor.Doctor_information">
+        UPDATE doctor_Information
+        SET doctorPhone=#{doctorPhone},
+            doctorAddr=#{doctorAddr}
+        WHERE id = #{id}
+    </update>
+    <insert id="addListDoctor" parameterType="java.util.List">
+        INSERT INTO
+        doctor_Information(id,doctorPhone,doctorName,doctorPassword,avatarUrl,salary,doctorAge,doctorSex,doctorBrith,doctorAddr,did)
+        <if test="doctorInformationList!= null and doctorInformationList.size() >0">
+            VALUES
+            <foreach collection="doctorInformationList" item="item" index="index" separator=",">
+                (#{item.id}, #{item.doctorPhone}, #{item.doctorName}, #{item.doctorPassword},
+                #{item.avatarUrl},#{item.salary}
+                , #{item.doctorAge} , #{item.doctorSex}, #{item.doctorBirth}, #{item.doctorAddr},#{department.id})
+            </foreach>
+        </if>
+    </insert>
+    <select id="findDoctorByDepartment" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT *
+        FROM doctor_Information
+        WHERE did = #{did}
+    </select>
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT *
+        FROM doctor_Information
+        WHERE id = #{id}
+    </select>
+    <select id="findByNameList" resultMap="BaseResultMap">
+        SELECT *
+        FROM doctor_Information
+        WHERE doctorName LIKE #{name} AND did=#{did}
+    </select>
+</mapper>
