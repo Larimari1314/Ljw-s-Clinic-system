@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinic_administrator_background_system.dao.clinic.AppointmentTimeNumberDao">
+    <resultMap id="BaseResultMap"
+               type="sale.ljw.clinic_administrator_background_system.pojo.clinic.AppointmentTimeNumber">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="timeNumber" jdbcType="VARCHAR" property="timeNumber"/>
+        <association property="doctor" column="did"
+                     javaType="sale.ljw.clinic_administrator_background_system.pojo.doctor.Doctor_information"
+                     select="sale.ljw.clinic_administrator_background_system.dao.doctor.DoctorInformationDao.findById"/>
+    </resultMap>
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM appointmentTimeNumber
+    </select>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT *
+        FROM appointmentTimeNumber
+        WHERE id = #{id}
+    </select>
+    <update id="exitNumber"
+            parameterType="sale.ljw.clinic_administrator_background_system.pojo.clinic.AppointmentTimeNumber">
+        UPDATE appointmentTimeNumber
+        SET timeNumber=#{timeNumber}
+        WHERE id = #{id}
+    </update>
+</mapper>

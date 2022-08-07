@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinic_administrator_background_system.dao.clinic.AdminPermissionDao">
+    <resultMap id="BaseResultMap"
+               type="sale.ljw.clinic_administrator_background_system.pojo.clinic.AdminPermission">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="permission" jdbcType="INTEGER" property="permission"/>
+    </resultMap>
+    <select id="getAccess" resultType="sale.ljw.clinic_administrator_background_system.pojo.clinic.AdminPermission" parameterType="java.lang.String">
+        SELECT *
+        FROM AdminPermission
+        WHERE id = #{id}
+    </select>
+</mapper>

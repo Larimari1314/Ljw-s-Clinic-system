@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinic_administrator_background_system.dao.clinic.DrugInformationDao">
+    <resultMap id="BaseResultMap"
+               type="sale.ljw.clinic_administrator_background_system.pojo.clinic.Drug_information">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="drugName" jdbcType="VARCHAR" property="drugName"/>
+        <result column="effect" jdbcType="VARCHAR" property="effect"/>
+        <result column="originalPrice" jdbcType="DOUBLE" property="originalPrice"/>
+        <result column="drugImgUrl" jdbcType="VARCHAR" property="drugImgUrl"/>
+        <result column="currentPrice" jdbcType="DOUBLE" property="currentPrice"/>
+        <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+        <result column="exhibit" jdbcType="INTEGER" property="exhibit"/>
+    </resultMap>
+    <select id="findAllDrug" resultMap="BaseResultMap">
+        SELECT *
+        FROM drug_information
+    </select>
+    <select id="findByIdDrug" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT *
+        FROM drug_information
+        WHERE id = #{id}
+    </select>
+    <select id="findByNameDrug" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT *
+        FROM drug_information
+        WHERE drugName LIKE #{drugName}
+    </select>
+
+    <insert id="addOneDrug"
+            parameterType="sale.ljw.clinic_administrator_background_system.pojo.clinic.Drug_information">
+        INSERT INTO drug_information(id, drugName, effect, originalPrice, drugImgUrl, currentPrice, quantity, exhibit)
+        VALUES (#{id}, #{drugName}, #{effect}, #{originalPrice},
+                #{drugImgUrl}, #{currentPrice}, #{quantity}, #{exhibit})
+    </insert>
+
+    <update id="editDrug"
+            parameterType="sale.ljw.clinic_administrator_background_system.pojo.clinic.Drug_information">
+        UPDATE drug_information
+        SET drugName=#{drugName},
+            effect=#{effect},
+            drugImgUrl=#{drugImgUrl},
+            currentPrice=#{currentPrice},
+            quantity=#{quantity},
+            exhibit=#{exhibit}
+        WHERE id = #{id}
+    </update>
+    <insert id="addListDrug" parameterType="java.util.List">
+        INSERT INTO
+        drug_information(id, drugName, effect, originalPrice, drugImgUrl, currentPrice, quantity, exhibit)
+        <if test="drug_information!= null and drug_information.size() >0">
+            VALUES
+            <foreach collection="drug_information" item="item" index="index" separator=",">
+                (#{item.id}, #{item.drugName}, #{item.effect}, #{item.originalPrice},
+                #{item.drugImgUrl},#{item.currentPrice}
+                , #{item.quantity} , #{item.exhibit})
+            </foreach>
+        </if>
+    </insert>
+    <update id="exitDrugExhibit"
+            parameterType="sale.ljw.clinic_administrator_background_system.pojo.clinic.Drug_information">
+        UPDATE drug_information
+        SET exhibit=#{exhibit}
+        WHERE id = #{id}
+    </update>
+</mapper>
