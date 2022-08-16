@@ -1,0 +1,57 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /clinic
+spring:
+  profiles:
+    active: test
+  cache:
+    type: redis
+    redis:
+      time-to-live: 20000
+      cache-null-values: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
+      file-size-threshold: 10MB
+  datasource:
+    username: clinicSystem
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 11i8hxm8bN9gKeHAEqQm
+    url: jdbc:mysql://123.57.20.244:3306/clinicSystem?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    #    ip数据库
+#    url: jdbc:mysql://123.57.20.244:3306/neusoftTest?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+  redis:
+    host: localhost
+    jedis:
+      pool:
+        max-idle: 500
+        max-wait: 100
+        max-active: 1000
+        min-idle: 100
+    timeout: 1000
+mybatis-plus:
+  #配置MyBatis映射文件
+  mapper-locations: classpath:/mybatis/mappers/*.xml
+  #配置MyBatis返回类型别名
+  type-aliases-package: sale.ljw.clinicsystem.backend.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    jdbc-type-for-null: 'null'
+    default-statement-timeout: 3000
+#    日志输出
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      update-strategy: ignored
+page helper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

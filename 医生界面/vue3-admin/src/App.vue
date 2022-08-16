@@ -18,12 +18,12 @@
           <el-menu-item index="/home">首页</el-menu-item>
           <el-submenu index="2">
             <template #title>
-              <span>查看数据</span>
+              <span>查看预约</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/introduce"><i class="el-icon-data-line" />系统介绍</el-menu-item>
-              <el-menu-item index="/dashboard"><i class="el-icon-odometer" />Dashboard</el-menu-item>
-              <el-menu-item index="/add"><i class="el-icon-plus" />添加商品</el-menu-item>
+              <el-menu-item index="/introduce"><i class="el-icon-data-line" />全部订单</el-menu-item>
+              <el-menu-item index="/dashboard"><i class="el-icon-odometer" />已完成订单</el-menu-item>
+              <el-menu-item index="/add"><i class="el-icon-plus" />历史记录</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="3">

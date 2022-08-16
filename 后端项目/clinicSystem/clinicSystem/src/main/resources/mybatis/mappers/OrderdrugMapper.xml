@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.order.OrderdrugMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.order.Orderdrug">
+            <result property="orderid" column="orderId" jdbcType="VARCHAR"/>
+            <result property="drugid" column="drugId" jdbcType="VARCHAR"/>
+            <result property="number" column="number" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        orderId,drugId,number
+    </sql>
+</mapper>

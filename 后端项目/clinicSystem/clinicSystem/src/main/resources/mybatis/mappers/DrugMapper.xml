@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.basic.DrugMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.basic.Drug">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="cover" column="cover" jdbcType="VARCHAR"/>
+            <result property="drugname" column="drugName" jdbcType="VARCHAR"/>
+            <result property="specification" column="specification" jdbcType="CHAR"/>
+            <result property="number" column="number" jdbcType="INTEGER"/>
+            <result property="price" column="price" jdbcType="DOUBLE"/>
+            <result property="drugdelete" column="drugDelete" jdbcType="INTEGER"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="enable" column="enable" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,cover,drugName,
+        specification,number,price,
+        drugDelete,version,enable
+    </sql>
+    <select id="findAllByDrug" resultType="java.util.Map">
+        SELECT id,cover,drugName,number,price,general.value specif,version,enable
+        FROM drug
+        INNER JOIN general ON coding=specification
+        WHERE 1=1
+        <if test='drugName != null and drugName != "" '>
+            AND drugName LIKE CONCAT('%',#{drugName},'%')
+        </if>
+        <if test='specification != null and specification != "" '>
+            AND specification = #{specification}
+        </if>
+        AND drugDelete=0
+    </select>
+</mapper>

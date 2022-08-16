@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.order.OrderformMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.order.Orderform">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="operatingtime" column="operatingTime" jdbcType="DATE"/>
+        <result property="state" column="state" jdbcType="CHAR"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+        <result property="orderdelete" column="orderDelete" jdbcType="INTEGER"/>
+        <result property="orderprice" column="orderPrice" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,operatingTime,state,
+        version,orderDelete,orderPrice
+    </sql>
+    <select id="findAllOrderFrom" resultType="map">
+        SELECT reserve.id id, patient.name patientName,doctor.name doctorName,
+        DATE_FORMAT(reserveTime,'%Y-%m-%d %H:%i') reserveTime,general.value orderState,orderPrice,department.name
+        departName,patient.identityNumber
+        FROM reserve
+        INNER JOIN patientInformation patient ON reserve.patientId=patient.id
+        INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
+        INNER JOIN department ON did=department.id
+        INNER JOIN OrderForm ON reserve.id=OrderForm.id
+        INNER JOIN general ON OrderForm.state=general.coding
+        WHERE 1=1
+        <if test='patientName != null and patientName != "" '>
+            AND patient.name LIKE CONCAT('%',#{patientName},'%')
+        </if>
+        <if test='doctorName != null and doctorName != "" '>
+            AND doctor.name LIKE CONCAT('%',#{doctorName},'%')
+        </if>
+        <if test='did != null and did != "" '>
+            AND doctor.did = #{did}
+        </if>
+        <if test='orderStatus != null and orderStatus != "" '>
+            AND OrderForm.state = #{orderStatus}
+        </if>
+        <if test='orderId != null and orderId != "" '>
+            AND OrderForm.id = #{orderId}
+        </if>
+        AND reserve.state=1
+    </select>
+    <select id="findOrderListById" resultType="map">
+        SELECT reserve.id      id,
+               patient.name    patientName,
+               doctor.name     doctorName,
+               DATE_FORMAT(reserveTime,'%Y年%m月%d日 %H:%i') reserveTime,
+               general.value   orderState,
+               department.name departName,
+               patient.identityNumber
+        FROM reserve
+                 INNER JOIN patientInformation patient ON reserve.patientId = patient.id
+                 INNER JOIN doctorInformation doctor ON reserve.doctorId = doctor.id
+                 INNER JOIN department ON did = department.id
+                 INNER JOIN OrderForm ON reserve.id = OrderForm.id
+                 INNER JOIN general ON OrderForm.state = general.coding
+        WHERE reserve.state = 1
+          AND reserve.id = #{id}
+    </select>
+    <select id="findOrderFrom" resultType="java.util.Map">
+        SELECT drug.drugName,
+               general.value,
+               orderDrug.number,
+               drug.price                    drugPrice,
+               drug.price * orderDrug.number totalPrice
+        FROM orderDrug
+                 INNER JOIN drug ON drug.id = orderDrug.drugId
+                 INNER JOIN general ON drug.specification = general.coding
+        WHERE ENABLE = 0
+          AND drugDelete = 0
+          AND orderDrug.orderId = #{id}
+    </select>
+    <select id="getOrderTotalPrice" resultType="java.lang.Double">
+        SELECT SUM(price) price
+        FROM (SELECT orderDrug.number * drug.price price, orderId
+              FROM orderDrug,
+                   drug
+              WHERE drugId = id) PriceNumber
+        WHERE orderId = #{id}
+    </select>
+
+</mapper>

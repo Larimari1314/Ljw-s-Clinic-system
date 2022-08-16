@@ -1,8 +1,10 @@
 <template>
   <div class="footer">
-    <div class="left"></div>
+    <div class="left">
+
+    </div>
     <div class="right">
-      <a target="_blank" href="https://github.com/newbee-ltd/vue3-admin">vue3-admin Version 3.0.0</a>
+      <a target="_blank">国字号100.025</a>
     </div>
   </div>
 </template>

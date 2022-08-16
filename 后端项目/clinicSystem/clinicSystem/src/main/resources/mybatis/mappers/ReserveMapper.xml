@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.order.ReserveMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.order.Reserve">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="doctorid" column="doctorId" jdbcType="VARCHAR"/>
+        <result property="patientid" column="patientId" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="reservetime" column="reserveTime" jdbcType="DATE"/>
+        <result property="numberreminders" column="NumberReminders" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,doctorId,patientId,
+        state,reserveTime,NumberReminders
+    </sql>
+    <update id="cancelAppointment">
+        UPDATE reserve SET state=2
+        <if test="ids!= null and ids.size() >0">
+            WHERE
+            id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+    <select id="findByPatientIds" resultType="map" parameterType="java.util.List">
+        SELECT * FROM reserve
+        <if test="ids!= null and ids.size() >0">
+            WHERE
+            patientId in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+    <select id="findByDoctorIds" resultType="map" parameterType="java.util.List">
+        SELECT * FROM reserve
+        <if test="ids!= null and ids.size() >0">
+            WHERE
+            doctorId in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+    <select id="findReserveNotViewed" resultType="map">
+        SELECT reserve.id id, patient.name patientName,doctor.name
+        doctorName,reserve.NumberReminders,reserve.state,DATE_FORMAT(reserveTime,'%Y-%m-%d %H:%i')
+        reserveTime,department.name departName,regis.value
+        FROM reserve
+        INNER JOIN patientInformation patient ON reserve.patientId=patient.id
+        INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
+        INNER JOIN department ON did=department.id
+        INNER JOIN (SELECT r.id,VALUE FROM general,registrationLevel r WHERE NAME=coding) regis ON regis.id=registereId
+        WHERE 1=1
+        <if test='patientName != null and patientName != "" '>
+            AND patient.name LIKE CONCAT('%',#{patientName},'%')
+        </if>
+        <if test='doctorName != null and doctorName != "" '>
+            AND doctor.name LIKE CONCAT('%',#{doctorName},'%')
+        </if>
+        <if test='did != null and did != "" '>
+            AND doctor.did = #{did}
+        </if>
+        <if test='registereId != null and registereId != "" '>
+            AND doctor.registereId = #{registereId}
+        </if>
+        AND reserve.id NOT IN (SELECT OrderForm.id FROM OrderForm) AND state=0
+    </select>
+
+    <select id="cancelAppointmentViews" resultType="map">
+        SELECT reserve.id id, patient.name patientName,doctor.name doctorName,reserve.NumberReminders,reserve.state,DATE_FORMAT(reserveTime,'%Y-%m-%d %H:%i') reserveTime,department.name departName,regis.value
+        FROM reserve
+                 INNER JOIN patientInformation patient ON reserve.patientId=patient.id
+                 INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
+                 INNER JOIN department ON did=department.id
+                 INNER JOIN (SELECT r.id,VALUE FROM general,registrationLevel r WHERE NAME=coding) regis ON regis.id=registereId
+        WHERE 1=1
+        <if test='patientName != null and patientName != "" '>
+            AND patient.name LIKE CONCAT('%',#{patientName},'%')
+        </if>
+        <if test='doctorName != null and doctorName != "" '>
+            AND doctor.name LIKE CONCAT('%',#{doctorName},'%')
+        </if>
+        <if test='did != null and did != "" '>
+            AND doctor.did = #{did}
+        </if>
+        <if test='registereId != null and registereId != "" '>
+            AND doctor.registereId = #{registereId}
+        </if>
+        AND reserve.id NOT IN (SELECT OrderForm.id FROM OrderForm) AND state=2
+    </select>
+    <update id="resumeAppointment">
+        UPDATE reserve SET state=0
+        <if test="ids!= null and ids.size() >0">
+            WHERE
+            id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+</mapper>

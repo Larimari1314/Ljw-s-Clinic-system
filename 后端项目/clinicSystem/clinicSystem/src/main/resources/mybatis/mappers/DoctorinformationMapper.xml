@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.personnel.DoctorinformationMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="age" column="age" jdbcType="INTEGER"/>
+        <result property="birthday" column="birthday" jdbcType="DATE"/>
+        <result property="sex" column="sex" jdbcType="CHAR"/>
+        <result property="identitynumber" column="identityNumber" jdbcType="CHAR"/>
+        <result property="did" column="did" jdbcType="VARCHAR"/>
+        <result property="salary" column="salary" jdbcType="DOUBLE"/>
+        <result property="registereid" column="registereId" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="doctordelete" column="doctorDelete" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,avatar,name,
+        age,birthday,sex,
+        identityNumber,did,salary,
+        registereId,address,doctorDelete
+    </sql>
+    <select id="findAllDoctor" resultType="java.util.Map">
+        SELECT doctorInformation.id,avatar,doctorInformation.name,age,DATE_FORMAT(birthday,'%Y-%m-%d')
+        birthday,identityNumber,salary,address,department.name departmentName,general.value sex,regis.value regis,
+                 sex sexCoding,birthday birthdayCoding,did,registereId
+        FROM doctorInformation
+        INNER JOIN department ON did=department.id
+        INNER JOIN (SELECT r.id,VALUE FROM general,registrationLevel r WHERE NAME=coding) regis ON regis.id=registereId
+        INNER JOIN general ON sex=general.coding
+        WHERE 1=1
+        <if test='name != null and name != "" '>
+            AND doctorInformation.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='sex != null and sex != "" '>
+            AND doctorInformation.sex = #{sex}
+        </if>
+        <if test='did != null and did != "" '>
+            AND doctorInformation.did = #{did}
+        </if>
+        <if test='registereId != null and registereId != "" '>
+            AND doctorInformation.registereId = #{registereId}
+        </if>
+        AND doctorDelete=0
+    </select>
+</mapper>

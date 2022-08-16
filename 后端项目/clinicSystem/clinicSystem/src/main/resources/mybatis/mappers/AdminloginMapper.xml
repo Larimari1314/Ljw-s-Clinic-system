@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.personnel.AdminloginMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.personnel.Adminlogin">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="loginname" column="LoginName" jdbcType="VARCHAR"/>
+            <result property="loginphone" column="LoginPhone" jdbcType="CHAR"/>
+            <result property="loginemail" column="LoginEmail" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="permission" column="permission" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,LoginName,LoginPhone,
+        LoginEmail,password,permission
+    </sql>
+</mapper>
