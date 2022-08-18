@@ -12,4 +12,28 @@
     <sql id="Base_Column_List">
         id,dutyId
     </sql>
+    <select id="findAllSchedulesDoctor" resultType="map">
+        SELECT doctorInformation.id,avatar,doctorInformation.name,address,department.name departmentName,general.value schedules,regis.value regis,general.coding scheduledCoding,did,age
+        FROM doctorInformation
+                 INNER JOIN department ON did=department.id
+                 INNER JOIN (SELECT r.id,VALUE FROM general,registrationLevel r WHERE NAME=coding) regis ON regis.id=registereId
+                 INNER JOIN doctorDuty ON doctorDuty.id=doctorInformation.id
+                 INNER JOIN general ON doctorDuty.dutyId=general.coding
+        WHERE 1=1
+        <if test='name != null and name != "" '>
+            AND doctorInformation.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='did != null and did != "" '>
+            AND doctorInformation.did = #{did}
+        </if>
+        <if test='registereId != null and registereId != "" '>
+            AND doctorInformation.registereId = #{registereId}
+        </if>
+        AND doctorDelete=0
+    </select>
+    <select id="findDutyTime" resultType="map">
+        SELECT id, TIME_FORMAT(startTime,'%H:%i') startTime,TIME_FORMAT(endTime,'%H:%i') endTime,value
+        FROM dutyTime
+        INNER JOIN general ON id=coding
+    </select>
 </mapper>

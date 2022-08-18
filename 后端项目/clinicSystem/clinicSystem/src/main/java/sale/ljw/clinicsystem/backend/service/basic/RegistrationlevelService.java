@@ -1,5 +1,6 @@
 package sale.ljw.clinicsystem.backend.service.basic;
 
+import sale.ljw.clinicsystem.backend.form.basic.admin.EditRegistrationLevelByAdmin;
 import sale.ljw.clinicsystem.backend.pojo.basic.Registrationlevel;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RegistrationlevelService extends IService<Registrationlevel> {
 
+    String findAllRegistrationLevel();
+
+    String editRegistrationLevel(EditRegistrationLevelByAdmin registrationLevel);
 }

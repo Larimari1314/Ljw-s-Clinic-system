@@ -40,9 +40,15 @@ public class GeneralServlet {
         return generalService.findPayInformation();
     }
 
+    @ApiOperation(value = "获取药品规格列表")
+    @GetMapping("/findDrugSpecification")
+    public String findDrugSpecification(){
+        return generalService.findDrugSpecification();
+    }
     @ApiOperation(value = "获取全部常规项")
     @PostMapping("/getAllGeneral")
     public String getAllGeneral(@RequestBody @Valid FindAllGeneralByAdmin general) {
+
         return generalService.getAllGeneral(general);
     }
 

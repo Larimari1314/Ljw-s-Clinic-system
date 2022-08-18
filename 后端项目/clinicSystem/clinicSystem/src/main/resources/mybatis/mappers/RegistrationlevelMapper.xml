@@ -15,4 +15,9 @@
         id,name,price,
         version
     </sql>
+    <select id="findAllRegistrationLevel" resultType="map">
+        SELECT id,general.value name,price
+        FROM registrationLevel
+        INNER JOIN general ON coding=name
+    </select>
 </mapper>

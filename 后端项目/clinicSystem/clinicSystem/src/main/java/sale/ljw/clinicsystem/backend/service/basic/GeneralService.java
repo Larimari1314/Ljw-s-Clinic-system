@@ -25,4 +25,7 @@ public interface GeneralService extends IService<General> {
     public abstract String getAllGeneral(FindAllGeneralByAdmin general);
 
     public abstract String editGeneral(EditGeneralByAdmin general);
+
+    public abstract String findDrugSpecification();
+
 }

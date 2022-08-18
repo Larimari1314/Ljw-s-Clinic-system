@@ -103,6 +103,14 @@ public class GeneralServiceImpl extends ServiceImpl<GeneralMapper, General>
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
+
+    @Override
+    public String findDrugSpecification() {
+        QueryWrapper<General> queryWrapper=new QueryWrapper<>();
+        queryWrapper.like("coding", "GD");
+        List<General> list = list(queryWrapper);
+        return JSON.toJSONString(ResponseResult.getSuccessResult(list));
+    }
 }
 
 

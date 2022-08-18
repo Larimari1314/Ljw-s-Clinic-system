@@ -408,6 +408,59 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
         //上述没报错误就是导入成功了
         return JSON.toJSONString(ResponseResult.getSuccessResult(null, "C200", null));
     }
+
+    @Override
+    public String mainGetNumber() {
+        return JSON.toJSONString(ResponseResult.getSuccessResult(doctorinformationMapper.mainGetNumber()));
+    }
+
+    @Override
+    public String getValueNumber() {
+        Map<String, Object> allValues = doctorinformationMapper.findValueNumber();
+        Set<Map.Entry<String, Object>> entrySet = allValues.entrySet();
+        Iterator<Map.Entry<String, Object>> it = entrySet.iterator();
+        List<ArrayList<Object>> arrayLists=new ArrayList<>();
+        ArrayList<Object> arrayName=new ArrayList<>();
+        ArrayList<Object> arrayNumber=new ArrayList<>();
+        while(it.hasNext()) {
+            Map.Entry<String, Object> entry = it.next();
+            arrayName.add(entry.getKey());
+            if (entry.getValue()!=null){
+                arrayNumber.add( entry.getValue());
+            }
+        }
+        arrayLists.add(arrayName);
+        arrayLists.add(arrayNumber);
+        return JSON.toJSONString(arrayLists);
+    }
+
+    @Override
+    public String getDayMedicine() {
+        List<Map<String, Object>> dayMedicine = doctorinformationMapper.getDayMedicine();
+        List<ArrayList<String>> arrayLists=new ArrayList<>();
+        ArrayList<String> arrayDay=new ArrayList<>();
+        ArrayList<String> arrayNumber=new ArrayList<>();
+        dayMedicine.stream().forEach(s->{
+            arrayDay.add(s.get("days").toString());
+            arrayNumber.add( s.get("COUNT").toString());
+        });
+        String[] strings = new String[2];
+        arrayLists.add(arrayDay);
+        arrayLists.add(arrayNumber);
+        return JSON.toJSONString(arrayLists);
+    }
+
+    @Override
+    public String getStateStatistics() {
+        return JSON.toJSONString(doctorinformationMapper.getStateStatistics());
+    }
+
+    @Override
+    public String getRegisDoctor() {
+        List<Map<String, Object>> regisDoctor = doctorinformationMapper.getRegisDoctor();
+//        System.out.println(regisDoctor);
+        return JSON.toJSONString(regisDoctor);
+    }
 }
 
 

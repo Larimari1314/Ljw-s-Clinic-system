@@ -7,6 +7,7 @@ import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,6 +25,14 @@ public interface DoctorinformationMapper extends BaseMapper<Doctorinformation> {
      * 查找全部医生用户
      */
     public abstract ArrayList<Map<String, Objects>> findAllDoctor(FindDoctorByAdmin doctor);
+
+    ArrayList<Map<String,Objects>> mainGetNumber();
+    Map<String, Object> findValueNumber();
+    public List<Map<String,Object>> getDayMedicine();
+
+    List<Map<String,Object>> getStateStatistics();
+
+    List<Map<String, Object>> getRegisDoctor();
 }
 
 

@@ -6,8 +6,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- * 
- * @TableName drug
+ * 药品表
  */
 @TableName(value ="drug")
 @Data
@@ -67,6 +66,4 @@ public class Drug implements Serializable {
     @TableField(value = "enable")
     private Integer enable;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

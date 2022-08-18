@@ -31,4 +31,14 @@ public interface DoctorinformationService extends IService<Doctorinformation> {
     public abstract ByteArrayOutputStream exportData(HttpServletResponse response);
 
     public abstract String analyseFile(MultipartFile multipartFileUpload);
+
+    public abstract String mainGetNumber();
+
+    public  abstract String getValueNumber();
+
+   public abstract String getDayMedicine();
+
+   public abstract String getStateStatistics();
+
+    public abstract String getRegisDoctor();
 }

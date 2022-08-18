@@ -49,4 +49,38 @@
         </if>
         AND doctorDelete=0
     </select>
+    <select id="mainGetNumber" resultType="java.util.Map">
+        SELECT * FROM
+         (SELECT COUNT(id) patientNumber FROM patientLogin) patient,
+         (SELECT COUNT(id) doctorNumber FROM doctorLogin) doctor,
+         (SELECT COUNT(id) drugNumber FROM drug) drug
+    </select>
+    <select id="findValueNumber" resultType="java.util.Map">
+        SELECT  (SELECT COUNT(doctorInformation.id) FROM doctorInformation WHERE doctorDelete = 0) 医生数量,
+                (SELECT COUNT(patientInformation.id) FROM patientInformation WHERE doctorDelete = 0)   患者数量,
+                (SELECT COUNT(OrderForm.id) FROM OrderForm)  订单数量,
+                COUNT(drug.id)                                          药品数量
+        FROM drug
+        WHERE drugDelete= 0
+    </select>
+    <select id="getDayMedicine" resultType="java.util.Map">
+        SELECT DATE_FORMAT(reserveTime, '%m月%d日') days, COUNT(id) COUNT
+        FROM reserve
+        GROUP BY days;
+    </select>
+    <select id="getStateStatistics" resultType="java.util.Map">
+        SELECT COUNT(reserve.id) value,general.value name
+        FROM reserve
+            INNER JOIN OrderForm ON OrderForm.id=reserve.id
+            INNER JOIN general ON general.coding=OrderForm.state
+        GROUP BY OrderForm.state
+    </select>
+    <select id="getRegisDoctor" resultType="java.util.Map">
+        SELECT COUNT(doctorDuty.id) value,general.value name
+        FROM doctorDuty
+            INNER JOIN general ON doctorDuty.dutyId=general.coding
+            INNER JOIN doctorInformation ON doctorInformation.id=doctorDuty.id
+        WHERE doctorInformation.doctorDelete=0
+        GROUP BY dutyId;
+    </select>
 </mapper>

@@ -13,4 +13,14 @@
     <sql id="Base_Column_List">
         orderId,drugId,number
     </sql>
+    <select id="findByDrugIds" resultType="map" parameterType="java.util.List">
+        SELECT orderId FROM orderDrug
+        <if test="ids!= null and ids.size() >0">
+            WHERE
+            drugId in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </select>
 </mapper>
