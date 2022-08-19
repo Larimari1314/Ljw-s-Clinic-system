@@ -1,5 +1,7 @@
 package sale.ljw.clinicsystem.backend.dao.personnel;
 
+import org.mapstruct.Mapper;
+import org.springframework.stereotype.Repository;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Admininformation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -9,6 +11,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2022-08-07 15:58:09
 * @Entity sale.ljw.clinicsystem.backend.pojo.personnel.Admininformation
 */
+@Mapper
+@Repository
 public interface AdmininformationMapper extends BaseMapper<Admininformation> {
 
 }

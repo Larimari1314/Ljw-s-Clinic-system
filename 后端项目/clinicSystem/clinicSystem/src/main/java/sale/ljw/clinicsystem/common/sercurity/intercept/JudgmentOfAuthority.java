@@ -7,12 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import sale.ljw.clinicsystem.backend.pojo.basic.Permission;
+import sale.ljw.clinicsystem.backend.service.basic.PermissionService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-/*
 
 @Component
 public class JudgmentOfAuthority {
@@ -31,7 +32,7 @@ public class JudgmentOfAuthority {
             if (redisTemplate.boundValueOps(redisKey).get() != null) {
                 int per = (int) redisTemplate.boundValueOps(redisKey).get();
                 QueryWrapper<Permission> queryWrapper=new QueryWrapper<>();
-                queryWrapper.eq("p_id", per).eq("p_url", servletPath);
+                queryWrapper.eq("permission", per).eq("url", servletPath);
                 Map<String, Object> map =permissionService.getMap(queryWrapper);
                 if (map!=null) {
                     return true;
@@ -47,4 +48,3 @@ public class JudgmentOfAuthority {
         }
     }
 }
-*/

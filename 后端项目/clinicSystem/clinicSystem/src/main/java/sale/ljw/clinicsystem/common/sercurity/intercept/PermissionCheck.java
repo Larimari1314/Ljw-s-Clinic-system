@@ -7,7 +7,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-/*
 
 @Component
 public class PermissionCheck implements HandlerInterceptor {
@@ -27,7 +26,7 @@ public class PermissionCheck implements HandlerInterceptor {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 //cookie中华由数值则检测
-                if ("_neusoft_admin".equals(cookie.getName())) {
+                if ("_web_admin".equals(cookie.getName())) {
                     redisValue = cookie.getValue();
                     sboolean = true;
                 }
@@ -58,4 +57,3 @@ public class PermissionCheck implements HandlerInterceptor {
         response.getWriter().flush();
     }
 }
-*/
