@@ -31,4 +31,10 @@ public interface PatientinformationService extends IService<Patientinformation> 
     public abstract ByteArrayOutputStream exportData(HttpServletResponse response);
 
     public abstract String analyseFile(MultipartFile multipartFileUpload);
+
+    public abstract String getDeleteData();
+
+    public abstract String deleteById(String id);
+
+    public abstract String recoveryData(String id);
 }

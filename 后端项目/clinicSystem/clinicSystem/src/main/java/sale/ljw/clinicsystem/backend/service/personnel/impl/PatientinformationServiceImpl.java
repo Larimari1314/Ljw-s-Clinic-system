@@ -2,6 +2,7 @@ package sale.ljw.clinicsystem.backend.service.personnel.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -373,6 +374,46 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         }
         //上述没报错误就是导入成功了
         return JSON.toJSONString(ResponseResult.getSuccessResult(null, "C200", null));
+    }
+
+    @Override
+    public String getDeleteData() {
+        ArrayList<Map<String, Object>> deleteData = patientinformationMapper.getDeleteData();
+        return JSON.toJSONString(ResponseResult.getSuccessResult(deleteData));
+    }
+
+    @Override
+    public String deleteById(String id) {
+        //在预约表中查找患者是否存在
+        QueryWrapper<Reserve> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("patientId",id);
+        if (reserveMapper.selectList(queryWrapper).size()!=0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
+        //删除用户信息，并删除头像文件
+        Patientinformation patientinformation = patientinformationMapper.selectDeleteDataById(id);
+        if(!patientinformation.getAvatar().contains("default")){
+            String path = System.getProperty("user.dir");
+            File newFile = new File(path + "\\src\\main\\webapp\\Img\\patient\\" + id+"\\" + id + ".jpg");
+            //删除不了也没啥关系，不得影响主任务的执行，只好转化脏数据，所以不对结果进行判定
+            newFile.delete();
+        }
+        if(patientinformationMapper.permanentDeleteById(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C404"));
+        }
+        //删除用户注册信息
+        if(patientloginMapper.deleteById(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult(null));
+    }
+
+    @Override
+    public String recoveryData(String id) {
+        if(patientinformationMapper.recoveryData(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult(null));
     }
 
 }

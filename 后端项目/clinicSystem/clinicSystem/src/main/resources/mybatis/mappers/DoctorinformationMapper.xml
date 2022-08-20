@@ -83,4 +83,25 @@
         WHERE doctorInformation.doctorDelete=0
         GROUP BY dutyId;
     </select>
+    <select id="getDeleteData" resultType="map">
+        SELECT department.name dname,doctorInformation.name,general.value sex,doctorInformation.age,doctorInformation.id,doctorInformation.salary
+        FROM doctorInformation
+                 INNER JOIN department ON department.id=did
+                 INNER JOIN general ON sex=coding
+        WHERE doctorDelete=1
+    </select>
+    <delete id="permanentDeleteById" parameterType="string">
+        DELETE
+        FROM doctorInformation
+        WHERE id = #{id} AND doctorDelete=1
+    </delete>
+    <select id="selectDeleteDataById" resultType="doctorinformation" parameterType="string">
+        select *
+        FROM doctorInformation
+        WHERE id = #{id}
+          AND doctorDelete = 1;
+    </select>
+    <update id="recoveryData" parameterType="string">
+        UPDATE doctorInformation SET doctorDelete=0 WHERE id = #{id}
+    </update>
 </mapper>

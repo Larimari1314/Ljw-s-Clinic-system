@@ -21,6 +21,10 @@ import java.util.Objects;
 @Repository
 public interface DrugMapper extends BaseMapper<Drug> {
     public abstract ArrayList<Map<String, Objects>> findAllByDrug(FindDrugByAdmin drug);
+    public abstract  ArrayList<Map<String, Objects>> getDeleteData();
+    public abstract  Integer permanentDeleteById(String id);
+    public abstract  Drug selectDeleteDataById(String id);
+    public abstract  Integer recoveryData(String id);
 }
 
 

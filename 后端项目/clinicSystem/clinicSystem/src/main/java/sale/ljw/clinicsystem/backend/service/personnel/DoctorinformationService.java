@@ -41,4 +41,10 @@ public interface DoctorinformationService extends IService<Doctorinformation> {
    public abstract String getStateStatistics();
 
     public abstract String getRegisDoctor();
+
+    public abstract String getDeleteData();
+
+    public abstract String deleteById(String id);
+
+    public abstract String recoveryData(String id);
 }

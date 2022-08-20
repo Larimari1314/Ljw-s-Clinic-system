@@ -94,4 +94,22 @@ public class PatientServlet {
     public String analyseFile() throws IOException {
         return patientinformationService.analyseFile(multipartFileUpload);
     }
+
+    @ApiOperation("获取删除数据")
+    @PostMapping("/getDeleteData")
+    public String getDeleteData(){
+        return patientinformationService.getDeleteData();
+    }
+
+    @ApiOperation(value = "永久删除数据")
+    @GetMapping("/deleteById/{id}")
+    public String deleteById(@PathVariable String id) {
+        return patientinformationService.deleteById(id);
+    }
+
+    @ApiOperation(value = "恢复恢复数据")
+    @GetMapping("/recoveryData/{id}")
+    public String recoveryData(@PathVariable String id){
+        return patientinformationService.recoveryData(id);
+    }
 }

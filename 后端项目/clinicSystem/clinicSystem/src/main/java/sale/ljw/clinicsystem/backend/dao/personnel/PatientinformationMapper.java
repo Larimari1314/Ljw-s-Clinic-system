@@ -19,6 +19,10 @@ import java.util.Map;
 @Repository
 public interface PatientinformationMapper extends BaseMapper<Patientinformation> {
     public abstract ArrayList<Map<String,Object>> findAllPatient(FindPatientByAdmin patient);
+    public abstract ArrayList<Map<String,Object>> getDeleteData();
+    public abstract Integer permanentDeleteById(String id);
+    public abstract Patientinformation selectDeleteDataById(String id);
+    public abstract Integer recoveryData(String id);
 }
 
 

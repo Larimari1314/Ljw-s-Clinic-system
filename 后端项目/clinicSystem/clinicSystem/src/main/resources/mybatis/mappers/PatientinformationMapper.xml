@@ -35,4 +35,23 @@
         </if>
         AND doctorDelete=0
     </select>
+    <select id="getDeleteData" resultType="map">
+        SELECT id,avatar,name,age,identityNumber
+        FROM patientInformation
+        WHERE doctorDelete=1
+    </select>
+    <delete id="permanentDeleteById" parameterType="string">
+        DELETE
+        FROM patientInformation
+        WHERE id = #{id} AND doctorDelete=1
+    </delete>
+    <select id="selectDeleteDataById" resultType="patientinformation" parameterType="string">
+        select *
+        FROM patientInformation
+        WHERE id = #{id}
+          AND doctorDelete = 1;
+    </select>
+    <update id="recoveryData" parameterType="string">
+        UPDATE patientInformation SET doctorDelete=0 WHERE id = #{id}
+    </update>
 </mapper>

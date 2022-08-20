@@ -33,6 +33,10 @@ public interface DoctorinformationMapper extends BaseMapper<Doctorinformation> {
     List<Map<String,Object>> getStateStatistics();
 
     List<Map<String, Object>> getRegisDoctor();
+    List<Map<String, Object>> getDeleteData();
+    Integer permanentDeleteById(String id);
+    Doctorinformation selectDeleteDataById(String id);
+    Integer recoveryData(String id);
 }
 
 

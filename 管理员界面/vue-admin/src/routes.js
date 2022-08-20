@@ -14,6 +14,7 @@ import registrationLevel from "./views/basicInformationMaintenance/registrationL
 import department from "./views/basicInformationMaintenance/department";
 import drug from "./views/basicInformationMaintenance/drug";
 import homeMain from "./views/home/homeMain";
+import dataRecovery from "./views/basicInformationMaintenance/dataRecovery";
 let routes = [
     {
         path: '/login',
@@ -76,7 +77,8 @@ let routes = [
             { path: '/landingAds', component: landingAds, name: '页面广告管理' },
             { path: '/dutyTime', component: dutyTime, name: '预约时间管理' },
             { path: '/registrationLevel', component: registrationLevel, name: '挂号级别管理' },
-            { path: '/department', component: department, name: '科室管理' }
+            { path: '/department', component: department, name: '科室管理' },
+            { path: '/dataRecovery', component: dataRecovery, name: '数据恢复' }
         ]
     },
     {

@@ -26,6 +26,9 @@ public class JudgmentOfAuthority {
     public Boolean findPermission(String redisKey, HttpServletRequest request, HttpServletResponse response) {
         try {
             String servletPath = request.getServletPath();
+            if((servletPath.length()-servletPath.replace("/", "").length())>2){
+                servletPath=servletPath.substring(0,servletPath.lastIndexOf('/'));
+            }
             if("/Img".equals(servletPath.substring(0, 4))){
                 return true;
             }

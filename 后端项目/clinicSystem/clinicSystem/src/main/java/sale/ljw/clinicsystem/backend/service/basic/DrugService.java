@@ -35,4 +35,10 @@ public interface DrugService extends IService<Drug> {
     String analyseFile(MultipartFile multipartFile);
 
     String addDrug(AddDrugByAdmin drug,MultipartFile multipartFile);
+
+    String getDeleteData();
+
+    String deleteById(String id);
+
+    String recoveryData(String id);
 }

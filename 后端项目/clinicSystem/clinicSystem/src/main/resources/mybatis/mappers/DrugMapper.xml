@@ -34,5 +34,23 @@
         </if>
         AND drugDelete=0
     </select>
-
+    <select id="getDeleteData" resultType="map">
+        SELECT id,cover,drugName name,number,price
+        FROM drug
+        WHERE drugDelete=1
+    </select>
+    <delete id="permanentDeleteById" parameterType="string">
+        DELETE
+        FROM drug
+        WHERE id = #{id} AND drugDelete=1
+    </delete>
+    <select id="selectDeleteDataById" resultType="drug" parameterType="string">
+        select *
+        FROM drug
+        WHERE id = #{id}
+          AND drugDelete = 1;
+    </select>
+    <update id="recoveryData" parameterType="string">
+        UPDATE drug SET drugDelete=0 WHERE id = #{id}
+    </update>
 </mapper>

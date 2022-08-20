@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +30,7 @@ import sale.ljw.clinicsystem.backend.form.basic.admin.EditDrugByAdmin;
 import sale.ljw.clinicsystem.backend.form.basic.admin.FindDrugByAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.pojo.basic.Drug;
+import sale.ljw.clinicsystem.backend.pojo.order.Orderdrug;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorlogin;
 import sale.ljw.clinicsystem.backend.service.basic.DrugService;
@@ -147,6 +149,8 @@ public class DrugServiceImpl extends ServiceImpl<DrugMapper, Drug>
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
+
+
     @Override
     public ByteArrayOutputStream drugTemplateDownload(HttpServletResponse response) {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
@@ -336,6 +340,38 @@ public class DrugServiceImpl extends ServiceImpl<DrugMapper, Drug>
         return JSON.toJSONString(ResponseResult.getSuccessResult(null, "C200", null));
     }
 
+    @Override
+    public String getDeleteData() {
+        ArrayList<Map<String, Objects>> deleteData = drugMapper.getDeleteData();
+        return JSON.toJSONString(ResponseResult.getSuccessResult(deleteData));
+    }
+
+    @Override
+    public String deleteById(String id) {
+        //在订单表中查询是否存在药品
+        QueryWrapper<Orderdrug> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("drugId", id);
+        if(orderdrugMapper.selectList(queryWrapper).size()!=0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
+        //删除封面
+        String path = System.getProperty("user.dir");
+        File newFile = new File(path + "\\src\\main\\webapp\\Img\\drug\\" + id+"\\" + id + ".jpg");
+        //删除不了也没啥关系，不得影响主任务的执行，只好转化脏数据，所以不对结果进行判定
+        newFile.delete();
+        if(drugMapper.permanentDeleteById(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult(null));
+    }
+
+    @Override
+    public String recoveryData(String id) {
+        if(drugMapper.recoveryData(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult(null));
+    }
 
 }
 

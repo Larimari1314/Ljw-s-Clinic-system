@@ -77,3 +77,13 @@ export const logoutAdmin = params => { return axios.post(`${bases}/loginAdmin/lo
 /*修改管理员信息*/
 export const editAdminInformation = params => { return axios.post(`${bases}/loginAdmin/editAdminInformation`,params); };
 export const editAdminLogin = params => { return axios.post(`${bases}/loginAdmin/editAdminLogin`,params); };
+/*数据恢复区*/
+export const checkDeleteDoctor = params => { return axios.post(`${bases}/doctorInformation/getDeleteData`,params); };
+export const deletePermanentlyDoctor = params => { return axios.get(`${bases}/doctorInformation/deleteById/`+params); };
+export const dataRecoveryDoctor = params => { return axios.get(`${bases}/doctorInformation/recoveryData/`+params); };
+export const getDeleteDrug = params => { return axios.post(`${bases}/drug/getDeleteData`,params); };
+export const deletePermanentlyDrug = params => { return axios.get(`${bases}/drug/deleteById/`+params); };
+export const dataRecoveryDrug = params => { return axios.get(`${bases}/drug/recoveryData/`+params); };
+export const getDeleteUser = params => { return axios.post(`${bases}/patientInformation/getDeleteData`,params); };
+export const deletePermanentlyUser = params => { return axios.get(`${bases}/patientInformation/deleteById/`+params); };
+export const dataRecoveryUser = params => { return axios.get(`${bases}/patientInformation/recoveryData/`+params); };

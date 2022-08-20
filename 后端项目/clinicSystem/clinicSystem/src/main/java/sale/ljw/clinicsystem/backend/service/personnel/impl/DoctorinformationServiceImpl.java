@@ -2,11 +2,13 @@ package sale.ljw.clinicsystem.backend.service.personnel.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import jdk.nashorn.internal.ir.IfNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -460,6 +462,61 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
         List<Map<String, Object>> regisDoctor = doctorinformationMapper.getRegisDoctor();
 //        System.out.println(regisDoctor);
         return JSON.toJSONString(regisDoctor);
+    }
+
+    @Override
+    public String getDeleteData() {
+        List<Map<String, Object>> deleteData = doctorinformationMapper.getDeleteData();
+        return JSON.toJSONString(ResponseResult.getSuccessResult(deleteData));
+    }
+    @Transactional
+    @Override
+    public String deleteById(String id) {
+        //删除医生数据首先检查医生数据是否在预约表中，若存在则禁止删除
+        QueryWrapper<Reserve> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("doctorId",id);
+        if(reserveMapper.selectList(queryWrapper).size()!=0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
+        //在值班表中删除医生值班信息
+        if(doctordutyMapper.deleteById(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
+        }
+        //在医生信息表中删除医生信息
+        Doctorinformation doctorinformation = doctorinformationMapper.selectDeleteDataById(id);
+        System.out.println(doctorinformation);
+        //判断头像是否是默认头像
+        if(!doctorinformation.getAvatar().contains("default")){
+            String path = System.getProperty("user.dir");
+            File newFile = new File(path + "\\src\\main\\webapp\\Img\\user\\" + id+"\\" + id + ".jpg");
+            //删除不了也没啥关系，不得影响主任务的执行，只好转化脏数据，所以不对结果进行判定
+            newFile.delete();
+        }
+        if(doctorinformationMapper.permanentDeleteById(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
+        }
+        //登陆表中删除医生信息
+        if(doctorloginMapper.deleteById(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C401"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult("C200"));
+    }
+
+    @Override
+    public String recoveryData(String id) {
+        //判断值班表中是否还存在数据
+        if(doctordutyMapper.selectById(id)==null){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
+        }
+        //判断登陆表中是否存在数据
+        if(doctorloginMapper.selectById(id)==null){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
+        }
+        //恢复数据
+        if(doctorinformationMapper.recoveryData(id)==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult(null));
     }
 }
 
