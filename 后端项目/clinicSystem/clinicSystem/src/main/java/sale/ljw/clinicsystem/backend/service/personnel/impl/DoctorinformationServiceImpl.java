@@ -33,6 +33,7 @@ import sale.ljw.clinicsystem.backend.form.personnel.admin.AddDoctorInformationBy
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditDoctorInformation;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindDoctorByAdmin;
+import sale.ljw.clinicsystem.backend.form.personnel.doctor.EditDoctorInformationByDoctor;
 import sale.ljw.clinicsystem.backend.pojo.basic.Doctorduty;
 import sale.ljw.clinicsystem.backend.pojo.order.Reserve;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
@@ -517,6 +518,45 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(null));
+    }
+
+    @Override
+    public String editDoctorByDoctor(EditDoctorInformationByDoctor doctorInformation, MultipartFile multipartFile) {
+        QueryWrapper<Doctorinformation> queryWrapperName = new QueryWrapper<>();
+        queryWrapperName.eq("name", doctorInformation.getName());
+        //当存在名称数据
+        Map<String, Object> map = getMap(queryWrapperName);
+        if (map != null && !map.get("id").equals(doctorInformation.getId())) {
+            //返回相同名称的错误码 403
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
+        }
+        if (multipartFile != null) {
+            //判断用户头像是否上传
+            String path = System.getProperty("user.dir");
+            File newFile = new File(path + "\\src\\main\\webapp\\Img\\user\\" + doctorInformation.getId());
+            newFile.mkdirs();
+            File files = new File(newFile + "\\" + doctorInformation.getId() + ".jpg");
+            try {
+                multipartFile.transferTo(files);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            doctorInformation.setAvatar("http://localhost:8000/clinic/Img/user/" + doctorInformation.getId() + "/" + doctorInformation.getId() + ".jpg");
+        }
+        UpdateWrapper<Doctorinformation> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", doctorInformation.getId()).
+                set("address", doctorInformation.getAddress()).
+                set("avatar", doctorInformation.getAvatar()).
+                set("birthday", doctorInformation.getBirthday()).
+                set("name", doctorInformation.getName()).
+                set("age", new Date().getYear() - doctorInformation.getBirthday().getYear()).
+                set("sex", doctorInformation.getSex());
+        boolean update = update(updateWrapper);
+        if (update) {
+            return JSON.toJSONString(ResponseResult.getSuccessResult(null));
+        } else {
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
     }
 }
 

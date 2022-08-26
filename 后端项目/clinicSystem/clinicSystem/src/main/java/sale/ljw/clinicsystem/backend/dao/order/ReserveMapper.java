@@ -3,6 +3,10 @@ package sale.ljw.clinicsystem.backend.dao.order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.order.doctor.CheckOrderByDoctor;
+import sale.ljw.clinicsystem.backend.form.order.doctor.ConfirmAppointmentByDoctor;
+import sale.ljw.clinicsystem.backend.form.basic.doctor.FindAppointmentTime;
+import sale.ljw.clinicsystem.backend.form.basic.doctor.FindReserveByDoctor;
 import sale.ljw.clinicsystem.backend.form.order.admin.FindReserveNotViewedByAdmin;
 import sale.ljw.clinicsystem.backend.pojo.order.Reserve;
 
@@ -20,15 +24,20 @@ import java.util.Map;
 @Repository
 public interface ReserveMapper extends BaseMapper<Reserve> {
     ArrayList<Map<String, Object>> findByPatientIds(List<String> ids);
-
     ArrayList<Map<String, Object>> findByDoctorIds(List<String> ids);
-
     ArrayList<Map<String, Object>> findReserveNotViewed(FindReserveNotViewedByAdmin reserve);
-
     ArrayList<Map<String, Object>> cancelAppointmentViews(FindReserveNotViewedByAdmin reserve);
-
     Integer cancelAppointment(List<String> ids);
     Integer resumeAppointment(List<String> ids);
+    ArrayList<Map<String, Object>> historyAppointment( FindReserveByDoctor reserve);
+
+    Map<String,Object> checkOrderOnOrderFrom(CheckOrderByDoctor order);
+
+    ArrayList<Map<String, Object>> checkOrderDrugOnOrderFrom(String id);
+    ArrayList<Map<String, Object>> getAppointmentTime(FindAppointmentTime appointment);
+    Map<String, Object> getDutyHours(String id);
+    Map<String, Object> checkAppointmentTime(ConfirmAppointmentByDoctor confirmAppointment);
+    ArrayList<Map<String, Object>> findCurrentAppointments(FindReserveByDoctor reserve);
 }
 
 

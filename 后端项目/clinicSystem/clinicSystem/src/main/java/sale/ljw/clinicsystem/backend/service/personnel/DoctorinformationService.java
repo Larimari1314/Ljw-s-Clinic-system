@@ -5,6 +5,7 @@ import sale.ljw.clinicsystem.backend.form.personnel.admin.AddDoctorInformationBy
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditDoctorInformation;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindDoctorByAdmin;
+import sale.ljw.clinicsystem.backend.form.personnel.doctor.EditDoctorInformationByDoctor;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -47,4 +48,6 @@ public interface DoctorinformationService extends IService<Doctorinformation> {
     public abstract String deleteById(String id);
 
     public abstract String recoveryData(String id);
+
+   public abstract String editDoctorByDoctor(EditDoctorInformationByDoctor doctorInformation, MultipartFile multipartFile);
 }

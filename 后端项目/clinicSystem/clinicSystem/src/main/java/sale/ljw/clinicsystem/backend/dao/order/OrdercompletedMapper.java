@@ -1,5 +1,7 @@
 package sale.ljw.clinicsystem.backend.dao.order;
 
+import org.mapstruct.Mapper;
+import org.springframework.stereotype.Repository;
 import sale.ljw.clinicsystem.backend.pojo.order.Ordercompleted;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -9,6 +11,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2022-08-07 16:10:49
 * @Entity sale.ljw.clinicsystem.backend.pojo.order.Ordercompleted
 */
+@Mapper
+@Repository
 public interface OrdercompletedMapper extends BaseMapper<Ordercompleted> {
 
 }

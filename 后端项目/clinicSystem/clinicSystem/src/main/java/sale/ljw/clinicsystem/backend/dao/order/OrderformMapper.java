@@ -2,6 +2,7 @@ package sale.ljw.clinicsystem.backend.dao.order;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.basic.doctor.FindDispensingInterfaceByDoctor;
 import sale.ljw.clinicsystem.backend.form.order.admin.FindOrderFromByAdmin;
 import sale.ljw.clinicsystem.backend.pojo.order.Orderform;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -22,6 +23,8 @@ public interface OrderformMapper extends BaseMapper<Orderform> {
     public Map<String,Object> findOrderListById(String id);
     public ArrayList<Map<String,Object>> findOrderFrom(String id);
     public Double getOrderTotalPrice(String id);
+    public Integer updateOrderpriceById(String id,Double totalPrice);
+    public ArrayList<Map<String,Object>> findDispensingInterface(FindDispensingInterfaceByDoctor findDispensing);
 }
 
 

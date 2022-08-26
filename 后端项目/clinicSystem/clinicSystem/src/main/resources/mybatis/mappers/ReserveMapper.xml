@@ -95,6 +95,7 @@
         </if>
         AND reserve.id NOT IN (SELECT OrderForm.id FROM OrderForm) AND state=2
     </select>
+
     <update id="resumeAppointment">
         UPDATE reserve SET state=0
         <if test="ids!= null and ids.size() >0">
@@ -105,4 +106,74 @@
             </foreach>
         </if>
     </update>
+
+    <select id="historyAppointment" resultType="java.util.Map">
+        SELECT reserve.id,doctor.name doctorName,patient.name patientName,
+               DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
+               department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId
+        FROM reserve
+            INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
+            INNER JOIN patientInformation patient ON patient.id=reserve.patientId
+            INNER JOIN department ON department.id=did
+        WHERE 1=1
+        <if test='patientName != null and patientName != "" '>
+            AND patient.name LIKE CONCAT('%',#{patientName},'%')
+        </if>
+        <if test='orderId != null and orderId != "" '>
+            AND reserve.id LIKE CONCAT('%',#{orderId},'%')
+        </if>
+          AND doctor.id = #{doctorId} AND reserve.state!=0
+    </select>
+    <select id="checkOrderOnOrderFrom" resultType="java.util.Map">
+        SELECT OrderForm.id,DATE_FORMAT(operatingTime, '%Y年%m月%d日 %H:%i') operatingTime,general.value orderState,doctor.name doctorName,patientInformation.name patientName
+             ,department.name departmentName
+        FROM OrderForm
+                 INNER JOIN reserve ON OrderForm.id=reserve.id AND doctorId=#{doctorId}
+                 INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
+                 INNER JOIN patientInformation ON patientInformation.id-reserve.patientId
+                 INNER JOIN general ON coding=OrderForm.state
+                 INNER JOIN department ON department.id=did
+        WHERE OrderForm.id=#{reserveId}
+        GROUP BY OrderForm.id
+    </select>
+    <select id="checkOrderDrugOnOrderFrom" resultType="map" parameterType="string">
+        SELECT drug.id,cover,drugName,price,orderDrug.number*price totalPrice,orderDrug.number number
+        FROM orderDrug
+                 INNER JOIN drug ON orderDrug.drugId=drug.id
+        WHERE orderDrug.orderId=#{id}
+    </select>
+    <select id="getAppointmentTime" resultType="map">
+        SELECT DATE_FORMAT(reserveTime,'%H:%i') reserveTime
+        FROM reserve
+        WHERE DATEDIFF(#{date},reserveTime)=0 AND doctorId=#{doctorId}
+    </select>
+    <select id="getDutyHours" resultType="map">
+        SELECT TIME_FORMAT(startTime,'%H:%i') startTime,TIME_FORMAT(endTime,'%H:%i') endTime
+        FROM doctorDuty
+                 INNER JOIN dutyTime ON dutyTime.id=doctorDuty.dutyId
+        WHERE doctorDuty.id=#{id}
+    </select>
+    <select id="checkAppointmentTime" resultType="map">
+        SELECT id
+        FROM reserve
+        WHERE DATE_FORMAT(#{reservetime},'%Y年%m月%d日 %H:%i')=DATE_FORMAT(reserveTime,'%Y年%m月%d日 %H:%i') AND doctorId=#{doctorid}
+    </select>
+    <select id="findCurrentAppointments" resultType="java.util.Map">
+        SELECT reserve.id,doctor.name doctorName,patient.name patientName,
+               DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
+               department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId
+        FROM reserve
+                 INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
+                 INNER JOIN patientInformation patient ON patient.id=reserve.patientId
+                 INNER JOIN department ON department.id=did
+        WHERE 1=1
+        <if test='patientName != null and patientName != "" '>
+            AND patient.name LIKE CONCAT('%',#{patientName},'%')
+        </if>
+        <if test='orderId != null and orderId != "" '>
+            AND reserve.id LIKE CONCAT('%',#{orderId},'%')
+        </if>
+        AND doctor.id='1' AND reserve.state=0
+    </select>
+
 </mapper>

@@ -28,9 +28,11 @@ public class WebConfig implements WebMvcConfigurer {
                 "/patientInformation/upload",
                 "/doctorInformation/upload",
                 "/patientInformation/uploadToServer",
+                "/doctorInformationByDoctor/upload",
                 "/swagger-ui.html/**",
                 "/webjars/**",
-                "/swagger-resources/**"
+                "/swagger-resources/**",
+                "/loginDoctor/login"
         );
     }
 }

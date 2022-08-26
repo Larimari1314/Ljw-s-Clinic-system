@@ -31,10 +31,6 @@
       </el-table-column>
       <el-table-column label="上午可预约时间" width="340">
         <template scope="scope">
-          <!--          <el-select v-model="form" placeholder="查看预约情况" style="display: block; width: 50%;"
-                               @click.native="getTimeMorning(scope.$index, scope.row,1)">
-                      <el-option label="区域一" value="shanghai"></el-option>
-                    </el-select>-->
           <el-dropdown :hide-on-click="false" @click.native="getTimeMorning(scope.$index, scope.row,1)">
             <span class="el-dropdown-link">
               {{ AppointmentTime }}}<i class="el-icon-caret-bottom el-icon--right"></i>
@@ -67,10 +63,6 @@
       </el-table-column>
       <el-table-column label="下午可预约时间" width="340">
         <template scope="scope">
-          <!--          <el-select v-model="form" placeholder="查看预约情况" style="display: block; width: 50%;"
-                               @click.native="getTimeMorning(scope.$index, scope.row,1)">
-                      <el-option label="区域一" value="shanghai"></el-option>
-                    </el-select>-->
           <el-dropdown :hide-on-click="false" @click.native="getTimeAfternoon(scope.$index, scope.row,1)">
             <span class="el-dropdown-link">
               {{ AppointmentTime }}}<i class="el-icon-caret-bottom el-icon--right"></i>

@@ -2,7 +2,6 @@ package sale.ljw.clinicsystem.backend.service.personnel.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,24 +19,21 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sale.ljw.clinicsystem.backend.dao.order.ReserveMapper;
+import sale.ljw.clinicsystem.backend.dao.personnel.PatientinformationMapper;
 import sale.ljw.clinicsystem.backend.dao.personnel.PatientloginMapper;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.AddPatientInformationByAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditPatientInformation;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindPatientByAdmin;
-import sale.ljw.clinicsystem.backend.pojo.basic.Doctorduty;
 import sale.ljw.clinicsystem.backend.pojo.order.Reserve;
-import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
-import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorlogin;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Patientinformation;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Patientlogin;
 import sale.ljw.clinicsystem.backend.service.personnel.PatientinformationService;
-import sale.ljw.clinicsystem.backend.dao.personnel.PatientinformationMapper;
-import org.springframework.stereotype.Service;
 import sale.ljw.clinicsystem.backend.service.personnel.PatientloginService;
 import sale.ljw.clinicsystem.common.http.ResponseResult;
 import sale.ljw.clinicsystem.common.sercurity.utils.export.ExportDataUtils;
@@ -50,13 +46,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
-* @author 86155
-* @description 针对表【patientInformation】的数据库操作Service实现
-* @createDate 2022-08-07 16:02:23
-*/
+ * @author 86155
+ * @description 针对表【patientInformation】的数据库操作Service实现
+ * @createDate 2022-08-07 16:02:23
+ */
 @Service
 public class PatientinformationServiceImpl extends ServiceImpl<PatientinformationMapper, Patientinformation>
-    implements PatientinformationService{
+        implements PatientinformationService {
     @Autowired
     private PatientinformationMapper patientinformationMapper;
     @Autowired
@@ -66,6 +62,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
 
     @Autowired
     private ReserveMapper reserveMapper;
+
     @Override
     public String findAllPatient(FindPatientByAdmin patient) {
         PageHelper.startPage(patient.getPage(), 20);
@@ -112,6 +109,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
+
     @Transactional
     @Override
     public String addPatientInformation(AddPatientInformationByAdmin patientInformation) {
@@ -155,7 +153,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
     public String deleteByIdsPatientInformation(DeleteIdsBYAdmin ids) {
         //根据id删除首先判断预约表中是否存在相关数据
         ArrayList<Map<String, Object>> reserves = reserveMapper.findByPatientIds(ids.getIds());
-        if (reserves.size()!=0) {
+        if (reserves.size() != 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
         }
         //预约表中不存在患者，执行删除患者
@@ -299,7 +297,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
             multipartFileUpload.transferTo(newFile);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C404"));
         }
         XSSFWorkbook xssfWorkbook = null;
@@ -312,10 +310,10 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         XSSFSheet sheetAt = xssfWorkbook.getSheetAt(0);
         int newRow = 3;
         ArrayList<Patientinformation> patientinformations = new ArrayList<>();
-        ArrayList<Patientlogin> patientlogins=new ArrayList<>();
+        ArrayList<Patientlogin> patientlogins = new ArrayList<>();
         while (true) {
             Patientinformation patientinformation = new Patientinformation();
-            Patientlogin patientlogin=new Patientlogin();
+            Patientlogin patientlogin = new Patientlogin();
             XSSFRow new_row = sheetAt.getRow(newRow);
             try {
                 new_row.getCell(1).setCellType(CellType.STRING);
@@ -362,9 +360,9 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         try {
             //保存数据
             boolean result = patientloginService.saveBatch(patientlogins);
-            if(result){
+            if (result) {
                 saveBatch(patientinformations);
-            }else {
+            } else {
                 return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
             }
         } catch (Exception e) {
@@ -385,24 +383,24 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
     @Override
     public String deleteById(String id) {
         //在预约表中查找患者是否存在
-        QueryWrapper<Reserve> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("patientId",id);
-        if (reserveMapper.selectList(queryWrapper).size()!=0){
+        QueryWrapper<Reserve> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("patientId", id);
+        if (reserveMapper.selectList(queryWrapper).size() != 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
         //删除用户信息，并删除头像文件
         Patientinformation patientinformation = patientinformationMapper.selectDeleteDataById(id);
-        if(!patientinformation.getAvatar().contains("default")){
+        if (!patientinformation.getAvatar().contains("default")) {
             String path = System.getProperty("user.dir");
-            File newFile = new File(path + "\\src\\main\\webapp\\Img\\patient\\" + id+"\\" + id + ".jpg");
+            File newFile = new File(path + "\\src\\main\\webapp\\Img\\patient\\" + id + "\\" + id + ".jpg");
             //删除不了也没啥关系，不得影响主任务的执行，只好转化脏数据，所以不对结果进行判定
             newFile.delete();
         }
-        if(patientinformationMapper.permanentDeleteById(id)==0){
+        if (patientinformationMapper.permanentDeleteById(id) == 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C404"));
         }
         //删除用户注册信息
-        if(patientloginMapper.deleteById(id)==0){
+        if (patientloginMapper.deleteById(id) == 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(null));
@@ -410,7 +408,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
 
     @Override
     public String recoveryData(String id) {
-        if(patientinformationMapper.recoveryData(id)==0){
+        if (patientinformationMapper.recoveryData(id) == 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(null));

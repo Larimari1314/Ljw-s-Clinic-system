@@ -18,6 +18,7 @@
         ,operatingTime,state,
         version,orderDelete,orderPrice
     </sql>
+
     <select id="findAllOrderFrom" resultType="map">
         SELECT reserve.id id, patient.name patientName,doctor.name doctorName,
         DATE_FORMAT(reserveTime,'%Y-%m-%d %H:%i') reserveTime,general.value orderState,orderPrice,department.name
@@ -84,5 +85,28 @@
               WHERE drugId = id) PriceNumber
         WHERE orderId = #{id}
     </select>
+    <update id="updateOrderpriceById">
+        UPDATE OrderForm
+        SET orderPrice=#{totalPrice}
+        WHERE id = #{id}
+    </update>
 
+    <select id="findDispensingInterface" resultType="map">
+        SELECT reserve.id,patientInformation.name patientName,doctorInformation.name doctorName,
+               DATE_FORMAT(OrderForm.operatingTime,'%Y-%m-%d %H:%i') operatingTime,DATE_FORMAT(reserve.reserveTime,'%Y-%m-%d %H:%i') reserveTime,orderCompleted.payment,OrderForm.orderPrice
+        FROM reserve
+                 INNER JOIN OrderForm ON OrderForm.id=reserve.id
+                 INNER JOIN patientInformation ON reserve.patientId=patientInformation.id
+                 INNER JOIN doctorInformation ON reserve.doctorId=doctorInformation.id
+                 INNER JOIN orderCompleted ON orderCompleted.id=OrderForm.id
+        WHERE
+        1=1
+        <if test='patientName != null and patientName != "" '>
+            AND patientInformation.name LIKE CONCAT('%',#{patientName},'%')
+        </if>
+        <if test='orderId != null and orderId != "" '>
+            AND reserve.id LIKE CONCAT('%',#{orderId},'%')
+        </if>
+          AND reserve.state=1 AND OrderForm.state='GST02' AND reserve.doctorId=#{doctorId}
+    </select>
 </mapper>
