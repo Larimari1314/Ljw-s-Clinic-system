@@ -17,7 +17,9 @@ import sale.ljw.clinicsystem.backend.dao.order.OrdercompletedMapper;
 import sale.ljw.clinicsystem.backend.dao.order.OrderdrugMapper;
 import sale.ljw.clinicsystem.backend.dao.order.OrderformMapper;
 import sale.ljw.clinicsystem.backend.dao.order.ReserveMapper;
-import sale.ljw.clinicsystem.backend.form.basic.doctor.*;
+import sale.ljw.clinicsystem.backend.form.basic.doctor.FindAppointmentTime;
+import sale.ljw.clinicsystem.backend.form.basic.doctor.FindDispensingInterfaceByDoctor;
+import sale.ljw.clinicsystem.backend.form.basic.doctor.FindReserveByDoctor;
 import sale.ljw.clinicsystem.backend.form.order.admin.FindReserveNotViewedByAdmin;
 import sale.ljw.clinicsystem.backend.form.order.doctor.*;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
@@ -280,6 +282,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
             }
         }
     }
+
     @Transactional
     @Override
     public String removeDrug(RemoveDrugByDoctor drug) {
@@ -298,7 +301,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
         }
         //第三步药品表中药品数量增加
         Drug newDrug = drugMapper.selectById(drug.getDrugId());
-        newDrug.setNumber(newDrug.getNumber()+drug.getNumber());
+        newDrug.setNumber(newDrug.getNumber() + drug.getNumber());
         if (drugMapper.updateById(newDrug) == 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
@@ -314,13 +317,13 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
         //计算总金额并修改订单表
         Double totalPrice = orderformMapper.getOrderTotalPrice(orderId);
         Integer update = orderformMapper.updateOrderpriceById(orderId, totalPrice);
-        if(update==0){
+        if (update == 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
         }
         //修改预约表状态，将state修改成1
-        UpdateWrapper<Reserve> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.eq("id",orderId).set("state", 1);
-        if(!update(updateWrapper)){
+        UpdateWrapper<Reserve> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", orderId).set("state", 1);
+        if (!update(updateWrapper)) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(null));
@@ -328,10 +331,10 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
 
     @Override
     public String findDispensingInterface(FindDispensingInterfaceByDoctor findDispensing) {
-        PageHelper.startPage(findDispensing.getPage(),10);
+        PageHelper.startPage(findDispensing.getPage(), 10);
         ArrayList<Map<String, Object>> dispensingInterface = orderformMapper.findDispensingInterface(findDispensing);
-        PageInfo pageInfo=new PageInfo(dispensingInterface);
-        return JSON.toJSONString(ResponseResult.getSuccessResult(pageInfo),SerializerFeature.DisableCircularReferenceDetect);
+        PageInfo pageInfo = new PageInfo(dispensingInterface);
+        return JSON.toJSONString(ResponseResult.getSuccessResult(pageInfo), SerializerFeature.DisableCircularReferenceDetect);
     }
 
     @Override
@@ -341,15 +344,15 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
             return JSON.toJSONString(ResponseResult.getErrorResult("C401"));
         }
         //查询支付编号和订单id是否对应上
-        QueryWrapper<Ordercompleted> queryWrapper=new QueryWrapper<>();
+        QueryWrapper<Ordercompleted> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("payment", checkOrder.getPayment())
-                        .eq("id",checkOrder.getReserveId());
-        if(ordercompletedMapper.selectOne(queryWrapper)==null){
+                .eq("id", checkOrder.getReserveId());
+        if (ordercompletedMapper.selectOne(queryWrapper) == null) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
         }
         //修改状态为订单结束状态
-        QueryWrapper<Orderform> queryWrapperOrderFrom=new QueryWrapper<>();
-        queryWrapperOrderFrom.eq("id",checkOrder.getReserveId());
+        QueryWrapper<Orderform> queryWrapperOrderFrom = new QueryWrapper<>();
+        queryWrapperOrderFrom.eq("id", checkOrder.getReserveId());
         Orderform orderform = orderformMapper.selectOne(queryWrapperOrderFrom);
         orderform.setState("GST03");
         int update = orderformMapper.updateById(orderform);
@@ -359,6 +362,12 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
             return JSON.toJSONString(ResponseResult.getSuccessResult(null));
         }
     }
+
+    @Override
+    public String getAppointmentNumberByDoctorId(String doctorId) {
+        return JSON.toJSONString(ResponseResult.getSuccessResult(reserveMapper.getAppointmentNumber(doctorId)));
+    }
+
 
 }
 

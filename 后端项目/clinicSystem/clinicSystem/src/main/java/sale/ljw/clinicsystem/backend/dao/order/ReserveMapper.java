@@ -38,6 +38,7 @@ public interface ReserveMapper extends BaseMapper<Reserve> {
     Map<String, Object> getDutyHours(String id);
     Map<String, Object> checkAppointmentTime(ConfirmAppointmentByDoctor confirmAppointment);
     ArrayList<Map<String, Object>> findCurrentAppointments(FindReserveByDoctor reserve);
+    Map<String,Object> getAppointmentNumber(String doctorId);
 }
 
 

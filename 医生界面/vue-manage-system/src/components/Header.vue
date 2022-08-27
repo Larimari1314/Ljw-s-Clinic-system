@@ -10,7 +10,7 @@
             <div class="header-user-con">
                 <!-- 消息中心 -->
                 <div class="btn-bell">
-                    <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
+                    <el-tooltip effect="dark" :content="message?`有${message}条预约信息`:`就诊中心`" placement="bottom">
                         <router-link to="/currentAppointment">
                             <i class="el-icon-bell"></i>
                         </router-link>
@@ -43,17 +43,17 @@
 import { computed, onMounted } from "vue";
 import { useSidebarStore } from '../store/sidebar'
 import { useRouter } from "vue-router";
+import {getAppointmentNumber} from "../api/api";
 export default {
     setup() {
         const user = JSON.parse(localStorage.getItem("doctor"));
-        const message = 2;
+        const message = localStorage.getItem("appointmentNumber");
 
         const sidebar = useSidebarStore();
         // 侧边栏折叠
         const collapseChage = () => {
             sidebar.handleCollapse();
         };
-
         onMounted(() => {
             if (document.body.clientWidth < 1500) {
                 collapseChage();
@@ -79,7 +79,13 @@ export default {
             collapseChage,
             handleCommand,
         };
-    },
+    },mounted() {
+    getAppointmentNumber(JSON.parse(localStorage.getItem("doctor")).id).then((res) => {
+      if (res.data.msgId == 'C200') {
+        localStorage.setItem('appointmentNumber', res.data.result.allAppointmentNumber-res.data.result.appointmentNumber-res.data.result.overAppointmentNumber)
+      }
+    })
+  }
 };
 </script>
 <style scoped>

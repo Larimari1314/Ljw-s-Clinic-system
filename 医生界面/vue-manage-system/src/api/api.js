@@ -26,3 +26,4 @@ export const findDispensingInterface = params => { return axios.post(`${bases}/o
 export const dispensingMedicine = params => { return axios.post(`${bases}/orderByDoctor/dispensingMedicine`,params); };
 export const editDoctorInformation = params => { return axios.post(`${bases}/doctorInformationByDoctor/editDoctorInformation`,params); };
 export const editDoctorLogin = params => { return axios.post(`${bases}/doctorInformationByDoctor/editDoctorLogin`,params); };
+export const getAppointmentNumber = params => { return axios.get(`${bases}/doctorHome/getAppointmentNumber/`+params); };

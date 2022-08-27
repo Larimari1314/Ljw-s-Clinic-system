@@ -175,5 +175,11 @@
         </if>
         AND doctor.id='1' AND reserve.state=0
     </select>
+    <select id="getAppointmentNumber" resultType="map">
+        SELECT (SELECT COUNT(id) FROM reserve WHERE state=1 AND doctorId=#{doctorId}) overAppointmentNumber,
+               (SELECT COUNT(id) FROM reserve WHERE state=2 AND doctorId=#{doctorId}) appointmentNumber,
+               COUNT(id) allAppointmentNumber
+        FROM reserve WHERE doctorId=#{doctorId}
+    </select>
 
 </mapper>

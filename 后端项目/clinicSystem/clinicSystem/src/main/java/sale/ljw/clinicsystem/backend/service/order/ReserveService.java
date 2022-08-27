@@ -50,4 +50,7 @@ public interface ReserveService extends IService<Reserve> {
     public abstract String findDispensingInterface(FindDispensingInterfaceByDoctor findDispensing);
 
     public abstract String dispensingMedicine(DispensingMedicineByDoctor checkOrder);
+
+    public abstract String getAppointmentNumberByDoctorId(String doctorId);
+
 }

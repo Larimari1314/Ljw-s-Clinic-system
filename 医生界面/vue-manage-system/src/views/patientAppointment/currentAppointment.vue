@@ -53,7 +53,7 @@
           <el-tooltip
               class="box-item"
               effect="dark"
-              content="查看预约患者"
+              content="配药"
               placement="left-start">
           <el-button  type="primary" round size="small" @click="editAppointmentPatient(scope.$index, scope.row)" icon="el-icon-edit" circle>
           </el-button>
