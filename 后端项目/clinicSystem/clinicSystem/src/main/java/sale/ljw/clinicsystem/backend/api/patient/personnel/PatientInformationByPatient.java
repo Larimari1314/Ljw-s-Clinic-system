@@ -41,7 +41,8 @@ public class PatientInformationByPatient {
     }
 
     @ApiOperation(value = "注册账号")
+    @PostMapping("/registerAccountByPatient")
     public String registerAccountByPatient(@RequestBody RegisterAccountPatient patient){
-
+        return patientinformationService.registerAccountByPatient(patient);
     }
 }

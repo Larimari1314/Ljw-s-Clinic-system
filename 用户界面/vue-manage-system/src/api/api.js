@@ -33,3 +33,4 @@ export const cancelAppointment = params => { return axios.get(`${bases}/currentA
 export const editPatientLogin = params => { return axios.post(`${bases}/patientInformationByPatient/editPatientLogin` , params); };
 export const editPatientInformation = params => { return axios.post(`${bases}/patientInformationByPatient/editPatientInformation` , params); };
 export const getRemindersNumber = params => { return axios.get(`${bases}/orderByPatient/getRemindersNumber/` + params); };
+export const registerAccountByPatient = params => { return axios.post(`${bases}/patientInformationByPatient/registerAccountByPatient` , params); };

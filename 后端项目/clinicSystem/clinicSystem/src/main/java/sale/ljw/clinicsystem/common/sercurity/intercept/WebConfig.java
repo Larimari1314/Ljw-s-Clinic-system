@@ -38,7 +38,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "/departmentByPatient/scanPayStatus/**",
                 "/orderByPatient/scanPayStatusOrder/**",
                 "/orderByPatient/payingOrder/**",
-                "/patientInformationByPatient/upload"
+                "/patientInformationByPatient/upload",
+                "/patientInformationByPatient/registerAccountByPatient"
         );
     }
 }

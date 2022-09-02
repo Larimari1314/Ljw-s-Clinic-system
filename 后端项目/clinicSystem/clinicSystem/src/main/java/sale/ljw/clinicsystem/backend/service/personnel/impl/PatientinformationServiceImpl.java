@@ -2,6 +2,7 @@ package sale.ljw.clinicsystem.backend.service.personnel.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -31,6 +32,7 @@ import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditPatientInformation;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindPatientByAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.patient.EditPatientInformationByPatient;
+import sale.ljw.clinicsystem.backend.form.personnel.patient.RegisterAccountPatient;
 import sale.ljw.clinicsystem.backend.pojo.order.Reserve;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Patientinformation;
@@ -453,6 +455,61 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         } else {
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
+    }
+    @Transactional
+    @Override
+    public String registerAccountByPatient(RegisterAccountPatient patient) {
+        //判断登录名是否重复
+        QueryWrapper<Patientlogin> queryWrapperLoginName=new QueryWrapper<>();
+        queryWrapperLoginName.eq("loginName",patient.getLoginname());
+        List<Patientlogin> patientloginsName = patientloginMapper.selectList(queryWrapperLoginName);
+        if(patientloginsName.size()!=0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403-1"));
+        }
+        //判断邮箱是否重复
+        QueryWrapper<Patientlogin> queryWrapperLoginEmail=new QueryWrapper<>();
+        queryWrapperLoginEmail.eq("loginEmail",patient.getLoginemail());
+        List<Patientlogin> patientloginsEmail = patientloginMapper.selectList(queryWrapperLoginEmail);
+        if(patientloginsEmail.size()!=0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403-2"));
+        }
+        //判断电话是否重复
+        QueryWrapper<Patientlogin> queryWrapperPhone=new QueryWrapper<>();
+        queryWrapperPhone.eq("loginPhone",patient.getLoginphone());
+        List<Patientlogin> patientloginsPhone = patientloginMapper.selectList(queryWrapperPhone);
+        if(patientloginsPhone.size()!=0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403-3"));
+        }
+        //判断用户名是否重复
+        QueryWrapper<Patientinformation> queryWrapperUsername=new QueryWrapper<>();
+        queryWrapperUsername.eq("name",patient.getName());
+        List<Patientinformation> patientloginsUsername = patientinformationMapper.selectList(queryWrapperUsername);
+        if(patientloginsUsername.size()!=0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403-4"));
+        }
+        //存储用户登录信息
+        Patientlogin patientlogin=new Patientlogin();
+        //设置id
+        String resultId = UUID.randomUUID().toString();
+        patientlogin.setId(resultId);
+        //设置权限 3
+        patientlogin.setPermission(3);
+        BeanUtils.copyProperties(patient,patientlogin);
+        patientlogin.setPassword(DigestUtils.md5DigestAsHex(patient.getPassword().getBytes(StandardCharsets.UTF_8)));
+        int insert = patientloginMapper.insert(patientlogin);
+        if(insert==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405-1"));
+        }
+        //存储用户基本信息
+        Patientinformation patientinformation=new Patientinformation();
+        patientinformation.setId(resultId);
+        patientinformation.setAge(new Date().getYear()-patient.getBirthday().getYear());
+        BeanUtils.copyProperties(patient,patientinformation);
+        int insert1 = patientinformationMapper.insert(patientinformation);
+        if(insert1==0){
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405-2"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult(null));
     }
 
 }

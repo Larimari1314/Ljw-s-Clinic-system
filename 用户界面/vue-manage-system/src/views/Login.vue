@@ -91,7 +91,7 @@
 <script>
 import {ElMessage} from "element-plus";
 import router from "../router";
-import {findSexCoding, loginPatient} from "../api/api";
+import {findSexCoding, loginPatient, registerAccountByPatient} from "../api/api";
 
 export default {
   data() {
@@ -187,8 +187,40 @@ export default {
     submitAddForm() {
       this.$refs['vForm'].validate(valid => {
         if (valid) {
-          alert(JSON.stringify(this.formData))
-          this.drawer=false
+          // alert(JSON.stringify(this.formData))
+          registerAccountByPatient(this.formData).then((res)=>{
+           if(res.data.msgId=='C200'){
+             this.drawer=false
+             ElMessage.success("注册成功");
+             this.formData={
+               loginname: "",
+               loginemail: "",
+               loginphone: "",
+               password: "",
+               name: "",
+               birthday: null,
+               sex: "",
+               identitynumber: "",
+               address: "",
+             };
+           }else if(res.data.msgId=='C403-1'){
+             ElMessage.error("登录名重复");
+             this.formData.loginname='';
+           }else if(res.data.msgId=='C403-2'){
+             ElMessage.error("登录邮箱重复");
+             this.formData.loginemail='';
+           }else if(res.data.msgId=='C403-3'){
+             ElMessage.error("登录电话重复");
+             this.formData.loginphone='';
+           }else if(res.data.msgId=='C405-1'){
+             ElMessage.error("登录信息添加失败，请稍后重试");
+           }else if(res.data.msgId=='C405-2'){
+             ElMessage.error("用户基本信息添加失败，请稍后重试");
+           }else if(res.data.msgId=='C403-4'){
+             ElMessage.error("用户名重复，如重名请在名字后面填写1、2 以区分");
+             this.formData.name='';
+           }
+          })
         }
       })
     },
