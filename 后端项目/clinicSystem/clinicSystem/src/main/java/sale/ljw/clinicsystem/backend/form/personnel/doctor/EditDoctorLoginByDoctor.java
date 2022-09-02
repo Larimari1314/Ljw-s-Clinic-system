@@ -9,8 +9,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 @ApiModel(value = "修改医生登录信息")
 public class EditDoctorLoginByDoctor {
-    @ApiModelProperty(value = "医生id")
-    @NotBlank(message = "医生id不得为空")
+    @ApiModelProperty(value = "id")
+    @NotBlank(message = "id不得为空")
     private String id;
     @ApiModelProperty(value = "旧密码")
     @NotBlank(message = "旧密码不得为空")

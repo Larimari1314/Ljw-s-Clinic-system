@@ -6,6 +6,7 @@ import sale.ljw.clinicsystem.backend.form.personnel.admin.AddPatientInformationB
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditPatientInformation;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindPatientByAdmin;
+import sale.ljw.clinicsystem.backend.form.personnel.patient.EditPatientInformationByPatient;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Patientinformation;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,4 +38,6 @@ public interface PatientinformationService extends IService<Patientinformation> 
     public abstract String deleteById(String id);
 
     public abstract String recoveryData(String id);
+
+    public abstract String editPatientByPatient(EditPatientInformationByPatient patientInformation, MultipartFile multipartFile);
 }

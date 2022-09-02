@@ -558,6 +558,16 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
+
+    @Override
+    public String getDoctorListByDepartment(String departmentId) {
+        List<Map<String, Object>> doctorListByDepartment = doctorinformationMapper.getDoctorListByDepartment(departmentId);
+        if(doctorListByDepartment==null){
+            //科室无人
+            JSON.toJSONString(ResponseResult.getErrorResult("C403"));
+        }
+        return JSON.toJSONString(ResponseResult.getSuccessResult(doctorListByDepartment));
+    }
 }
 
 

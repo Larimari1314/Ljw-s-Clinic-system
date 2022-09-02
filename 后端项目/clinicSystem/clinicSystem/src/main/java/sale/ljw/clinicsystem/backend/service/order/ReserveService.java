@@ -2,8 +2,11 @@ package sale.ljw.clinicsystem.backend.service.order;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import sale.ljw.clinicsystem.backend.form.basic.doctor.*;
+import sale.ljw.clinicsystem.backend.form.basic.patient.FindAllCurrentAppointmentByPatient;
 import sale.ljw.clinicsystem.backend.form.order.admin.FindReserveNotViewedByAdmin;
 import sale.ljw.clinicsystem.backend.form.order.doctor.*;
+import sale.ljw.clinicsystem.backend.form.order.patient.FindAllHistoryOrderFormByPatient;
+import sale.ljw.clinicsystem.backend.form.order.patient.FindUnpaidOrderFormByPatient;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.pojo.order.Reserve;
 
@@ -53,4 +56,41 @@ public interface ReserveService extends IService<Reserve> {
 
     public abstract String getAppointmentNumberByDoctorId(String doctorId);
 
+    public abstract String getAppointmentInformation(ConfirmAppointmentByDoctor confirmAppointment);
+
+    public abstract String getQRCode(String payId);
+
+    public abstract String getPayAppointmentInformation(String payId);
+
+   public abstract String scanPayStatus(String payId);
+
+    public abstract String paymentStatus(String payId);
+
+    public abstract String payAppointment(String payId);
+
+    public abstract String findAllHistoryOrderForm(FindAllHistoryOrderFormByPatient historyOrderForm);
+
+    public abstract String findOrderCompletion(String orderId);
+
+    public abstract String findUnpaidOrderForm(FindUnpaidOrderFormByPatient unpaidOrderForm);
+
+    public abstract String getOrderInformation(String pagId);
+
+   public abstract String payOrderBoundingByPatient(String orderId);
+
+    public abstract String getOrderInformationPaying(String orderId);
+
+    public abstract String getQRCodeOrder(String orderId);
+
+    public abstract String scanPayStatusOrder(String orderId);
+
+    public abstract String payingOrder(String orderId);
+
+    public abstract String refundOperationOrder(String orderId);
+
+    public abstract String getAllCurrentAppointment(FindAllCurrentAppointmentByPatient currentAppointment);
+
+    public abstract String cancelAppointmentBypatient(String orderId);
+
+    public abstract String getRemindersNumber(String patientId);
 }

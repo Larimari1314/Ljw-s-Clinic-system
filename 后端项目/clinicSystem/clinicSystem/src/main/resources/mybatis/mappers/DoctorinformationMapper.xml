@@ -104,4 +104,15 @@
     <update id="recoveryData" parameterType="string">
         UPDATE doctorInformation SET doctorDelete=0 WHERE id = #{id}
     </update>
+    <select id="getDoctorListByDepartment" resultType="java.util.Map">
+        SELECT doctorInformation.id id,doctorInformation.name,age,generalSex.value sex,generalRegis.value register,
+               registrationLevel.id registraId,generalDrug.value duty,doctorDuty.dutyId dutyId
+        FROM doctorInformation
+                 INNER JOIN general generalSex ON doctorInformation.sex=coding
+                 INNER JOIN registrationLevel ON doctorInformation.registereId=registrationLevel.id
+                 INNER JOIN general generalRegis ON registrationLevel.name=generalRegis.coding
+                 INNER JOIN doctorDuty ON doctorInformation.id=doctorDuty.id
+                 INNER JOIN general generalDrug ON generalDrug.coding=doctorDuty.dutyId
+        WHERE doctorInformation.did=#{departmentId};
+    </select>
 </mapper>

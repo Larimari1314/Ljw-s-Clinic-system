@@ -50,4 +50,6 @@ public interface DoctorinformationService extends IService<Doctorinformation> {
     public abstract String recoveryData(String id);
 
    public abstract String editDoctorByDoctor(EditDoctorInformationByDoctor doctorInformation, MultipartFile multipartFile);
+
+    public abstract String getDoctorListByDepartment(String departmentId);
 }

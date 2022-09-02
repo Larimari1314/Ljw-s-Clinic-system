@@ -37,6 +37,8 @@ public interface DoctorinformationMapper extends BaseMapper<Doctorinformation> {
     Integer permanentDeleteById(String id);
     Doctorinformation selectDeleteDataById(String id);
     Integer recoveryData(String id);
+
+    List<Map<String, Object>> getDoctorListByDepartment(String departmentId);
 }
 
 

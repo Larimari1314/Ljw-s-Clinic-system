@@ -14,12 +14,8 @@
             登录时间：
             <span>{{ loginTime }}</span>
           </div>
-          <div class="user-info-list">
-            上次登录地点：
-            <span>东莞</span>
-          </div>
         </el-card>
-        <el-card shadow="hover" style="height:480px;">
+        <el-card shadow="hover" style="height:320px;">
           <template #header>
             <div class="clearfix">
               <span>预约详情图状</span>
@@ -69,7 +65,7 @@
             </el-card>
           </el-col>
         </el-row>
-        <el-card shadow="hover" style="height:480px;">
+        <el-card shadow="hover" style="height:470px;">
           <template #header>
             <el-scrollbar height="450px">
               <p v-for="item in appointmentList" :key="item" class="scrollbar-demo-item">

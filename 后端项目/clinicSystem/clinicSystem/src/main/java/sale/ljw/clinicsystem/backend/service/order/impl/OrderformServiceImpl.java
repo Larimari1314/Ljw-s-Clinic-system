@@ -60,9 +60,10 @@ public class OrderformServiceImpl extends ServiceImpl<OrderformMapper, Orderform
     public String invoiceService(String id) {
         //检测是否室已支付状态
         QueryWrapper<Orderform> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("state", "GST02").eq("id",id);
+        queryWrapper.eq("id",id).and(qr->qr.eq("state", "GST02").or().eq("state", "GST03"));
         Long aLong = orderformMapper.selectCount(queryWrapper);
         if(aLong == 0){
+
             return JSON.toJSONString(ResponseResult.getErrorResult("C404"));
         }
         //将药品列表，医生患者信息和支付信息发送

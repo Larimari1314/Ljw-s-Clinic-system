@@ -74,12 +74,14 @@
     </select>
 
     <select id="cancelAppointmentViews" resultType="map">
-        SELECT reserve.id id, patient.name patientName,doctor.name doctorName,reserve.NumberReminders,reserve.state,DATE_FORMAT(reserveTime,'%Y-%m-%d %H:%i') reserveTime,department.name departName,regis.value
+        SELECT reserve.id id, patient.name patientName,doctor.name
+        doctorName,reserve.NumberReminders,reserve.state,DATE_FORMAT(reserveTime,'%Y-%m-%d %H:%i')
+        reserveTime,department.name departName,regis.value
         FROM reserve
-                 INNER JOIN patientInformation patient ON reserve.patientId=patient.id
-                 INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
-                 INNER JOIN department ON did=department.id
-                 INNER JOIN (SELECT r.id,VALUE FROM general,registrationLevel r WHERE NAME=coding) regis ON regis.id=registereId
+        INNER JOIN patientInformation patient ON reserve.patientId=patient.id
+        INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
+        INNER JOIN department ON did=department.id
+        INNER JOIN (SELECT r.id,VALUE FROM general,registrationLevel r WHERE NAME=coding) regis ON regis.id=registereId
         WHERE 1=1
         <if test='patientName != null and patientName != "" '>
             AND patient.name LIKE CONCAT('%',#{patientName},'%')
@@ -109,12 +111,12 @@
 
     <select id="historyAppointment" resultType="java.util.Map">
         SELECT reserve.id,doctor.name doctorName,patient.name patientName,
-               DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
-               department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId
+        DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
+        department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId
         FROM reserve
-            INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
-            INNER JOIN patientInformation patient ON patient.id=reserve.patientId
-            INNER JOIN department ON department.id=did
+        INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
+        INNER JOIN patientInformation patient ON patient.id=reserve.patientId
+        INNER JOIN department ON department.id=did
         WHERE 1=1
         <if test='patientName != null and patientName != "" '>
             AND patient.name LIKE CONCAT('%',#{patientName},'%')
@@ -122,50 +124,56 @@
         <if test='orderId != null and orderId != "" '>
             AND reserve.id LIKE CONCAT('%',#{orderId},'%')
         </if>
-          AND doctor.id = #{doctorId} AND reserve.state!=0
+        AND doctor.id = #{doctorId} AND reserve.state!=0
     </select>
     <select id="checkOrderOnOrderFrom" resultType="java.util.Map">
-        SELECT OrderForm.id,DATE_FORMAT(operatingTime, '%Y年%m月%d日 %H:%i') operatingTime,general.value orderState,doctor.name doctorName,patientInformation.name patientName
-             ,department.name departmentName
+        SELECT OrderForm.id
+             , DATE_FORMAT(operatingTime, '%Y年%m月%d日 %H:%i') operatingTime
+             , general.value                                    orderState
+             , doctor.name                                      doctorName
+             , patientInformation.name                          patientName
+             , department.name                                  departmentName
         FROM OrderForm
-                 INNER JOIN reserve ON OrderForm.id=reserve.id AND doctorId=#{doctorId}
-                 INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
-                 INNER JOIN patientInformation ON patientInformation.id-reserve.patientId
-                 INNER JOIN general ON coding=OrderForm.state
-                 INNER JOIN department ON department.id=did
-        WHERE OrderForm.id=#{reserveId}
+                 INNER JOIN reserve ON OrderForm.id = reserve.id AND doctorId = #{doctorId}
+                 INNER JOIN doctorInformation doctor ON doctor.id = reserve.doctorId
+                 INNER JOIN patientInformation ON patientInformation.id - reserve.patientId
+                 INNER JOIN general ON coding = OrderForm.state
+                 INNER JOIN department ON department.id = did
+        WHERE OrderForm.id = #{reserveId}
         GROUP BY OrderForm.id
     </select>
     <select id="checkOrderDrugOnOrderFrom" resultType="map" parameterType="string">
-        SELECT drug.id,cover,drugName,price,orderDrug.number*price totalPrice,orderDrug.number number
+        SELECT drug.id, cover, drugName, price, orderDrug.number * price totalPrice, orderDrug.number number
         FROM orderDrug
-                 INNER JOIN drug ON orderDrug.drugId=drug.id
-        WHERE orderDrug.orderId=#{id}
+                 INNER JOIN drug ON orderDrug.drugId = drug.id
+        WHERE orderDrug.orderId = #{id}
     </select>
     <select id="getAppointmentTime" resultType="map">
-        SELECT DATE_FORMAT(reserveTime,'%H:%i') reserveTime
+        SELECT DATE_FORMAT(reserveTime, '%H:%i') reserveTime
         FROM reserve
-        WHERE DATEDIFF(#{date},reserveTime)=0 AND doctorId=#{doctorId}
+        WHERE DATEDIFF(#{date}, reserveTime) = 0
+          AND doctorId = #{doctorId}
     </select>
     <select id="getDutyHours" resultType="map">
-        SELECT TIME_FORMAT(startTime,'%H:%i') startTime,TIME_FORMAT(endTime,'%H:%i') endTime
+        SELECT TIME_FORMAT(startTime, '%H:%i') startTime, TIME_FORMAT(endTime, '%H:%i') endTime
         FROM doctorDuty
-                 INNER JOIN dutyTime ON dutyTime.id=doctorDuty.dutyId
-        WHERE doctorDuty.id=#{id}
+                 INNER JOIN dutyTime ON dutyTime.id = doctorDuty.dutyId
+        WHERE doctorDuty.id = #{id}
     </select>
     <select id="checkAppointmentTime" resultType="map">
         SELECT id
         FROM reserve
-        WHERE DATE_FORMAT(#{reservetime},'%Y年%m月%d日 %H:%i')=DATE_FORMAT(reserveTime,'%Y年%m月%d日 %H:%i') AND doctorId=#{doctorid}
+        WHERE DATE_FORMAT(#{reservetime}, '%Y年%m月%d日 %H:%i') = DATE_FORMAT(reserveTime, '%Y年%m月%d日 %H:%i')
+          AND doctorId = #{doctorid}
     </select>
     <select id="findCurrentAppointments" resultType="java.util.Map">
         SELECT reserve.id,doctor.name doctorName,patient.name patientName,
-               DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
-               department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId
+        DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
+        department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId
         FROM reserve
-                 INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
-                 INNER JOIN patientInformation patient ON patient.id=reserve.patientId
-                 INNER JOIN department ON department.id=did
+        INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
+        INNER JOIN patientInformation patient ON patient.id=reserve.patientId
+        INNER JOIN department ON department.id=did
         WHERE 1=1
         <if test='patientName != null and patientName != "" '>
             AND patient.name LIKE CONCAT('%',#{patientName},'%')
@@ -176,10 +184,126 @@
         AND doctor.id='1' AND reserve.state=0
     </select>
     <select id="getAppointmentNumber" resultType="map">
-        SELECT (SELECT COUNT(id) FROM reserve WHERE state=1 AND doctorId=#{doctorId}) overAppointmentNumber,
-               (SELECT COUNT(id) FROM reserve WHERE state=2 AND doctorId=#{doctorId}) appointmentNumber,
-               COUNT(id) allAppointmentNumber
-        FROM reserve WHERE doctorId=#{doctorId}
+        SELECT (SELECT COUNT(id) FROM reserve WHERE state = 1 AND doctorId = #{doctorId}) overAppointmentNumber,
+               (SELECT COUNT(id) FROM reserve WHERE state = 2 AND doctorId = #{doctorId}) appointmentNumber,
+               COUNT(id)                                                                  allAppointmentNumber
+        FROM reserve
+        WHERE doctorId = #{doctorId}
     </select>
-
+    <select id="getPayAppointmentInformation" resultType="map">
+        SELECT patient.name           patientName,
+               patient.age            patientAge,
+               patient.identityNumber patientIdentityNumber,
+               doctor.name            doctorName,
+               doctor.age             doctorAge,
+               general.value          duty,
+               department.name        departmentName
+        FROM patientInformation patient,
+             doctorInformation doctor
+                 INNER JOIN doctorDuty ON doctorDuty.id = doctor.id
+                 INNER JOIN department ON did = department.id
+                 INNER JOIN general ON doctorDuty.dutyId = coding
+        WHERE patient.id = #{patientid}
+          AND doctor.id = #{doctorid}
+    </select>
+    <select id="findAllHistoryOrderFormByPatient" resultType="java.util.Map">
+        SELECT reserve.id,patient.name patientName,doctor.name doctorName,orderGeneral.value orderState,
+        OrderForm.orderPrice totalPrice,DATE_FORMAT(OrderForm.operatingTime,'%Y年%m月%d日 %H时%i分%s秒') operatingTime,
+        DATE_FORMAT(reserve.reserveTime,'%Y年%m月%d日 %H时%i分') reserveTime
+        FROM reserve
+        INNER JOIN OrderForm ON OrderForm.id=reserve.id AND (OrderForm.state='GST03' OR OrderForm.state='GST04')
+        INNER JOIN general orderGeneral ON OrderForm.state=orderGeneral.coding
+        INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
+        INNER JOIN department ON doctor.did=department.id
+        INNER JOIN patientInformation patient ON patient.id=reserve.patientId
+        WHERE 1=1
+        <if test='doctorName != null and doctorName != "" '>
+            AND doctor.name LIKE CONCAT('%',#{doctorName},'%')
+        </if>
+        AND reserve.patientId=#{patientId}
+    </select>
+    <select id="findOrderCompletion" resultType="java.util.Map">
+        SELECT reserve.id,
+               patient.name                                                      patientName,
+               doctor.name                                                       doctorName,
+               orderGeneral.value                                                orderState,
+               OrderForm.orderPrice                                              totalPrice,
+               DATE_FORMAT(OrderForm.operatingTime, '%Y年%m月%d日 %H时%i分%s秒') operatingTime,
+               DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H时%i分')         reserveTime,
+               department.name                                                   departmentName,
+               patient.identityNumber
+        FROM reserve
+                 INNER JOIN OrderForm ON OrderForm.id = reserve.id AND OrderForm.state = 'GST03'
+                 INNER JOIN general orderGeneral ON OrderForm.state = orderGeneral.coding
+                 INNER JOIN doctorInformation doctor ON reserve.doctorId = doctor.id
+                 INNER JOIN department ON doctor.did = department.id
+                 INNER JOIN patientInformation patient ON patient.id = reserve.patientId
+        WHERE OrderForm.id = #{orderId}
+    </select>
+    <select id="findOrderCompletionDrugList" resultType="java.util.Map">
+        SELECT DISTINCT drug.cover,
+                        drug.drugName                 drugName,
+                        orderDrug.number,
+                        drug.price,
+                        drug.price * orderDrug.number totalPrice
+        FROM drug,
+             orderDrug
+        WHERE (orderDrug.number, drug.id) IN
+              (SELECT orderDrug.number, orderDrug.drugId FROM orderDrug WHERE orderDrug.orderId = #{orderId})
+    </select>
+    <select id="findUnpaidOrderForm" resultType="java.util.Map">
+        SELECT OrderForm.id orderId,doctor.name doctorName,patient.name patientName,OrderForm.orderPrice,
+        DATE_FORMAT(OrderForm.operatingTime,'%Y年%m月%d日 %H时%i分%s秒')
+        operatingTime,DATE_FORMAT(reserve.reserveTime,'%Y年%m月%d日 %H时%i分') reserveTime,
+        general.value orderState
+        FROM reserve
+            INNER JOIN OrderForm ON (OrderForm.state='GST01' OR OrderForm.state='GST02') AND OrderForm.id=reserve.id
+            INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
+            INNER JOIN patientInformation patient ON reserve.patientId=patient.id
+            INNER JOIN general ON OrderForm.state=coding
+        WHERE 1=1
+        <if test='doctorName != null and doctorName != "" '>
+            AND doctor.name LIKE CONCAT('%',#{doctorName},'%')
+        </if>
+        AND reserve.state=1 AND reserve.patientId=#{patientId}
+        GROUP BY OrderForm.id
+    </select>
+    <select id="findOrderUnpaid" resultType="java.util.Map">
+        SELECT reserve.id,
+               patient.id patientId,
+               patient.name                                                      patientName,
+               doctor.name                                                       doctorName,
+               orderGeneral.value                                                orderState,
+               OrderForm.orderPrice                                              totalPrice,
+               DATE_FORMAT(OrderForm.operatingTime, '%Y年%m月%d日 %H时%i分%s秒') operatingTime,
+               DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H时%i分')         reserveTime,
+               department.name                                                   departmentName,
+               patient.identityNumber
+        FROM reserve
+                 INNER JOIN OrderForm ON OrderForm.id = reserve.id AND OrderForm.state = 'GST01'
+                 INNER JOIN general orderGeneral ON OrderForm.state = orderGeneral.coding
+                 INNER JOIN doctorInformation doctor ON reserve.doctorId = doctor.id
+                 INNER JOIN department ON doctor.did = department.id
+                 INNER JOIN patientInformation patient ON patient.id = reserve.patientId
+        WHERE OrderForm.id = #{orderId}
+    </select>
+    <select id="getAllCurrentAppointment" resultType="java.util.Map">
+        SELECT reserve.id orderId,doctor.name,doctor.avatar doctorAvatar,department.name departmentName
+             ,DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H时%i分') reserveTime,reserve.state
+        FROM reserve
+                 INNER JOIN doctorInformation doctor ON reserve.doctorId=doctor.id
+                 INNER JOIN department ON doctor.did=department.id
+                 INNER JOIN patientInformation patient ON reserve.patientId=patient.id
+        WHERE 1=1
+        <if test='doctorName != null and doctorName != "" '>
+           AND  doctor.name LIKE CONCAT('%',#{doctorName},'%')
+        </if> AND reserve.patientId=#{patientId}
+        ORDER BY
+        reserve.state
+    </select>
+    <select id="getRemindersNumber" resultType="java.lang.Integer">
+        SELECT SUM(NumberReminders)
+        FROM reserve
+        WHERE state=0 AND patientId=#{patientId}
+    </select>
 </mapper>

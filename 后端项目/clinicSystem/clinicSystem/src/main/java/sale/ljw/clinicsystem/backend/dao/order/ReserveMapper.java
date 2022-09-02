@@ -3,11 +3,14 @@ package sale.ljw.clinicsystem.backend.dao.order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.basic.patient.FindAllCurrentAppointmentByPatient;
 import sale.ljw.clinicsystem.backend.form.order.doctor.CheckOrderByDoctor;
 import sale.ljw.clinicsystem.backend.form.order.doctor.ConfirmAppointmentByDoctor;
 import sale.ljw.clinicsystem.backend.form.basic.doctor.FindAppointmentTime;
 import sale.ljw.clinicsystem.backend.form.basic.doctor.FindReserveByDoctor;
 import sale.ljw.clinicsystem.backend.form.order.admin.FindReserveNotViewedByAdmin;
+import sale.ljw.clinicsystem.backend.form.order.patient.FindAllHistoryOrderFormByPatient;
+import sale.ljw.clinicsystem.backend.form.order.patient.FindUnpaidOrderFormByPatient;
 import sale.ljw.clinicsystem.backend.pojo.order.Reserve;
 
 import java.util.ArrayList;
@@ -39,6 +42,19 @@ public interface ReserveMapper extends BaseMapper<Reserve> {
     Map<String, Object> checkAppointmentTime(ConfirmAppointmentByDoctor confirmAppointment);
     ArrayList<Map<String, Object>> findCurrentAppointments(FindReserveByDoctor reserve);
     Map<String,Object> getAppointmentNumber(String doctorId);
+    Map<String,Object> getPayAppointmentInformation(ConfirmAppointmentByDoctor confirmAppointment);
+    ArrayList<Map<String, Object>> findAllHistoryOrderFormByPatient(FindAllHistoryOrderFormByPatient historyOrderForm);
+
+    Map<String, Object> findOrderCompletion(String orderId);
+    ArrayList<Map<String, Object>> findOrderCompletionDrugList(String orderId);
+
+    ArrayList<Map<String, Object>> findUnpaidOrderForm(FindUnpaidOrderFormByPatient unpaidOrderForm);
+
+    Map<String, Object> findOrderUnpaid(String orderId);
+
+    ArrayList<Map<String, Object>> getAllCurrentAppointment(FindAllCurrentAppointmentByPatient currentAppointment);
+
+    Integer getRemindersNumber(String patientId);
 }
 
 

@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrap">
     <div class="ms-login">
-      <div class="ms-title">后台管理系统</div>
+      <div class="ms-title">医生诊所登录端</div>
       <el-form :model="param" :rules="rules" ref="param" label-width="0px" class="ms-content">
         <el-form-item prop="loginCredentials">
           <el-input v-model="param.loginCredentials" placeholder="账号">

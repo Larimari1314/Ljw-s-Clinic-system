@@ -30,7 +30,9 @@ import sale.ljw.clinicsystem.backend.form.personnel.admin.AddPatientInformationB
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditPatientInformation;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindPatientByAdmin;
+import sale.ljw.clinicsystem.backend.form.personnel.patient.EditPatientInformationByPatient;
 import sale.ljw.clinicsystem.backend.pojo.order.Reserve;
+import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Patientinformation;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Patientlogin;
 import sale.ljw.clinicsystem.backend.service.personnel.PatientinformationService;
@@ -412,6 +414,45 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(null));
+    }
+
+    @Override
+    public String editPatientByPatient(EditPatientInformationByPatient patientInformation, MultipartFile multipartFile) {
+        QueryWrapper<Patientinformation> queryWrapperName = new QueryWrapper<>();
+        queryWrapperName.eq("name", patientInformation.getName());
+        //当存在名称数据
+        Map<String, Object> map = getMap(queryWrapperName);
+        if (map != null && !map.get("id").equals(patientInformation.getId())) {
+            //返回相同名称的错误码 403
+            return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
+        }
+        if (multipartFile != null) {
+            //判断用户头像是否上传
+            String path = System.getProperty("user.dir");
+            File newFile = new File(path + "\\src\\main\\webapp\\Img\\patient\\" + patientInformation.getId());
+            newFile.mkdirs();
+            File files = new File(newFile + "\\" + patientInformation.getId() + ".jpg");
+            try {
+                multipartFile.transferTo(files);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            patientInformation.setAvatar("http://localhost:8000/clinic/Img/patient/" + patientInformation.getId() + "/" + patientInformation.getId() + ".jpg");
+        }
+        UpdateWrapper<Patientinformation> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", patientInformation.getId()).
+                set("address", patientInformation.getAddress()).
+                set("avatar", patientInformation.getAvatar()).
+                set("birthday", patientInformation.getBirthday()).
+                set("name", patientInformation.getName()).
+                set("age", new Date().getYear() - patientInformation.getBirthday().getYear()).
+                set("sex", patientInformation.getSex());
+        boolean update = update(updateWrapper);
+        if (update) {
+            return JSON.toJSONString(ResponseResult.getSuccessResult(null));
+        } else {
+            return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
+        }
     }
 
 }

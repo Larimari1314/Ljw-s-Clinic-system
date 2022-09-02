@@ -56,7 +56,7 @@
           <el-tag v-if="users[scope.$index].orderState=='未支付'" type="warning">未支付</el-tag>
           <el-tag v-if="users[scope.$index].orderState=='已支付'" type="success">已支付</el-tag>
           <el-tag v-if="users[scope.$index].orderState=='订单完成'" type="primary">订单完成</el-tag>
-          <el-tag v-if="users[scope.$index].orderState=='已取消'" type="danger">已取消</el-tag>
+          <el-tag v-if="users[scope.$index].orderState=='订单取消'" type="danger">已取消</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="reserveTime" label="预约时间" width="150" sortable>
@@ -210,7 +210,7 @@ export default {
       this.sameOrder=true;
       this.totalPrice=0;
       this.orderList= Object.assign({}, row);
-      if(this.orderList.orderState==='已支付'){
+      if(this.orderList.orderState==='已支付' || this.orderList.orderState==='订单完成' ){
         this.sameOrder=false
       }
       findOrderDrugList(row.id).then((res)=>{
