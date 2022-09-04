@@ -307,7 +307,7 @@ export default {
 .login-tips {
   font-size: 12px;
   line-height: 30px;
-  color: #f17070;
+  color: #0800e6;
 }
 /*1.显示滚动条：当内容超出容器的时候，可以拖动：*/
 .el-drawer__body {

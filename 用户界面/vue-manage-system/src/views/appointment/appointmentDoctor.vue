@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column prop="cover" label="科室图片" width="320">
         <template v-slot="scope">
-          <a href="http://localhost:5000/#/appointmentDoctor">
+          <a href="http://192.168.1.106:3088/#/appointmentDoctor">
             <img :src="department[scope.$index].cover" style="border-radius:10%; " width="250" height="150"
                  alt="科室封面">
           </a>
