@@ -181,7 +181,7 @@
         <if test='orderId != null and orderId != "" '>
             AND reserve.id LIKE CONCAT('%',#{orderId},'%')
         </if>
-        AND doctor.id='1' AND reserve.state=0
+        AND doctor.id=#{doctorId} AND reserve.state=0
     </select>
     <select id="getAppointmentNumber" resultType="map">
         SELECT (SELECT COUNT(id) FROM reserve WHERE state = 1 AND doctorId = #{doctorId}) overAppointmentNumber,
