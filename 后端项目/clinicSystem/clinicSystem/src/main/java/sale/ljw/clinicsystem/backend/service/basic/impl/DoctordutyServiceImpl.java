@@ -13,6 +13,7 @@ import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sale.ljw.clinicsystem.backend.dao.basic.DoctordutyMapper;
+import sale.ljw.clinicsystem.backend.dao.personnel.DoctorinformationMapper;
 import sale.ljw.clinicsystem.backend.form.basic.admin.EditDoctorDuty;
 import sale.ljw.clinicsystem.backend.form.basic.admin.EditUniteDutyTimeByAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindDoctorByAdmin;
@@ -22,10 +23,8 @@ import sale.ljw.clinicsystem.backend.service.basic.DoctordutyService;
 import sale.ljw.clinicsystem.backend.service.personnel.DoctorinformationService;
 import sale.ljw.clinicsystem.common.http.ResponseResult;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author 86155
@@ -39,6 +38,8 @@ public class DoctordutyServiceImpl extends ServiceImpl<DoctordutyMapper, Doctord
     private DoctordutyMapper doctordutyMapper;
     @Autowired
     private DoctorinformationService doctorinformationService;
+    @Autowired
+    private DoctorinformationMapper doctorinformationMapper;
 
     @Override
     public String findAllDoctor(FindDoctorByAdmin doctor) {
@@ -75,9 +76,9 @@ public class DoctordutyServiceImpl extends ServiceImpl<DoctordutyMapper, Doctord
                 .eq(StringUtils.isNotBlank(dutyTime.getRegistered()),"registereId", dutyTime.getRegistered())
                 .between("age", dutyTime.getStartAge(), dutyTime.getEndAge())
                 .select("id");
-        Map<String, Object> map = doctorinformationService.getMap(queryWrapper);
+        List<String> collect =  doctorinformationMapper.selectList(queryWrapper).stream().map(Doctorinformation::getId).collect(Collectors.toList());
         UpdateWrapper<Doctorduty> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.in("id", map.values())
+        updateWrapper.in("id", collect)
                         .set("dutyId", dutyTime.getScheduleRule());
         boolean update = update(updateWrapper);
         if (update) {
