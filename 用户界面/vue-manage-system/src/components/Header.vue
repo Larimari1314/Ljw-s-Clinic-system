@@ -81,7 +81,11 @@ export default {
     },mounted() {
     getRemindersNumber(JSON.parse(localStorage.getItem("patient")).id).then((res) => {
       if (res.data.msgId == 'C200') {
-        localStorage.setItem('appointmentNumber',res.data.result)
+        if(res.data.result==null){
+          localStorage.setItem('appointmentNumber',0)
+        }else{
+          localStorage.setItem('appointmentNumber',res.data.result)
+        }
       }
     })
   }
