@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sale.ljw.clinicsystem.backend.dao.basic.DoctordutyMapper;
@@ -139,6 +140,8 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
             //返回相同名称的错误码 403
             return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //数据通过验证，此时添加数据到数据库
         //添加医生信息，首先添加登陆表中
         //为用户创建id
@@ -165,6 +168,7 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
                 }
             }
         }
+        TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
         return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
     }
 
@@ -177,6 +181,8 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
         if (reserves.size()!=0){
             return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //预约表中不存在医生，执行删除医生
         //逻辑删除顺序：医生信息表——登录表权限关闭
         //逻辑删除删除信息表即可，将权限改为0
@@ -194,6 +200,7 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
         if (result) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C200"));
         } else {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
@@ -339,6 +346,8 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
         } catch (IOException | InvalidFormatException e) {
             throw new RuntimeException(e);
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //获取工作谱对象
         XSSFSheet sheetAt = xssfWorkbook.getSheetAt(0);
         int newRow = 3;
@@ -401,9 +410,11 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
             if(result){
                 saveBatch(doctorInformation);
             }else {
+                TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
                 return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
             }
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             e.printStackTrace();
             //原因分析为数据可能已存在
             return JSON.toJSONString(ResponseResult.getErrorResult("C501"));
@@ -479,6 +490,8 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
         if(reserveMapper.selectList(queryWrapper).size()!=0){
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //在值班表中删除医生值班信息
         if(doctordutyMapper.deleteById(id)==0){
             return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
@@ -494,10 +507,12 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
             newFile.delete();
         }
         if(doctorinformationMapper.permanentDeleteById(id)==0){
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
         }
         //登陆表中删除医生信息
         if(doctorloginMapper.deleteById(id)==0){
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C401"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult("C200"));

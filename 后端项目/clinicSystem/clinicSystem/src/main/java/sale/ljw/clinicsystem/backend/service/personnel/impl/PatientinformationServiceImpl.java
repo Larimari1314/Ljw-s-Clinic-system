@@ -22,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sale.ljw.clinicsystem.backend.dao.order.ReserveMapper;
@@ -132,6 +133,8 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
             //返回相同名称的错误码 403
             return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //数据通过验证，此时添加数据到数据库
         //添加患者信息，首先添加登陆表中
         //为用户创建id
@@ -150,6 +153,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
                 return JSON.toJSONString(ResponseResult.getSuccessResult("C200"));
             }
         }
+        TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
         return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
     }
 
@@ -160,6 +164,8 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         if (reserves.size() != 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //预约表中不存在患者，执行删除患者
         //逻辑删除顺序：医生信息表——登录表权限关闭
         //逻辑删除删除信息表即可，将权限改为0
@@ -177,6 +183,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         if (result) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C200"));
         } else {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
@@ -487,6 +494,8 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         if(patientloginsUsername.size()!=0){
             return JSON.toJSONString(ResponseResult.getErrorResult("C403-4"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //存储用户登录信息
         Patientlogin patientlogin=new Patientlogin();
         //设置id
@@ -498,6 +507,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         patientlogin.setPassword(DigestUtils.md5DigestAsHex(patient.getPassword().getBytes(StandardCharsets.UTF_8)));
         int insert = patientloginMapper.insert(patientlogin);
         if(insert==0){
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C405-1"));
         }
         //存储用户基本信息
@@ -507,6 +517,7 @@ public class PatientinformationServiceImpl extends ServiceImpl<Patientinformatio
         BeanUtils.copyProperties(patient,patientinformation);
         int insert1 = patientinformationMapper.insert(patientinformation);
         if(insert1==0){
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C405-2"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(null));
