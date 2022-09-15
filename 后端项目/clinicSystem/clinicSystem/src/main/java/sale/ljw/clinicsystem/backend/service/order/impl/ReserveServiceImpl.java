@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import sale.ljw.clinicsystem.backend.dao.basic.DrugMapper;
 import sale.ljw.clinicsystem.backend.dao.order.OrdercompletedMapper;
 import sale.ljw.clinicsystem.backend.dao.order.OrderdrugMapper;
@@ -231,12 +232,15 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
             return JSON.toJSONString(ResponseResult.getErrorResult("C401"));
         }
         //判断当前药品数量，如果小于当前药品数量，则在原基础上减去药品数量
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         Drug drugByDoctor = drugMapper.selectById(addDrug.getDrugId());
         if (drugByDoctor.getNumber() < addDrug.getNumber()) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
         }
         drugByDoctor.setNumber(drugByDoctor.getNumber() - addDrug.getNumber());
         if (drugMapper.updateById(drugByDoctor) == 0) {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C404"));
         }
         //orderForm中添加记录，其他数值记录为默认值即可，状态为：GST01
@@ -249,6 +253,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
             orderForm.setState("GST01");
             int insert = orderformMapper.insert(orderForm);
             if (insert == 0) {
+                TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
                 return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
             }
         } else {
@@ -259,6 +264,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
                     .set("operatingTime", orderform.getOperatingtime());
             int update = orderformMapper.update(orderform, updateWrapper);
             if (update == 0) {
+                TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
                 return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
             }
         }
@@ -275,6 +281,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
             drug.setOrderid(addDrug.getOrderId());
             int insert = orderdrugMapper.insert(drug);
             if (insert == 0) {
+                TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
                 return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
             } else {
                 return JSON.toJSONString(ResponseResult.getSuccessResult(null));
@@ -287,6 +294,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
                     .set("number", orderdrug.getNumber());
             int update = orderdrugMapper.update(orderdrug, updateWrapper);
             if (update == 0) {
+                TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
                 return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
             } else {
                 return JSON.toJSONString(ResponseResult.getSuccessResult(null));
@@ -301,6 +309,8 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
         if (reserveMapper.selectById(drug.getOrderId()).getState() != 0) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C401"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //第二步在订单药品表删除药品
         QueryWrapper<Orderdrug> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("orderId", drug.getOrderId())
@@ -308,12 +318,14 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
                 .eq("number", drug.getNumber());
         int delete = orderdrugMapper.delete(queryWrapper);
         if (delete == 0) {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C403"));
         }
         //第三步药品表中药品数量增加
         Drug newDrug = drugMapper.selectById(drug.getDrugId());
         newDrug.setNumber(newDrug.getNumber() + drug.getNumber());
         if (drugMapper.updateById(newDrug) == 0) {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(null));
@@ -618,11 +630,14 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
         if (orderform == null) {
             return JSON.toJSONString(ResponseResult.getErrorResult("C402"));
         }
+        //设置回滚点
+        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         //将id和支付编号进行存储
         Ordercompleted ordercompleted = new Ordercompleted();
         ordercompleted.setId((String) redisValue);
         ordercompleted.setPayment(orderId);
         if (ordercompletedMapper.insert(ordercompleted) == 0) {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
         //修改订单状态为已支付
@@ -634,6 +649,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
             redisTemplate.boundValueOps(orderId + reserve.getPatientid()).set("pay200", 5, TimeUnit.MINUTES);
             return JSON.toJSONString(ResponseResult.getSuccessResult(null));
         } else {
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
