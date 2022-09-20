@@ -1,5 +1,7 @@
 package sale.ljw.clinicsystem.backend.dao.basic;
 
+import org.mapstruct.Mapper;
+import org.springframework.stereotype.Repository;
 import sale.ljw.clinicsystem.backend.pojo.basic.Permission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -9,6 +11,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2022-08-07 16:13:22
 * @Entity sale.ljw.clinicsystem.backend.pojo.basic.Permission
 */
+@Mapper
+@Repository
 public interface PermissionMapper extends BaseMapper<Permission> {
 
 }

@@ -130,8 +130,13 @@ export default {
         did: this.filters.did,
         registereId: this.filters.registereId
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      cancelAppointmentViews(para).then((res) => {
+      cancelAppointmentViews(para,configs).then((res) => {
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
           this.users = res.data.result.list;
@@ -149,7 +154,12 @@ export default {
         this.listLoading = true;
         //NProgress.start();
         let para = {"ids": [row.id]};
-        resumeAppointment(para).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        resumeAppointment(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C405") {
             this.$message.error('恢复失败！请稍后重试');
@@ -176,7 +186,12 @@ export default {
       }).then(() => {
         this.listLoading = true;
         let para = {"ids": ids};
-        resumeAppointment(para).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        resumeAppointment(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C405") {
             this.$message.error('恢复失败！请稍后重试');
@@ -193,21 +208,26 @@ export default {
   },
   mounted() {
     this.getUsers();
-    findDepartmentCoding().then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    findDepartmentCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.departmentList = res.data.result
       } else {
         this.$message.error('数据初始化失败，请稍后重试');
       }
     });
-    findDutyTimeCoding().then((res) => {
+    findDutyTimeCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.dutyTimeLIst = res.data.result
       } else {
         this.$message.error('数据初始化失败，请稍后重试');
       }
     })
-    findAllByAllDuty().then((res) => {
+    findAllByAllDuty(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.allDuty = res.data.result
       } else {

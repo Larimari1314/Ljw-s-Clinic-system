@@ -1,89 +1,89 @@
 import axios from 'axios';
 let bases='http://localhost:8000/clinic';
 /*基础信息*/
-export const findSexCoding = params => { return axios.get(`${bases}/general/findSex`); };
-export const findAllByAllDuty = params => { return axios.get(`${bases}/general/findAllByAllDuty`); };
-export const findDepartmentCoding = params => { return axios.get(`${bases}/department/findDepartmentCoding`); };
-export const findDutyTimeCoding = params => { return axios.get(`${bases}/general/findDutyTimeCoding`); };
-export const findPayInformation = params => { return axios.get(`${bases}/general/findPayInformation`); };
-export const findDrugSpecification = params => { return axios.get(`${bases}/general/findDrugSpecification`); };
+export const findSexCoding = (config) => { return axios.get(`${bases}/general/findSex`,config); };
+export const findAllByAllDuty = (config) => { return axios.get(`${bases}/general/findAllByAllDuty`,config); };
+export const findDepartmentCoding = (config) => { return axios.get(`${bases}/department/findDepartmentCoding`,config); };
+export const findDutyTimeCoding = (config) => { return axios.get(`${bases}/general/findDutyTimeCoding`,config); };
+export const findPayInformation = (config) => { return axios.get(`${bases}/general/findPayInformation`,config); };
+export const findDrugSpecification = (config) => { return axios.get(`${bases}/general/findDrugSpecification`,config); };
 /*doctor*/
-export const findAllDoctor = params => { return axios.post(`${bases}/doctorInformation/findAllDoctor`, params); };
-export const editDoctorInformation = params => { return axios.post(`${bases}/doctorInformation/editDoctorInformation`, params); };
-export const addDoctorInformation = params => { return axios.post(`${bases}/doctorInformation/addDoctorInformation`, params); };
-export const deleteByIdsInDoctor = params => { return axios.post(`${bases}/doctorInformation/deleteByIdsInDoctor`, params); };
-export const dataTemplateDownloadByDoctorInformation = params => { return axios.post(`${bases}/doctorInformation/dataTemplateDownload`, params,{responseType: 'blob'}); };
-export const exportDataByDoctorInformation = params => { return axios.post(`${bases}/doctorInformation/exportData`, params,{responseType: 'blob'}); };
-export const analyseFileByDoctorInformation = params => { return axios.get(`${bases}/doctorInformation/analyseFile`)};
+export const findAllDoctor = (params,config) => { return axios.post(`${bases}/doctorInformation/findAllDoctor`, params,config); };
+export const editDoctorInformation = (params,config) => { return axios.post(`${bases}/doctorInformation/editDoctorInformation`, params,config); };
+export const addDoctorInformation = (params,config) => { return axios.post(`${bases}/doctorInformation/addDoctorInformation`, params,config); };
+export const deleteByIdsInDoctor = (params,config) => { return axios.post(`${bases}/doctorInformation/deleteByIdsInDoctor`, params,config); };
+export const dataTemplateDownloadByDoctorInformation = (params,config) => { return axios.post(`${bases}/doctorInformation/dataTemplateDownload`, params,config); };
+export const exportDataByDoctorInformation = (params,config) => { return axios.post(`${bases}/doctorInformation/exportData`, params,config); };
+export const analyseFileByDoctorInformation = (config) => { return axios.get(`${bases}/doctorInformation/analyseFile`,config)};
 /*patient*/
-export const findAllPatient = params => { return axios.post(`${bases}/patientInformation/findAllPatient`, params); };
-export const editPatientInformation = params => { return axios.post(`${bases}/patientInformation/editPatientInformation`, params); };
-export const addPatientInformation = params => { return axios.post(`${bases}/patientInformation/addPatientInformation`, params); };
-export const deleteByIdsInPatient = params => { return axios.post(`${bases}/patientInformation/deleteByIdsInPatient`, params); };
-export const dataTemplateDownloadByPatientInformation = params => { return axios.post(`${bases}/patientInformation/dataTemplateDownload`, params,{responseType: 'blob'}); };
-export const exportDataByPatientInformation = params => { return axios.post(`${bases}/patientInformation/exportData`,params,{responseType: 'blob'}); };
-export const analyseFileByPatientInformation = params => { return axios.get(`${bases}/patientInformation/analyseFile`); };
+export const findAllPatient = (params,config) => { return axios.post(`${bases}/patientInformation/findAllPatient`, params,config); };
+export const editPatientInformation = (params,config) => { return axios.post(`${bases}/patientInformation/editPatientInformation`, params,config); };
+export const addPatientInformation = (params,config) => { return axios.post(`${bases}/patientInformation/addPatientInformation`, params,config); };
+export const deleteByIdsInPatient = (params,config) => { return axios.post(`${bases}/patientInformation/deleteByIdsInPatient`, params,config); };
+export const dataTemplateDownloadByPatientInformation = (params,config) => { return axios.post(`${bases}/patientInformation/dataTemplateDownload`, params,config); };
+export const exportDataByPatientInformation = (params,config) => { return axios.post(`${bases}/patientInformation/exportData`,params,config); };
+export const analyseFileByPatientInformation = (config) => { return axios.get(`${bases}/patientInformation/analyseFile`,config); };
 /*订单管理*/
-export const findReserveNotViewed = params => { return axios.post(`${bases}/reserve/findReserveNotViewed`, params); };
-export const cancelAppointment = params => { return axios.post(`${bases}/reserve/cancelAppointment`, params); };
-export const cancelAppointmentViews = params => { return axios.post(`${bases}/reserve/cancelAppointmentViews`, params); };
-export const resumeAppointment = params => { return axios.post(`${bases}/reserve/resumeAppointment`, params); };
+export const findReserveNotViewed = (params,config) => { return axios.post(`${bases}/reserve/findReserveNotViewed`, params,config); };
+export const cancelAppointment = (params,config) => { return axios.post(`${bases}/reserve/cancelAppointment`, params,config); };
+export const cancelAppointmentViews = (params,config) => { return axios.post(`${bases}/reserve/cancelAppointmentViews`, params,config); };
+export const resumeAppointment = (params,config) => { return axios.post(`${bases}/reserve/resumeAppointment`, params,config); };
 /*全部订单*/
-export const findAllOrderFrom = params => { return axios.post(`${bases}/order/findAllOrderFrom`, params); };
-export const findOrderDrugList = params => { return axios.get(`${bases}/order/findOrderDrugList/` + params); };
-export const getTotalPrice = params => { return axios.get(`${bases}/order/getTotalPrice/` + params); };
-export const invoiceService = params => { return axios.get(`${bases}/order/invoiceService/` + params); };
+export const findAllOrderFrom = (params,config) => { return axios.post(`${bases}/order/findAllOrderFrom`, params,config); };
+export const findOrderDrugList = (params,config) => { return axios.get(`${bases}/order/findOrderDrugList/` + params,config); };
+export const getTotalPrice = (params,config) => { return axios.get(`${bases}/order/getTotalPrice/` + params,config); };
+export const invoiceService = (params,config) => { return axios.get(`${bases}/order/invoiceService/` + params,config); };
 /*基础信息维护*/
 /*常规项管理*/
-export const getAllGeneral = params => { return axios.post(`${bases}/general/getAllGeneral`,params); };
-export const editGeneral = params => { return axios.post(`${bases}/general/editGeneral`,params); };
+export const getAllGeneral = (params,config) => { return axios.post(`${bases}/general/getAllGeneral`,params,config); };
+export const editGeneral = (params,config) => { return axios.post(`${bases}/general/editGeneral`,params,config); };
 /*药品管理*/
-export const findAllDrug = params => { return axios.post(`${bases}/drug/findAllDrug`,params); };
-export const drugSwitching = params => { return axios.post(`${bases}/drug/switching`,params); };
-export const editDrug = params => { return axios.post(`${bases}/drug/editDrug`,params); };
-export const addDrug = params => { return axios.post(`${bases}/drug/addDrug`,params); };
-export const deleteDrugByIds = params => { return axios.post(`${bases}/drug/deleteDrugByIds`,params); };
-export const dataTemplateDownloadByDrug = params => { return axios.post(`${bases}/drug/dataTemplateDownload`, params,{responseType: 'blob'}); };
-export const exportDataByDrug = params => { return axios.post(`${bases}/drug/exportData`,params,{responseType: 'blob'}); };
-export const analyseFileByDrug = params => { return axios.get(`${bases}/drug/analyseFile`); };
+export const findAllDrug = (params,config) => { return axios.post(`${bases}/drug/findAllDrug`,params,config); };
+export const drugSwitching = (params,config) => { return axios.post(`${bases}/drug/switching`,params,config); };
+export const editDrug = (params,config) => { return axios.post(`${bases}/drug/editDrug`,params,config); };
+export const addDrug = (params,config) => { return axios.post(`${bases}/drug/addDrug`,params,config); };
+export const deleteDrugByIds = (params,config) => { return axios.post(`${bases}/drug/deleteDrugByIds`,params,config); };
+export const dataTemplateDownloadByDrug = (params,config) => { return axios.post(`${bases}/drug/dataTemplateDownload`, params,config); };
+export const exportDataByDrug = (params,config) => { return axios.post(`${bases}/drug/exportData`,params,config); };
+export const analyseFileByDrug = (config) => { return axios.get(`${bases}/drug/analyseFile`,config); };
 /*页面广告管理*/
-export const findAllLandingAds = params => { return axios.post(`${bases}/LandingAds/findAllLandingAds`,params); };
-export const editLandingAds = params => { return axios.post(`${bases}/LandingAds/editLandingAds`,params); };
-export const deleteLandingAds = params => { return axios.post(`${bases}/LandingAds/deleteLandingAds`,params); };
-export const addLandingAds = params => { return axios.post(`${bases}/LandingAds/addLandingAds`,params); };
+export const findAllLandingAds = (params,config) => { return axios.post(`${bases}/LandingAds/findAllLandingAds`,params,config); };
+export const editLandingAds = (params,config) => { return axios.post(`${bases}/LandingAds/editLandingAds`,params,config); };
+export const deleteLandingAds = (params,config) => { return axios.post(`${bases}/LandingAds/deleteLandingAds`,params,config); };
+export const addLandingAds = (params,config) => { return axios.post(`${bases}/LandingAds/addLandingAds`,params,config); };
 /*预约管理*/
-export const findAllDoctorDuty = params => { return axios.post(`${bases}/doctorDuty/findAllDoctorDuty`,params); };
-export const editDoctorDuty = params => { return axios.post(`${bases}/doctorDuty/editDoctorDuty`,params); };
-export const findDutyTime = params => { return axios.post(`${bases}/doctorDuty/findDutyTime`,params); };
-export const editUniteDoctorDutyTime = params => { return axios.post(`${bases}/doctorDuty/editUniteDoctorDutyTime`,params); };
+export const findAllDoctorDuty = (params,config) => { return axios.post(`${bases}/doctorDuty/findAllDoctorDuty`,params,config); };
+export const editDoctorDuty = (params,config) => { return axios.post(`${bases}/doctorDuty/editDoctorDuty`,params,config); };
+export const findDutyTime = (params,config) => { return axios.post(`${bases}/doctorDuty/findDutyTime`,params,config); };
+export const editUniteDoctorDutyTime = (params,config) => { return axios.post(`${bases}/doctorDuty/editUniteDoctorDutyTime`,params,config); };
 /*挂号级别管理*/
-export const findAllRegistrationLevel = params => { return axios.post(`${bases}/registrationLevel/findAllRegistrationLevel`,params); };
-export const editRegistrationLevel = params => { return axios.post(`${bases}/registrationLevel/editRegistrationLevel`,params); };
+export const findAllRegistrationLevel = (params,config) => { return axios.post(`${bases}/registrationLevel/findAllRegistrationLevel`,params,config); };
+export const editRegistrationLevel = (params,config) => { return axios.post(`${bases}/registrationLevel/editRegistrationLevel`,params,config); };
 /*科室管理*/
-export const findAllDepartment = params => { return axios.post(`${bases}/department/findAllDepartment`,params); };
-export const editDepartment = params => { return axios.post(`${bases}/department/editDepartment`,params); };
-export const addDepartment = params => { return axios.post(`${bases}/department/addDepartment`,params); };
+export const findAllDepartment = (params,config) => { return axios.post(`${bases}/department/findAllDepartment`,params,config); };
+export const editDepartment = (params,config) => { return axios.post(`${bases}/department/editDepartment`,params,config); };
+export const addDepartment = (params,config) => { return axios.post(`${bases}/department/addDepartment`,params,config); };
 /*主页设置*/
-export const mainGetNumber = params => { return axios.get(`${bases}/adminHome/mainGetNumber`,params); };
-export const getAllValues = params => { return axios.get(`${bases}/adminHome/getValueNumber`,params); };
-export const getDayNumber = params => { return axios.get(`${bases}/adminHome/getDayNumber`,params); };
-export const getStateStatistics = params => { return axios.get(`${bases}/adminHome/getStateStatistics`,params); };
-export const getRegisDoctor = params => { return axios.get(`${bases}/adminHome/getRegisDoctor`,params); };
+export const mainGetNumber = (config) => { return axios.get(`${bases}/adminHome/mainGetNumber`,config); };
+export const getAllValues = (config) => { return axios.get(`${bases}/adminHome/getValueNumber`,config); };
+export const getDayNumber = (config) => { return axios.get(`${bases}/adminHome/getDayNumber`,config); };
+export const getStateStatistics = (config) => { return axios.get(`${bases}/adminHome/getStateStatistics`,config); };
+export const getRegisDoctor = (config) => { return axios.get(`${bases}/adminHome/getRegisDoctor`,config); };
 /*登陆界面*/
-export const GetAllAds = params => { return axios.get(`${bases}/loginAdmin/GetAllAds`,params); };
-export const getAdminImgUrl = params => { return axios.get(`${bases}/loginAdmin/getAdminImgUrl/`+params); };
-export const adminRequestLogin = params => { return axios.post(`${bases}/loginAdmin/login`,params); };
-export const logoutAdmin = params => { return axios.post(`${bases}/loginAdmin/logout`,params); };
+export const GetAllAds = (config) => { return axios.get(`${bases}/loginAdmin/GetAllAds`,config); };
+export const getAdminImgUrl = (params,config) => { return axios.get(`${bases}/loginAdmin/getAdminImgUrl/`+params,config); };
+export const adminRequestLogin = (params,config) => { return axios.post(`${bases}/loginAdmin/login`,params,config); };
+export const logoutAdmin = (params,config) => { return axios.post(`${bases}/loginAdmin/logout`,params,config); };
 /*修改管理员信息*/
-export const editAdminInformation = params => { return axios.post(`${bases}/loginAdmin/editAdminInformation`,params); };
-export const editAdminLogin = params => { return axios.post(`${bases}/loginAdmin/editAdminLogin`,params); };
+export const editAdminInformation = (params,config) => { return axios.post(`${bases}/loginAdmin/editAdminInformation`,params,config); };
+export const editAdminLogin = (params,config) => { return axios.post(`${bases}/loginAdmin/editAdminLogin`,params,config); };
 /*数据恢复区*/
-export const checkDeleteDoctor = params => { return axios.post(`${bases}/doctorInformation/getDeleteData`,params); };
-export const deletePermanentlyDoctor = params => { return axios.get(`${bases}/doctorInformation/deleteById/`+params); };
-export const dataRecoveryDoctor = params => { return axios.get(`${bases}/doctorInformation/recoveryData/`+params); };
-export const getDeleteDrug = params => { return axios.post(`${bases}/drug/getDeleteData`,params); };
-export const deletePermanentlyDrug = params => { return axios.get(`${bases}/drug/deleteById/`+params); };
-export const dataRecoveryDrug = params => { return axios.get(`${bases}/drug/recoveryData/`+params); };
-export const getDeleteUser = params => { return axios.post(`${bases}/patientInformation/getDeleteData`,params); };
-export const deletePermanentlyUser = params => { return axios.get(`${bases}/patientInformation/deleteById/`+params); };
-export const dataRecoveryUser = params => { return axios.get(`${bases}/patientInformation/recoveryData/`+params); };
+export const checkDeleteDoctor = (params,config) => { return axios.post(`${bases}/doctorInformation/getDeleteData`,params,config); };
+export const deletePermanentlyDoctor = (params,config) => { return axios.get(`${bases}/doctorInformation/deleteById/`+params,config); };
+export const dataRecoveryDoctor = (params,config) => { return axios.get(`${bases}/doctorInformation/recoveryData/`+params,config); };
+export const getDeleteDrug = (params,config) => { return axios.post(`${bases}/drug/getDeleteData`,params,config); };
+export const deletePermanentlyDrug = (params,config) => { return axios.get(`${bases}/drug/deleteById/`+params,config); };
+export const dataRecoveryDrug = (params,config) => { return axios.get(`${bases}/drug/recoveryData/`+params,config); };
+export const getDeleteUser = (params,config) => { return axios.post(`${bases}/patientInformation/getDeleteData`,params,config); };
+export const deletePermanentlyUser = (params,config) => { return axios.get(`${bases}/patientInformation/deleteById/`+params,config); };
+export const dataRecoveryUser = (params,config) => { return axios.get(`${bases}/patientInformation/recoveryData/`+params,config); };

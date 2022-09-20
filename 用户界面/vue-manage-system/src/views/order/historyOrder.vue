@@ -154,8 +154,13 @@ export default {
         doctorName: this.filters.doctorName,
         patientId: this.patientInformation.id
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findAllHistoryOrderForm(para).then((res) => {
+      findAllHistoryOrderForm(para,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.historyOrderFormList = res.data.result.list;
           this.total = res.data.result.total
@@ -167,7 +172,12 @@ export default {
       this.orderInformation='';
       this.orderDrugList='';
       this.editFormVisible = true;
-      findOrderCompletion(row.id).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findOrderCompletion(row.id,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.orderInformation = res.data.result.informationOrder;
           this.orderDrugList = res.data.result.drugList

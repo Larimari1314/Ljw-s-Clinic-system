@@ -160,7 +160,12 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.addLoading = true;
             let para = Object.assign({}, this.addForm);
-            addLandingAds(para).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            addLandingAds(para,configs).then((res)=>{
               if (res.data.msgId === "C405") {
                 this.$message.error('添加失败！请稍后重试');
               } else if (res.data.msgId === "C200") {
@@ -189,7 +194,12 @@ export default {
         this.listLoading = true;
         //NProgress.start();
         let para = {"ids": [row.id]};
-        deleteLandingAds(para).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        deleteLandingAds(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C405") {
             this.$message.error('删除失败！请稍后重试');
@@ -216,7 +226,12 @@ export default {
       }).then(() => {
         this.listLoading = true;
         let para = {"ids": ids};
-        deleteLandingAds(para).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        deleteLandingAds(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C405") {
             this.$message.error('删除失败！请稍后重试');
@@ -256,7 +271,12 @@ export default {
         name: this.filters.name
       };
       this.listLoading = true;
-      findAllLandingAds(para).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findAllLandingAds(para,configs).then((res) => {
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
           this.users = res.data.result.list;
@@ -276,7 +296,12 @@ export default {
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true;
-            editLandingAds(this.editForm).then((res) => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editLandingAds(this.editForm,configs).then((res) => {
               if (res.data.msgId === 'C200') {
                 this.orderVisible = false;
                 this.getUsers();

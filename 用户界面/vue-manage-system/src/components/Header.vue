@@ -79,7 +79,12 @@ export default {
             handleCommand,
         };
     },mounted() {
-    getRemindersNumber(JSON.parse(localStorage.getItem("patient")).id).then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    getRemindersNumber(JSON.parse(localStorage.getItem("patient")).id,configs).then((res) => {
       if (res.data.msgId == 'C200') {
         if(res.data.result==null){
           localStorage.setItem('appointmentNumber',0)

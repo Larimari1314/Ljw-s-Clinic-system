@@ -152,7 +152,13 @@ export default {
   },
   methods: {
     drawLine(){
-      getAllValues().then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      // alert(JSON.stringify(configs))
+      getAllValues(configs).then((res)=>{
         this.numberList=res.data[0]
         this.numberSize=res.data[1]
         let numbers = this.$echarts.init(document.getElementById('numbers'))
@@ -187,7 +193,7 @@ export default {
           }]
         });
       })
-      getDayNumber().then((res)=>{
+      getDayNumber(configs).then((res)=>{
         this.dayList=res.data[0]
         this.numberDay=res.data[1]
         let myChart = this.$echarts.init(document.getElementById('daysNumber'))
@@ -209,7 +215,7 @@ export default {
           }]
         });
       })
-      getStateStatistics().then((res)=>{
+      getStateStatistics(configs).then((res)=>{
         this.dayList=res.data[0]
         this.numberDay=res.data[1]
         let myChart = this.$echarts.init(document.getElementById('stateStatistics'))
@@ -242,7 +248,7 @@ export default {
           ]
         })
       })
-      getRegisDoctor().then((res)=>{
+      getRegisDoctor(configs).then((res)=>{
         this.dayList=res.data[0]
         this.numberDay=res.data[1]
         let myChart = this.$echarts.init(document.getElementById('doctorRegis'))
@@ -287,7 +293,12 @@ export default {
 
     },
     getUserNumber(){
-      mainGetNumber().then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      mainGetNumber(configs).then((res)=>{
         this.number=res.data.result[0]
       })
     }

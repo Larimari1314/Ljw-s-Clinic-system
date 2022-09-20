@@ -203,7 +203,12 @@ export default {
               password: this.formLogin.password,
               newPassword: this.formLogin.newpassword
             }
-            editDoctorLogin(para).then((res) => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editDoctorLogin(para,configs).then((res) => {
               if (res.data.msgId == 'C403') {
                 ElMessage({
                   type: 'error',
@@ -237,7 +242,12 @@ export default {
             }
         )
             .then(() => {
-              editDoctorInformation(this.formData).then((res) => {
+              let configs={
+                headers: {
+                  token: sessionStorage.getItem('permissionToken')
+                }
+              };
+              editDoctorInformation(this.formData,configs).then((res) => {
                 if (res.data.msgId == 'C403') {
                   ElMessage({
                     type: 'error',
@@ -286,7 +296,12 @@ export default {
   }, mounted() {
     this.doctorInformation = JSON.parse(localStorage.getItem("doctor"));
     this.formData = this.doctorInformation;
-    findSexCoding().then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    findSexCoding(configs).then((res) => {
       if (res.data.msgId == 'C200') {
         this.sexOptions = res.data.result
       }

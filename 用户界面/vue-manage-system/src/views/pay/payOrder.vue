@@ -72,7 +72,12 @@ export default {
     //获取当前支付状态
     paymentStatus(){
       let that=this;
-      paymentStatus(this.payId+this.payList.patientId).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      paymentStatus(this.payId+this.payList.patientId,configs).then((res)=>{
         if(res.data.msgId=='C201'){
           this.hiddens=true
           this.payingState=false
@@ -111,7 +116,12 @@ export default {
   mounted() {
     let that=this
     this.payId = that.$route.params.id
-    getOrderInformationPaying(this.payId).then((res)=>{
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    getOrderInformationPaying(this.payId,configs).then((res)=>{
       if(res.data.msgId=='C404'){
         /*订单超时或不存在*/
         this.$notify.error({

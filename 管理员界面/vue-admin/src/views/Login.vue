@@ -130,7 +130,11 @@ export default {
           let loginParams = {loginCredentials: this.ruleForm2.account, password: this.ruleForm2.checkPass};
           adminRequestLogin(loginParams).then((res) => {
             this.logining = false;
+            sessionStorage.removeItem('permissionToken');
             if (res.data.msgId == 'C200') {
+              //获取请求头中的信息permissionToken，将其保存到页面域中的permissionToken
+              sessionStorage.setItem("permissionToken",res.headers['token'])
+              // alert(res.headers['token'])
               sessionStorage.setItem('user', JSON.stringify(res.data.result));
               this.$router.push({path: '/HomeMain'});
             } else if (res.data.msgId == 'C404') {

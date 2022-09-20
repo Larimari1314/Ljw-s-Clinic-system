@@ -219,8 +219,13 @@ import {editAdminInformation, editAdminLogin, findSexCoding, logoutAdmin} from "
         this.$confirm('确认修改吗?', '提示', {
           type: 'success'
         }).then(() => {
+          let configs={
+            headers: {
+              token: sessionStorage.getItem('permissionToken')
+            }
+          };
           this.editFormAdminLogin.id=JSON.parse(sessionStorage.getItem('user')).id;
-          editAdminLogin(this.editFormAdminLogin).then((res)=>{
+          editAdminLogin(this.editFormAdminLogin,configs).then((res)=>{
             if(res.data.msgId=='C200'){
               logoutAdmin().then()
               sessionStorage.removeItem('user');
@@ -239,7 +244,12 @@ import {editAdminInformation, editAdminLogin, findSexCoding, logoutAdmin} from "
         this.$confirm('确认修改吗?', '提示', {
           type: 'success'
         }).then(() => {
-          editAdminInformation(this.editFormAdmin).then((res)=>{
+          let configs={
+            headers: {
+              token: sessionStorage.getItem('permissionToken')
+            }
+          };
+          editAdminInformation(this.editFormAdmin,configs).then((res)=>{
             if(res.data.msgId=='C200'){
               logoutAdmin().then()
               sessionStorage.removeItem('user');
@@ -289,7 +299,12 @@ import {editAdminInformation, editAdminLogin, findSexCoding, logoutAdmin} from "
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-          logoutAdmin().then()
+          let configs={
+            headers: {
+              token: sessionStorage.getItem('permissionToken')
+            }
+          };
+          logoutAdmin(null,configs).then()
 					sessionStorage.removeItem('user');
 					_this.$router.push('/login');
 				}).catch(() => {
@@ -311,7 +326,12 @@ import {editAdminInformation, editAdminLogin, findSexCoding, logoutAdmin} from "
 				this.sysUserName = user.name || '';
 				this.sysUserAvatar = user.avatar || '';
 			}
-      findSexCoding().then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findSexCoding(configs).then((res)=>{
         this.sexList=res.data.result
       })
 		}

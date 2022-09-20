@@ -130,8 +130,13 @@ export default {
         doctorId: JSON.parse(localStorage.getItem("doctor")).id,
         orderId: this.filters.orderId
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findDispensingInterface(para).then((res) => {
+      findDispensingInterface(para,configs).then((res) => {
         this.listLoading = false;
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
@@ -157,7 +162,12 @@ export default {
               doctorId: this.doctorInformation.id,
               payment:row.payment
             }
-            dispensingMedicine(para).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            dispensingMedicine(para,configs).then((res)=>{
               if(res.data.msgId=='C401'){
                 ElMessage({
                   type: 'error',

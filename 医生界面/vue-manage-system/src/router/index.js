@@ -46,20 +46,6 @@ const routes = [
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
             }, {
-                path: "/form",
-                name: "baseform",
-                meta: {
-                    title: '表单'
-                },
-                component: () => import ( /* webpackChunkName: "form" */ "../views/BaseForm.vue")
-            },  {
-                path: "/upload",
-                name: "upload",
-                meta: {
-                    title: '上传插件'
-                },
-                component: () => import ( /* webpackChunkName: "upload" */ "../views/Upload.vue")
-            }, {
                 path: '/403',
                 name: '403',
                 meta: {

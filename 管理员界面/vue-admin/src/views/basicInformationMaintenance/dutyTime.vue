@@ -192,16 +192,8 @@
 </template>
 
 <script>
-import {
-  addDoctor,
-  deleteByIdsDoctor, editDoctorDuty, editUniteDoctorDutyTime, findAllByAllDuty,
-  findAllDoctor, findAllDoctorDuty,
-  findByRegistered,
-  findDepartment, findDepartmentCoding, findDutyTime, findDutyTimeCoding,
-  findGender,
-  findScheduleList, findSexCoding,
-  getAllScheduleList,
-  setUpSchedule
+import {editDoctorDuty, editUniteDoctorDutyTime, findAllByAllDuty,findAllDoctorDuty,findDepartmentCoding, findDutyTime, findDutyTimeCoding,
+   findSexCoding
 } from '../../api/api';
 
 export default {
@@ -258,7 +250,12 @@ export default {
       };
       this.listLoading = true;
       //NProgress.start();
-      findAllDoctorDuty(para).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findAllDoctorDuty(para,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.listLoading = false;
           this.users = res.data.result.list
@@ -280,7 +277,12 @@ export default {
             this.editLoading = true;
             //NProgress.start();
             let para = Object.assign({}, this.editForm);
-            editDoctorDuty(para).then((res) => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editDoctorDuty(para,configs).then((res) => {
               if (res.data.msgId == 'C200') {
                 this.$notify.success({
                   title: '成功',
@@ -306,19 +308,24 @@ export default {
     },
     //批量删除
     Obtain() {
-      findDepartmentCoding().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findDepartmentCoding(configs).then((res) => {
         this.departments = res.data.result
       });
-      findDutyTimeCoding().then((res) => {
+      findDutyTimeCoding(configs).then((res) => {
         this.registeres = res.data.result
       });
-      findAllByAllDuty().then((res)=>{
+      findAllByAllDuty(configs).then((res)=>{
         this.schedules = res.data.result
       })
-      findDutyTime().then((res)=>{
+      findDutyTime(null,configs).then((res)=>{
         this.scheduleList = res.data.result
       })
-      findSexCoding().then((res)=>{
+      findSexCoding(configs).then((res)=>{
         this.Genders = res.data.result
       })
     },
@@ -333,7 +340,12 @@ export default {
       this.$confirm('确认提交吗？', '提示', {
         type: 'warning'
       }).then(() => {
-        editUniteDoctorDutyTime(this.doctorTimes).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        editUniteDoctorDutyTime(this.doctorTimes,configs).then((res) => {
           if (res.data.msgId == 'C200') {
             this.doctorTime = false;
             this.$notify.success({

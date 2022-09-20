@@ -16,6 +16,7 @@ import sale.ljw.clinicsystem.backend.form.personnel.patient.EditPatientLoginByPa
 import sale.ljw.clinicsystem.backend.pojo.personnel.Patientlogin;
 import sale.ljw.clinicsystem.backend.service.personnel.PatientloginService;
 import sale.ljw.clinicsystem.common.http.ResponseResult;
+import sale.ljw.clinicsystem.common.sercurity.utils.JwtUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -48,12 +49,15 @@ public class PatientloginServiceImpl extends ServiceImpl<PatientloginMapper, Pat
         Patientlogin patientlogin = patientloginMapper.selectOne(queryWrapper);
         if (patientlogin != null) {
             //设置cookie
-            String cookieValue = UUID.randomUUID().toString();
+            /*String cookieValue = UUID.randomUUID().toString();
             Cookie cookie = new Cookie("_web_admin", cookieValue);
             cookie.setPath("/");
             response.addCookie(cookie);
             //在redis中存储
-            redisTemplate.boundValueOps(cookieValue).set(patientlogin.getPermission(), 240, TimeUnit.MINUTES);
+            redisTemplate.boundValueOps(cookieValue).set(patientlogin.getPermission(), 240, TimeUnit.MINUTES);*/
+            //设置token将权限和用户id写入
+            String token = JwtUtils.sign("patient", patientlogin.getId());
+            response.setHeader("token", token);
             return JSON.toJSONString(ResponseResult.getSuccessResult(patientinformationMapper.selectById(patientlogin.getId()), "C200", null));
         } else {
             return JSON.toJSONString(ResponseResult.getErrorResult("C404"));

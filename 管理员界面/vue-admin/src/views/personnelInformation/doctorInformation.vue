@@ -386,8 +386,13 @@ export default {
         did: this.filters.did,
         registereId: this.filters.registereId
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findAllDoctor(para).then((res) => {
+      findAllDoctor(para,configs).then((res) => {
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
           this.users = res.data.result.list;
@@ -405,7 +410,12 @@ export default {
         this.listLoading = true;
         //NProgress.start();
         let para = {"ids": [row.id]};
-        deleteByIdsInDoctor(para).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        deleteByIdsInDoctor(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C402") {
             this.$message.error('删除失败！当前选中医生中已被预约，不可删除');
@@ -454,7 +464,12 @@ export default {
             this.editLoading = true;
             let para = Object.assign({}, this.editForm);
             para.birthdayCoding = (!para.birthdayCoding || para.birthdayCoding == '') ? '' : util.formatDate.format(new Date(para.birthdayCoding), 'yyyy-MM-dd');
-            editDoctorInformation(para).then((res => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editDoctorInformation(para,configs).then((res => {
               this.editLoading = false;
               if (res.data.msgId === 'C403') {
                 this.$message.error('错误：医生姓名已存在，如重名，请在名称后面添加编号(如：王五1、王五2)以便区分');
@@ -494,8 +509,13 @@ export default {
             this.addLoading = true;
             //NProgress.start();
             let para = Object.assign({}, this.addForm);
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
             para.birthday = (!para.birthday || para.birthday == '') ? '' : util.formatDate.format(new Date(para.birthday), 'yyyy-MM-dd');
-            addDoctorInformation(para).then((res) => {
+            addDoctorInformation(para,configs).then((res) => {
               this.addLoading = false;
               if (res.data.msgId === 'C402') {
                 this.$message.error('错误：身份证号已经存在，请检查后重试');
@@ -532,9 +552,14 @@ export default {
       this.$confirm('确认删除选中记录吗？', '提示', {
         type: 'warning'
       }).then(() => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
         this.listLoading = true;
         let para = {"ids": ids};
-        deleteByIdsInDoctor(para).then((res) => {
+        deleteByIdsInDoctor(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C402") {
             this.$message.error('删除失败！当前选中医生中已被预约，不可删除');
@@ -554,7 +579,13 @@ export default {
       });
     },
     dataTemplateDownload() {
-      dataTemplateDownloadByDoctorInformation().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        },
+        responseType: 'blob'
+      };
+      dataTemplateDownloadByDoctorInformation(null,configs).then((res) => {
         const disposition = res.headers['content-disposition'];
         let fileName = disposition.match(/=(.*)$/)[1];
         let blob = new Blob([res.data])
@@ -569,7 +600,13 @@ export default {
       })
     },
     exportData(){
-      exportDataByDoctorInformation().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        },
+        responseType: 'blob'
+      };
+      exportDataByDoctorInformation(null,configs).then((res) => {
         const disposition = res.headers['content-disposition'];
         let fileName = disposition.match(/=(.*)$/)[1];
         let blob = new Blob([res.data])
@@ -587,7 +624,11 @@ export default {
       this.uploadServerVisibleUser = true;
     },
     uploadToServer() {
-      analyseFileByDoctorInformation().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('AppointToken')
+        }};
+      analyseFileByDoctorInformation(configs).then((res) => {
         this.$refs.upload.clearFiles()
         this.uploadServerVisibleUser = false;
         if(res.data.msgId=='C500'){
@@ -612,28 +653,32 @@ export default {
   },
   mounted() {
     this.getUsers();
-    findSexCoding().then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('AppointToken')
+      }};
+    findSexCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.sexList = res.data.result
       } else {
         this.$message.error('数据初始化失败，请稍后重试');
       }
     });
-    findDepartmentCoding().then((res) => {
+    findDepartmentCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.departmentList = res.data.result
       } else {
         this.$message.error('数据初始化失败，请稍后重试');
       }
     });
-    findDutyTimeCoding().then((res) => {
+    findDutyTimeCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.dutyTimeLIst = res.data.result
       } else {
         this.$message.error('数据初始化失败，请稍后重试');
       }
     })
-    findAllByAllDuty().then((res)=>{
+    findAllByAllDuty(configs).then((res)=>{
       if (res.data.msgId === "C200") {
         this.allDuty = res.data.result
       } else {

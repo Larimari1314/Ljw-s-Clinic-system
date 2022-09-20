@@ -232,7 +232,12 @@ export default {
               drugId:row.id,
               number:row.number
             }
-            removeDrug(para).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            removeDrug(para,configs).then((res)=>{
               if(res.data.msgId=='C401'){
                 ElMessage({
                   type: 'error',
@@ -266,7 +271,12 @@ export default {
           })
     },
     endAppointment(){
-      endAppointmentByDoctor(this.reserveId).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      endAppointmentByDoctor(this.reserveId,configs).then((res)=>{
         if(res.data.msgId=='C401'){
           ElMessage({
             type: 'error',
@@ -288,12 +298,17 @@ export default {
       })
     },
     getMedicinesList(){
-      checkOrderDrug(this.reserveId).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      checkOrderDrug(this.reserveId,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.newDrugList=res.data.result
         }
       })
-      getTotalPrice(this.reserveId).then((res)=>{
+      getTotalPrice(this.reserveId,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.totalPrice=res.data.result
         }
@@ -310,6 +325,11 @@ export default {
           }
       )
           .then(() => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
             if(row.enable===0 || row.enable>row.number){
               ElMessage({
                 type: 'error',
@@ -321,7 +341,7 @@ export default {
               drugId:row.id,
               number:row.enable
             }
-            addDrugByPatient(para).then((res)=>{
+            addDrugByPatient(para,configs).then((res)=>{
               if(res.data.msgId=='C403'){
                 ElMessage({
                   type: 'error',
@@ -373,7 +393,12 @@ export default {
         page:this.pageDrug,
         drugName:this.drugName
       }
-      findDrugByDrugName(para).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findDrugByDrugName(para,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.drugList=res.data.result.list
           this.totalDrug=res.data.result.total
@@ -383,7 +408,12 @@ export default {
     remoteMethod(query) {
       if (query !== "") {
         this.loading = true;
-        searchMedicinesRemotely(query).then((req)=>{
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        searchMedicinesRemotely(query,configs).then((req)=>{
           if(req.data.msgId=='C200'){
             let res = req.data.result
             this.loading = false
@@ -418,8 +448,13 @@ export default {
           }
       )
           .then(() => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
             let para = {"ids": [row.id]};
-            cancelAppointment(para).then((res)=>{
+            cancelAppointment(para,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 this.getUsers();
                 ElMessage({
@@ -454,7 +489,12 @@ export default {
       )
           .then(() => {
             let para = {"ids": [ids]};
-            cancelAppointment(para).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            cancelAppointment(para,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 this.getUsers();
                 ElMessage({
@@ -492,7 +532,12 @@ export default {
               patientid:this.patientId,
               reservetime:new Date(this.appointmentDate.getFullYear()+"-"+(this.appointmentDate.getMonth()+1)+"-"+this.appointmentDate.getDate()+" "+this.appointmentTime)
             }
-            confirmAppointment(para).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            confirmAppointment(para,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 this.reserveVisible=false;
                 ElMessage({
@@ -535,8 +580,13 @@ export default {
         doctorId: JSON.parse(localStorage.getItem("doctor")).id,
         orderId: this.filters.orderId
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findCurrentAppointment(para).then((res) => {
+      findCurrentAppointment(para,configs).then((res) => {
         this.listLoading = false;
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
@@ -562,7 +612,12 @@ export default {
               numberreminders:row.NumberReminders,
               id:row.id
             }
-            remindPatientNumber(para).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            remindPatientNumber(para,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 ElMessage({
                   type: 'success',
@@ -596,17 +651,22 @@ export default {
         reserveId: row.id,
         doctorId: this.doctorInformation.id
       }
-      checkOrderInformation(para).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      checkOrderInformation(para,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.doctorInformation=res.data.result
         }
       })
-      checkOrderDrug(row.id).then((res)=>{
+      checkOrderDrug(row.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.drugList=res.data.result
         }
       })
-      getTotalPrice(row.id).then((res)=>{
+      getTotalPrice(row.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.totalPrice=res.data.result
         }
