@@ -188,7 +188,7 @@ export default {
       this.$refs['vForm'].validate(valid => {
         if (valid) {
           // alert(JSON.stringify(this.formData))
-          registerAccountByPatient(this.formData).then((res)=>{
+          registerAccountByPatient(this.formData,null).then((res)=>{
            if(res.data.msgId=='C200'){
              this.drawer=false
              ElMessage.success("注册成功");
@@ -236,6 +236,8 @@ export default {
           loginPatient(this.param).then((res)=>{
             if(res.data.msgId==='C200'){
               ElMessage.success("登录成功");
+              let token = res.headers['token'];
+              sessionStorage.setItem('permissionToken',token);
               localStorage.setItem("patient", JSON.stringify(res.data.result));
               localStorage.setItem("loginTime",new Date().getFullYear() + "-" + (new Date().getMonth() + 1) +'-'+new Date().getDate() +'  '+new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds())
               window.location.href = 'http://192.168.1.106:3088/#/appointmentDoctor';

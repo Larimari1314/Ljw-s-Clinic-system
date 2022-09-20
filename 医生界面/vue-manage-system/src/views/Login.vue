@@ -64,6 +64,7 @@ export default {
           loginDoctor(this.param).then((res)=>{
             if(res.data.msgId==='C200'){
               ElMessage.success("登录成功");
+              sessionStorage.setItem('permissionToken',res.headers['token'])
               localStorage.setItem("doctor", JSON.stringify(res.data.result));
               localStorage.setItem("loginTime",new Date().getFullYear() + "-" + (new Date().getMonth() + 1) +'-'+new Date().getDate() +'  '+new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds())
               window.location.href = 'http://localhost:3000/#/dashboard';

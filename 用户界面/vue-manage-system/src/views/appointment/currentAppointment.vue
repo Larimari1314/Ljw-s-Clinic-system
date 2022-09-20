@@ -99,8 +99,13 @@ export default {
         doctorName: this.filters.doctorName,
         patientId: this.patientInformation.id
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      getAllCurrentAppointment(para).then((res) => {
+      getAllCurrentAppointment(para,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.currentAppointmentList = res.data.result.list;
           this.total = res.data.result.total
@@ -119,7 +124,12 @@ export default {
           }
       )
           .then(() => {
-            cancelAppointment(row.orderId).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            cancelAppointment(row.orderId,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 ElMessage({
                   type: 'success',

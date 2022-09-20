@@ -116,8 +116,13 @@ export default {
         page: this.page,
         value:this.filters.value
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      getAllGeneral(para).then((res) => {
+      getAllGeneral(para,configs).then((res) => {
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
           this.users = res.data.result.list;
@@ -137,7 +142,12 @@ export default {
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true;
-            editGeneral(this.editForm).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editGeneral(this.editForm,configs).then((res)=>{
               if (res.data.msgId === 'C200') {
                 this.orderVisible = false;
                 this.getUsers();

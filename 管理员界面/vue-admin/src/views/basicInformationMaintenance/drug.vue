@@ -272,7 +272,12 @@ export default {
         id:row.id,
         enable:row.enable
       }
-      drugSwitching(para).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      drugSwitching(para,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.$notify.success({
             title: '成功',
@@ -313,8 +318,13 @@ export default {
         drugName: this.filters.drugName,
         specification: this.filters.specification,
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findAllDrug(para).then((res) => {
+      findAllDrug(para,configs).then((res) => {
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
           this.users = res.data.result.list;
@@ -329,10 +339,15 @@ export default {
       this.$confirm('确认删除该记录吗?', '提示', {
         type: 'warning'
       }).then(() => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
         this.listLoading = true;
         //NProgress.start();
         let para = {"ids": [row.id]};
-        deleteDrugByIds(para).then((res) => {
+        deleteDrugByIds(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C402") {
             this.$message.error('删除失败！当前选中药品已存在订单中，不可删除');
@@ -373,7 +388,12 @@ export default {
             this.$refs.edit.clearFiles();
             this.editLoading = true;
             let para = Object.assign({}, this.editForm);
-            editDrug(para).then((res => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editDrug(para,configs).then((res => {
               this.editLoading = false;
               if (res.data.msgId === "C200") {
                 this.$notify.success({
@@ -410,7 +430,12 @@ export default {
             this.addLoading = true;
             //NProgress.start();
             let para = Object.assign({}, this.addForm);
-           addDrug(para).then((res) => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+           addDrug(para,configs).then((res) => {
               this.addLoading = false;
               if (res.data.msgId === 'C404') {
                 this.$message.error('错误：请上传药品封面');
@@ -444,9 +469,14 @@ export default {
       this.$confirm('确认删除选中记录吗？', '提示', {
         type: 'warning'
       }).then(() => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
         this.listLoading = true;
         let para = {"ids": ids};
-        deleteDrugByIds(para).then((res) => {
+        deleteDrugByIds(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C402") {
             this.$message.error('删除失败！当前选中药品已在订单中，不可删除');
@@ -466,7 +496,13 @@ export default {
       });
     },
     dataTemplateDownload() {
-      dataTemplateDownloadByDrug().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        },
+        responseType: 'blob'
+      };
+      dataTemplateDownloadByDrug(null,configs).then((res) => {
         const disposition = res.headers['content-disposition'];
         let fileName = disposition.match(/=(.*)$/)[1];
         let blob = new Blob([res.data])
@@ -481,7 +517,13 @@ export default {
       })
     },
     exportData(){
-      exportDataByDrug().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        },
+        responseType: 'blob'
+      };
+      exportDataByDrug(null,configs).then((res) => {
         const disposition = res.headers['content-disposition'];
         let fileName = disposition.match(/=(.*)$/)[1];
         let blob = new Blob([res.data])
@@ -499,7 +541,12 @@ export default {
       this.uploadServerVisibleUser = true;
     },
     uploadToServer() {
-      analyseFileByDrug().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      analyseFileByDrug(configs).then((res) => {
         this.$refs.upload.clearFiles()
         if(res.data.msgId=='C500'){
           this.$notify.error({
@@ -530,7 +577,12 @@ export default {
   },
   mounted() {
     this.getUsers();
-    findDrugSpecification().then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    findDrugSpecification(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.sexList = res.data.result
       } else {

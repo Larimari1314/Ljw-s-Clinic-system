@@ -17,6 +17,7 @@ import sale.ljw.clinicsystem.backend.service.personnel.DoctorloginService;
 import sale.ljw.clinicsystem.backend.dao.personnel.DoctorloginMapper;
 import org.springframework.stereotype.Service;
 import sale.ljw.clinicsystem.common.http.ResponseResult;
+import sale.ljw.clinicsystem.common.sercurity.utils.JwtUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -48,12 +49,15 @@ public class DoctorloginServiceImpl extends ServiceImpl<DoctorloginMapper, Docto
         Doctorlogin doctorlogin = doctorloginMapper.selectOne(queryWrapper);
         if (doctorlogin != null) {
             //设置cookie
-            String cookieValue = UUID.randomUUID().toString();
+           /* String cookieValue = UUID.randomUUID().toString();
             Cookie cookie = new Cookie("_web_admin", cookieValue);
             cookie.setPath("/");
             response.addCookie(cookie);
             //在redis中存储
-            redisTemplate.boundValueOps(cookieValue).set(doctorlogin.getPermission(), 240, TimeUnit.MINUTES);
+            redisTemplate.boundValueOps(cookieValue).set(doctorlogin.getPermission(), 240, TimeUnit.MINUTES);*/
+            //将登录信息存储到token中
+            String token = JwtUtils.sign("doctor", doctorlogin.getId());
+            response.setHeader("token", token);
             return JSON.toJSONString(ResponseResult.getSuccessResult(doctorinformationMapper.selectById(doctorlogin.getId()), "C200", null));
         } else {
             return JSON.toJSONString(ResponseResult.getErrorResult("C404"));

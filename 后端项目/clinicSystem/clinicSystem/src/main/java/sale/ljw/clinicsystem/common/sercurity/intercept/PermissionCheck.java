@@ -1,8 +1,10 @@
 package sale.ljw.clinicsystem.common.sercurity.intercept;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import sale.ljw.clinicsystem.common.sercurity.utils.JwtUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -16,41 +18,24 @@ public class PermissionCheck implements HandlerInterceptor {
     JudgmentOfAuthority judgmentOfAuthority;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
         if (OPTIONS.equalsIgnoreCase(request.getMethod())) {
             return true;
         }
-        Cookie[] cookies = request.getCookies();
-        String redisValue = null;
-        boolean sboolean = false;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                //cookie中华由数值则检测
-                if ("_web_admin".equals(cookie.getName())) {
-                    redisValue = cookie.getValue();
-                    sboolean = true;
-                }
-            }
-            if (sboolean) {
-//                System.out.println(request.getServletPath() + "权限" + judgmentOfAuthority.findPermission(redisValue, request, response));
-                if (judgmentOfAuthority.findPermission(redisValue, request, response)) {
-                    return true;
-                } else {
-                    handleFalseResponse(response);
-                    return false;
-                }
-            } else {
-                handleFalseResponse(response);
-                return false;
-            }
-        } else {
-            handleFalseResponse(response);
+        //获取token值
+        String token = request.getHeader("token");
+        //检测token值是否还在有效期
+        if(!JwtUtils.verify(token)){
+            //401登录失效
+            loginFailureResponse(response);
             return false;
         }
+        //token有效，检测用户权限是否有效
+        return judgmentOfAuthority.findPermission(token, request,response);
     }
 
-    private void handleFalseResponse(HttpServletResponse response) throws Exception {
-        response.setStatus(509);
+    private void loginFailureResponse(HttpServletResponse response) throws Exception {
+        response.setStatus(401);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write("{\"insufficientPermissions\":\"false\"}");

@@ -19,6 +19,7 @@ import sale.ljw.clinicsystem.backend.pojo.personnel.Admininformation;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Adminlogin;
 import sale.ljw.clinicsystem.backend.service.personnel.AdminloginService;
 import sale.ljw.clinicsystem.common.http.ResponseResult;
+import sale.ljw.clinicsystem.common.sercurity.utils.JwtUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -72,13 +73,20 @@ public class AdminloginServiceImpl extends ServiceImpl<AdminloginMapper, Adminlo
                 .or().eq("LoginEmail", login.getLoginCredentials());
         Adminlogin adminlogin = adminloginMapper.selectOne(queryWrapper);
         if (adminlogin != null) {
-//            设置cookie
+            /*// 设置cookie
             String cookieValue = UUID.randomUUID().toString();
             Cookie cookie = new Cookie("_web_admin", cookieValue);
             cookie.setPath("/");
             response.addCookie(cookie);
             //在redis中存储
             redisTemplate.boundValueOps(cookieValue).set(adminlogin.getPermission(), 60, TimeUnit.MINUTES);
+            return JSON.toJSONString(ResponseResult.getSuccessResult(admininformationMapper.selectById(adminlogin.getId()), "C200", null));
+            */
+            //将用户id和用户权限绑定在token中并放置在请求头中，发送到前端
+            String token = JwtUtils.sign("admin", adminlogin.getId());
+            //将信息写入请求头中
+            response.setHeader("token",token);
+            //返回页面信息
             return JSON.toJSONString(ResponseResult.getSuccessResult(admininformationMapper.selectById(adminlogin.getId()), "C200", null));
         } else {
             return JSON.toJSONString(ResponseResult.getErrorResult("C404"));
@@ -87,9 +95,7 @@ public class AdminloginServiceImpl extends ServiceImpl<AdminloginMapper, Adminlo
 
     @Override
     public String logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("_web_admin", "");
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        response.setHeader("permissionToken",null);
         return JSON.toJSONString(ResponseResult.getSuccessResult(null, "C200", null));
     }
 

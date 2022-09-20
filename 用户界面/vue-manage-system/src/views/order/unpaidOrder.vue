@@ -146,7 +146,12 @@ export default {
           }
       )
           .then(() => {
-            refundOperationOrder(row.orderId).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            refundOperationOrder(row.orderId,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 ElMessage({
                   type: 'success',
@@ -169,7 +174,12 @@ export default {
           })
     },
     payOrder(){
-      payOrderBounding(this.payOrderId).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      payOrderBounding(this.payOrderId,configs).then((res)=>{
         let that=this
         if(res.data.msgId=='C200'){
           that.$router.replace({path:'/payOrder/'+res.data.result})
@@ -192,8 +202,13 @@ export default {
         doctorName: this.filters.doctorName,
         patientId: this.patientInformation.id
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findUnpaidOrderForm(para).then((res) => {
+      findUnpaidOrderForm(para,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.unpaidOrderFormList = res.data.result.list;
           this.total = res.data.result.total
@@ -206,7 +221,12 @@ export default {
       this.orderDrugList='';
       this.editFormVisible = true;
       this.payOrderId='';
-      getOrderInformation(row.orderId).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getOrderInformation(row.orderId,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.payOrderId=row.orderId
           this.orderInformation = res.data.result.informationOrder;

@@ -186,8 +186,13 @@ export default {
               patientid:this.patientInformation.id,
               reservetime:new Date(this.appointmentDate.getFullYear()+"-"+(this.appointmentDate.getMonth()+1)+"-"+this.appointmentDate.getDate()+" "+this.appointmentTime)
             }
-            let that=this
-            getAppointmentInformation(para).then((res)=>{
+            let that=this;
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            getAppointmentInformation(para,configs).then((res)=>{
               if(res.data.msgId==='C200'){
                 that.$router.replace({path:'/pay/'+res.data.result})
               }
@@ -206,7 +211,12 @@ export default {
         date:this.appointmentDate,
         patientId:this.patientInformation.id
       }
-      getAppointmentTime(para).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getAppointmentTime(para,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.appointmentActive=2;
           this.top3=false;
@@ -287,7 +297,12 @@ export default {
     },
     chooseDoctor(index,row){
       this.appointmentDate='';
-      getOnDutyHours(row.id).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getOnDutyHours(row.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           let startTime=res.data.result.startTime
           let endTime=res.data.result.endTime
@@ -315,7 +330,12 @@ export default {
         name: this.filters.name
       };
       this.listLoading = true;
-      findAllDepartment(para).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findAllDepartment(para,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.department = res.data.result.list;
           this.total = res.data.result.total
@@ -324,7 +344,12 @@ export default {
       })
     },
     handleEdit: function (index, row) {
-      getDoctorListByDepartment(row.id).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getDoctorListByDepartment(row.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.doctorList=res.data.result
         }

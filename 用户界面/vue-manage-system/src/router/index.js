@@ -45,14 +45,7 @@ const routes = [
                     title: '未支付订单'
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/order/unpaidOrder.vue")
-            },    {
-                path: "/upload",
-                name: "upload",
-                meta: {
-                    title: '上传插件'
-                },
-                component: () => import ( /* webpackChunkName: "upload" */ "../views/Upload.vue")
-            }, {
+            },  {
                 path: '/403',
                 name: '403',
                 meta: {

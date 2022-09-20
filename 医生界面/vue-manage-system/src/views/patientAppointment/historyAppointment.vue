@@ -203,7 +203,12 @@ export default {
               patientid:this.patientId,
               reservetime:new Date(this.appointmentDate.getFullYear()+"-"+(this.appointmentDate.getMonth()+1)+"-"+this.appointmentDate.getDate()+" "+this.appointmentTime)
             }
-            confirmAppointment(para).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            confirmAppointment(para,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 this.reserveVisible=false;
                 ElMessage({
@@ -242,8 +247,13 @@ export default {
         doctorId: JSON.parse(localStorage.getItem("doctor")).id,
         orderId: this.filters.orderId
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findHistoryAppointment(para).then((res) => {
+      findHistoryAppointment(para,configs).then((res) => {
         this.listLoading = false;
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
@@ -303,7 +313,12 @@ export default {
       return time;
     },
     reschedule: function (index, row) {
-      getOnDutyHours(this.doctorInformation.id).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getOnDutyHours(this.doctorInformation.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           let startTime=res.data.result.startTime
           let endTime=res.data.result.endTime
@@ -324,7 +339,12 @@ export default {
         date:this.appointmentDate,
         patientId:this.patientId
       }
-      getAppointmentTime(para).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getAppointmentTime(para,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.reserveDisabled=true;
           this.appointmentTimeDisable=false;
@@ -357,17 +377,22 @@ export default {
         reserveId: row.id,
         doctorId: this.doctorInformation.id
       }
-      checkOrderInformation(para).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      checkOrderInformation(para,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.doctorInformationList=res.data.result
         }
       })
-      checkOrderDrug(row.id).then((res)=>{
+      checkOrderDrug(row.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.drugList=res.data.result
         }
       })
-      getTotalPrice(row.id).then((res)=>{
+      getTotalPrice(row.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.totalPrice=res.data.result
         }

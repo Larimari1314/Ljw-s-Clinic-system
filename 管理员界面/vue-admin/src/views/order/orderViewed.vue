@@ -193,8 +193,13 @@ export default {
         did: this.filters.did,
         orderStatus: this.filters.orderStatus
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findAllOrderFrom(para).then((res) => {
+      findAllOrderFrom(para,configs).then((res) => {
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
           this.users = res.data.result.list;
@@ -213,14 +218,19 @@ export default {
       if(this.orderList.orderState==='已支付' || this.orderList.orderState==='订单完成' ){
         this.sameOrder=false
       }
-      findOrderDrugList(row.id).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findOrderDrugList(row.id,configs).then((res)=>{
        if(res.data.msgId=='C200'){
          this.orderFrom=res.data.result
        } else{
          this.$message.error('数据获取失败，请稍后重试');
        }
       })
-      getTotalPrice(row.id).then((res)=>{
+      getTotalPrice(row.id,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.totalPrice=res.data.result;
         } else{
@@ -237,21 +247,26 @@ export default {
   },
   mounted() {
     this.getUsers();
-    findDepartmentCoding().then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    findDepartmentCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.departmentList = res.data.result
       } else {
         this.$message.error('数据初始化失败，请稍后重试');
       }
     });
-    findPayInformation().then((res) => {
+    findPayInformation(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.dutyTimeLIst = res.data.result
       } else {
         this.$message.error('数据初始化失败，请稍后重试');
       }
     })
-    findAllByAllDuty().then((res) => {
+    findAllByAllDuty(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.allDuty = res.data.result
       } else {

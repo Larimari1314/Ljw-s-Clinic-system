@@ -200,8 +200,13 @@ export default {
         page: this.page,
         name: this.filters.name
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findAllDepartment(para).then((res) => {
+      findAllDepartment(para,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.department = res.data.result.list;
           this.total = res.data.result.total
@@ -230,7 +235,12 @@ export default {
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true;
-            editDepartment(this.editForm).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editDepartment(this.editForm,configs).then((res)=>{
               this.$refs.edit.clearFiles()
               if(res.data.msgId=='C200'){
                 this.editFormVisible = false;
@@ -268,7 +278,12 @@ export default {
             this.addLoading = true;
             //NProgress.start();
             // alert(JSON.stringify(this.addForm))
-            addDepartment(this.addForm).then((res)=>{
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            addDepartment(this.addForm,configs).then((res)=>{
               if(res.data.msgId=='C200'){
                 this.$refs.upload.clearFiles()
                 this.addFormVisible = false;

@@ -294,8 +294,13 @@ export default {
         did: this.filters.did,
         registereId: this.filters.registereId
       };
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
       this.listLoading = true;
-      findAllPatient(para).then((res) => {
+      findAllPatient(para,configs).then((res) => {
         if (res.data.msgId === "C200") {
           this.total = res.data.result.total;
           this.users = res.data.result.list;
@@ -313,7 +318,12 @@ export default {
         this.listLoading = true;
         //NProgress.start();
         let para = {"ids": [row.id]};
-        deleteByIdsInPatient(para).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        deleteByIdsInPatient(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C402") {
             this.$message.error('删除失败！当前选中患者已预约，不可删除');
@@ -358,7 +368,12 @@ export default {
             this.editLoading = true;
             let para = Object.assign({}, this.editForm);
             para.birthdayCoding = (!para.birthdayCoding || para.birthdayCoding == '') ? '' : util.formatDate.format(new Date(para.birthdayCoding), 'yyyy-MM-dd');
-            editPatientInformation(para).then((res => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            editPatientInformation(para,configs).then((res => {
               this.editLoading = false;
               if (res.data.msgId === 'C403') {
                 this.$message.error('错误：患者姓名已存在，如重名，请在名称后面添加编号(如：王五1、王五2)以便区分');
@@ -399,7 +414,12 @@ export default {
             //NProgress.start();
             let para = Object.assign({}, this.addForm);
             para.birthday = (!para.birthday || para.birthday == '') ? '' : util.formatDate.format(new Date(para.birthday), 'yyyy-MM-dd');
-            addPatientInformation(para).then((res) => {
+            let configs={
+              headers: {
+                token: sessionStorage.getItem('permissionToken')
+              }
+            };
+            addPatientInformation(para,configs).then((res) => {
               this.addLoading = false;
               if (res.data.msgId === 'C402') {
                 this.$message.error('错误：身份证号已经存在，请检查后重试');
@@ -438,7 +458,12 @@ export default {
       }).then(() => {
         this.listLoading = true;
         let para = {"ids": ids};
-        deleteByIdsInPatient(para).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+        deleteByIdsInPatient(para,configs).then((res) => {
           this.listLoading = false;
           if (res.data.msgId === "C402") {
             this.$message.error('删除失败！当前选中患者已预约，不可删除');
@@ -458,7 +483,13 @@ export default {
       });
     },
     dataTemplateDownload() {
-      dataTemplateDownloadByPatientInformation().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        },
+        responseType: 'blob'
+      };
+      dataTemplateDownloadByPatientInformation(null,configs).then((res) => {
         const disposition = res.headers['content-disposition'];
         let fileName = disposition.match(/=(.*)$/)[1];
         let blob = new Blob([res.data])
@@ -473,7 +504,13 @@ export default {
       })
     },
     exportData(){
-      exportDataByPatientInformation().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        },
+        responseType: 'blob'
+      };
+      exportDataByPatientInformation(null,configs).then((res) => {
         const disposition = res.headers['content-disposition'];
         let fileName = disposition.match(/=(.*)$/)[1];
         let blob = new Blob([res.data])
@@ -491,7 +528,12 @@ export default {
       this.uploadServerVisibleUser = true;
     },
     uploadToServer() {
-      analyseFileByPatientInformation().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      analyseFileByPatientInformation(configs).then((res) => {
         this.$refs.upload.clearFiles()
         if(res.data.msgId=='C500'){
           this.$notify.error({
@@ -522,7 +564,12 @@ export default {
   },
   mounted() {
     this.getUsers();
-    findSexCoding().then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    findSexCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.sexList = res.data.result
       } else {

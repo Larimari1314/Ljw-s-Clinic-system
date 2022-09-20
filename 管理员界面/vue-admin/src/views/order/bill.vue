@@ -166,7 +166,12 @@ export default {
   },
   mounted() {
     let id = this.$route.params.id;
-    invoiceService(id).then((res)=>{
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    invoiceService(id,configs).then((res)=>{
       if(res.data.msgId=='C200'){
         this.drugList=res.data.result.drugList
         this.orderInformation=res.data.result.orderListById

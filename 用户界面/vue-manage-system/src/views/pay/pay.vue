@@ -68,7 +68,12 @@ export default {
   },
   methods: {
     GetQRCode(){
-      getQRCode(this.payId).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getQRCode(this.payId,configs).then((res)=>{
         if(res.data.msgId=='C200'){
           this.pauImg= res.data.result
         }
@@ -80,7 +85,12 @@ export default {
     //获取当前支付状态
     paymentStatus(){
       let that=this;
-      paymentStatus(this.payId+this.payList.appointmentInformation.patientid).then((res)=>{
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      paymentStatus(this.payId+this.payList.appointmentInformation.patientid,configs).then((res)=>{
         if(res.data.msgId=='C201'){
           this.hiddens=true
           this.payingState=false
@@ -119,7 +129,12 @@ export default {
   mounted() {
     let that=this
     this.payId = that.$route.params.id
-      getPayAppointmentInformation(this.payId).then((res)=>{
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+      getPayAppointmentInformation(this.payId,configs).then((res)=>{
         if(res.data.msgId=='C404'){
           /*订单超时或不存在*/
           this.$notify.error({

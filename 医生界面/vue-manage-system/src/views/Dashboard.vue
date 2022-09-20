@@ -95,7 +95,12 @@ export default {
     }
   },
   methods: {}, mounted() {
-    getAppointmentNumber(this.user.id).then((res) => {
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
+    getAppointmentNumber(this.user.id,configs).then((res) => {
       if (res.data.msgId == 'C200') {
         this.appointmentNumber = res.data.result
       }
@@ -107,7 +112,7 @@ export default {
       doctorId: JSON.parse(localStorage.getItem("doctor")).id,
       orderId: ''
     }
-    findCurrentAppointment(para).then((res) => {
+    findCurrentAppointment(para,configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.appointmentList = res.data.result.list
       }

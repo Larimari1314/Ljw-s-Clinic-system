@@ -218,7 +218,12 @@ export default {
       this.$confirm('确认删除该记录吗?', '提示', {
         type: 'warning'
       }).then(() => {
-            deletePermanentlyDrug(row.id).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+            deletePermanentlyDrug(row.id,configs).then((res) => {
               if (res.data.msgId == 'C200') {
                 this.$notify.success({
                   title: '成功',
@@ -247,7 +252,12 @@ export default {
       this.$confirm('确认删除该记录吗?', '提示', {
         type: 'warning'
       }).then(() => {
-            deletePermanentlyUser(row.id).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+            deletePermanentlyUser(row.id,configs).then((res) => {
               if (res.data.msgId == 'C200') {
                 this.$notify.success({
                   title: '成功',
@@ -276,7 +286,12 @@ export default {
       this.$confirm('确认删除该记录吗?', '提示', {
         type: 'warning'
       }).then(() => {
-            deletePermanentlyDoctor(row.id).then((res) => {
+        let configs={
+          headers: {
+            token: sessionStorage.getItem('permissionToken')
+          }
+        };
+            deletePermanentlyDoctor(row.id,configs).then((res) => {
               if (res.data.msgId == 'C200') {
                 this.$notify.success({
                   title: '成功',
@@ -318,7 +333,12 @@ export default {
       )
     },
     dataRecoveryDoctor(index, row) {
-      dataRecoveryDoctor(row.id).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      dataRecoveryDoctor(row.id,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.$notify.success({
             title: '成功',
@@ -351,7 +371,12 @@ export default {
       })
     },
     dataRecoveryUser(index, row) {
-      dataRecoveryUser(row.id).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      dataRecoveryUser(row.id,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.$notify.success({
             title: '成功',
@@ -370,7 +395,12 @@ export default {
       })
     },
     dataRecoveryDrug(index, row) {
-      dataRecoveryDrug(row.id).then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      dataRecoveryDrug(row.id,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.$notify.success({
             title: '成功',
@@ -389,21 +419,36 @@ export default {
       })
     },
     getDoctorDelete() {
-      checkDeleteDoctor().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      checkDeleteDoctor(null,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.doctorList = res.data.result
         }
       })
     }
     , getNonDrug() {
-      getDeleteDrug().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getDeleteDrug(null,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.nonDrugList = res.data.result
         }
       })
     }
     , getUser() {
-      getDeleteUser().then((res) => {
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      getDeleteUser(null,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.userList = res.data.result
         }
