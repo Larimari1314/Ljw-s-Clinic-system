@@ -8,6 +8,7 @@ export const editDoctorInformation = (params,config) => { return axios.post(`${b
 export const editDoctorLogin = (params,config) => { return axios.post(`${bases}/doctorInformationByDoctor/editDoctorLogin`,params,config); };
 export const getAppointmentNumber = (params,config) => { return axios.get(`${bases}/doctorHome/getAppointmentNumber/`+params,config); };
 export const findAllDepartment = (params,config) => { return axios.post(`${bases}/department/findAllDepartment`,params,config); };
+export const findAllReserveDepartmentList = (params,config) => { return axios.post(`${bases}/departmentByPatient/findAllReserveDepartmentList`,params,config); };
 export const getDoctorListByDepartment = (params,config) => { return axios.get(`${bases}/departmentByPatient/getDoctorListByDepartment/`+params,config); };
 export const getAppointmentTime = (params,config) => { return axios.post(`${bases}/orderByDoctor/getAppointmentTime` , params,config); };
 export const getOnDutyHours = (params,config) => { return axios.get(`${bases}/orderByDoctor/getOnDuty/` + params,config); };
@@ -34,3 +35,20 @@ export const editPatientLogin = (params,config) => { return axios.post(`${bases}
 export const editPatientInformation = (params,config) => { return axios.post(`${bases}/patientInformationByPatient/editPatientInformation` , params,config); };
 export const getRemindersNumber = (params,config) => { return axios.get(`${bases}/orderByPatient/getRemindersNumber/` + params,config); };
 export const registerAccountByPatient = (params,config) => { return axios.post(`${bases}/patientInformationByPatient/registerAccountByPatient` , params,config); };
+export const getMedicalProjectNameList = (config) => { return axios.get(`${bases}/medicalTechnologyByPatient/getMedicalProjectNameList`,config); };
+export const findMedicalTechnologyList = (params,config) => { return axios.post(`${bases}/medicalTechnologyByPatient/findMedicalTechnologyList` , params,config); };
+export const getMedicalClassificationList = (params,config) => { return axios.get(`${bases}/medicalTechnologyByPatient/getMedicalClassificationList/`+params,config); };
+export const findDoctorListByDepartmentId = (params,config) => { return axios.post(`${bases}/medicalTechnologyByPatient/findDoctorListByDepartmentId`,params,config); };
+export const findDoctorDutyTimeListByDoctorId = (params,config) => { return axios.get(`${bases}/medicalTechnologyByPatient/findDoctorDutyTimeList/`+params,config); };
+export const queryBindingAppointment = (config) => { return axios.get(`${bases}/medicalTechnologyByPatient/queryBindingAppointment`,config); };
+export const medicalTechnologyAppointments = (params,config) => { return axios.post(`${bases}/medicalTechnologyByPatient/medicalTechnologyAppointment`,params,config); };
+export const confirmPayment = (params,config) => { return axios.get(`${bases}/medicalTechnologyByPatient/confirmPayment/`+params,config); };
+export const payingEncryption = (params,config) => { return axios.get(`${bases}/medicalTechnologyByPatient/payingEncryption/`+params,config); };
+export const queryPaymentInformation = (params,config) => { return axios.get(`${bases}/medicalTechnologyByPatient/queryPaymentInformation/`+params,config); };
+export const getQRCodeMedical = (params,config) => { return axios.get(`${bases}/medicalTechnologyByPatient/getQRCodeMedical/` + params,config); };
+export const scanPayStatusMedical = (params) => { return axios.get(`${basesIp}/medicalTechnologyByPatient/scanPayStatusMedical/` + params); };
+export const payingMedical = (params) => { return axios.get(`${basesIp}/medicalTechnologyByPatient/paying/` + params); };
+export const findAllUnpaidOrder = (params,config) => { return axios.post(`${bases}/medicalTechnologyOrderByPatient/findAllUnpaidOrder`,params,config); };
+export const refundMedicalOrder = (params,config) => { return axios.get(`${bases}/medicalTechnologyOrderByPatient/refundMedicalOrder/` + params,config); };
+export const findAllHistoryMedicalTechnology = (params,config) => { return axios.post(`${bases}/medicalTechnologyOrderByPatient/findAllHistoryMedicalTechnology`,params,config); };
+export const viewTheReport = (params,config) => { return axios.get(`${bases}/medicalTechnologyOrderByPatient/viewTheReport/` + params,config); };

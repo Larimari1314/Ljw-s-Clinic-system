@@ -2,6 +2,7 @@ package sale.ljw.clinicsystem.backend.dao.personnel;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.basic.admin.LoginFrom;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindDoctorByAdmin;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorlogin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @Repository
 public interface DoctorloginMapper extends BaseMapper<Doctorlogin> {
     public abstract Integer updateByIdToPermission(String id);
+    public abstract Doctorlogin login(LoginFrom login);
 }
 
 

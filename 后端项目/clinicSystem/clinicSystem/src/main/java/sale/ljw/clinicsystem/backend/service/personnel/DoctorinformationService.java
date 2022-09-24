@@ -1,6 +1,7 @@
 package sale.ljw.clinicsystem.backend.service.personnel;
 
 import org.springframework.web.multipart.MultipartFile;
+import sale.ljw.clinicsystem.backend.form.basic.patient.FindDoctorListByMedical;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.AddDoctorInformationByAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditDoctorInformation;
@@ -52,4 +53,6 @@ public interface DoctorinformationService extends IService<Doctorinformation> {
    public abstract String editDoctorByDoctor(EditDoctorInformationByDoctor doctorInformation, MultipartFile multipartFile);
 
     public abstract String getDoctorListByDepartment(String departmentId);
+
+    public abstract String findDoctorListByDepartmentId(FindDoctorListByMedical doctorListByMedical);
 }

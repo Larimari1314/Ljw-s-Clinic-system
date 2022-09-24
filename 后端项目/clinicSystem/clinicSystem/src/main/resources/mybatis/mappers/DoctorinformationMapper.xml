@@ -115,4 +115,22 @@
                  INNER JOIN general generalDrug ON generalDrug.coding=doctorDuty.dutyId
         WHERE doctorInformation.did=#{departmentId};
     </select>
+
+    <select id="findDoctorListByDepartmentId" resultType="java.util.Map">
+        SELECT doctor.id,doctor.name,general.value dutyTime,registrationLevel.price,generalRegistra.value RegisName
+        FROM doctorInformation doctor
+                 INNER JOIN doctorDuty ON doctorDuty.id=doctor.id
+                 INNER JOIN general ON general.coding=doctorDuty.dutyId
+                 INNER JOIN registrationLevel ON doctor.registereId=registrationLevel.id
+                 INNER JOIN general generalRegistra ON generalRegistra.coding=registrationLevel.name
+        WHERE doctor.did=#{did} AND doctor.doctorDelete=0 AND doctor.id IN (SELECT me.doctorId FROM medicalDoctor me WHERE me.medicalId=#{medicalId})
+        ORDER BY registrationLevel.price
+    </select>
+
+    <select id="findDoctorDutyTime" resultType="string">
+        SELECT dutyTime.id
+        FROM doctorDuty
+                 INNER JOIN dutyTime ON doctorDuty.dutyId=dutyTime.id
+        WHERE doctorDuty.id=#{doctorId}
+    </select>
 </mapper>

@@ -44,29 +44,10 @@ export default {
         icon: "el-icon-lx-home",
         index: "/dashboard",
         title: "系统首页",
-      }, {
-        icon: "el-icon-goods",
-        index: "/currentAppointment",
-        title: "患者就诊",
-      }, {
+      },{
         icon: "el-icon-setting",
         index: "/user",
         title: "个人中心",
-      },
-      {
-        icon: "el-icon-lx-calendar",
-        index: "3",
-        title: "预约相关",
-        subs: [
-          {
-            index: "/historyAppointment",
-            title: "历史预约",
-          },
-          {
-            index: "/dspensingMedicine",
-            title: "患者发药",
-          }
-        ],
       }
     ];
 
@@ -82,7 +63,69 @@ export default {
       onRoutes,
       sidebar,
     };
-  },
+  },created() {
+  //  根据医生所在部门动态显示界面
+    let doctor = JSON.parse(localStorage.getItem("doctor"));
+    if(doctor.did==='DE006'){
+      this.items=[
+        {
+          icon: "el-icon-lx-home",
+          index: "/dashboard",
+          title: "系统首页",
+        }, {
+          icon: "el-icon-goods",
+          index: "/medicalTechnologyCurrentAppointment",
+          title: "患者医技就诊",
+        }, {
+          icon: "el-icon-setting",
+          index: "/user",
+          title: "个人中心",
+        },
+        {
+          icon: "el-icon-lx-calendar",
+          index: "3",
+          title: "预约相关",
+          subs: [
+            {
+              index: "/medicalTechnologyHistoryAppointment",
+              title: "历史预约",
+            }
+          ]
+        }
+      ]
+    }else{
+      this.items=[
+        {
+          icon: "el-icon-lx-home",
+          index: "/dashboard",
+          title: "系统首页",
+        }, {
+          icon: "el-icon-goods",
+          index: "/currentAppointment",
+          title: "患者就诊",
+        }, {
+          icon: "el-icon-setting",
+          index: "/user",
+          title: "个人中心",
+        },
+        {
+          icon: "el-icon-lx-calendar",
+          index: "3",
+          title: "预约相关",
+          subs: [
+            {
+              index: "/historyAppointment",
+              title: "历史预约",
+            },
+            {
+              index: "/dspensingMedicine",
+              title: "患者发药",
+            }
+          ]
+        }
+      ]
+    }
+  }
 };
 </script>
 

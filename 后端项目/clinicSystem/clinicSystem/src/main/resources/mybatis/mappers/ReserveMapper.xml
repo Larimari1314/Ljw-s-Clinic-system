@@ -169,7 +169,7 @@
     <select id="findCurrentAppointments" resultType="java.util.Map">
         SELECT reserve.id,doctor.name doctorName,patient.name patientName,
         DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
-        department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId
+        department.name departmentName,reserve.NumberReminders,reserve.state reserveState,patient.id patientId,(SELECT COUNT(id) FROM medicalTechnologyReserve WHERE medicalTechnologyReserve.patientId=reserve.patientId) COUNT
         FROM reserve
         INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
         INNER JOIN patientInformation patient ON patient.id=reserve.patientId

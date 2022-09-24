@@ -655,8 +655,9 @@ export default {
     this.getUsers();
     let configs={
       headers: {
-        token: sessionStorage.getItem('AppointToken')
-      }};
+        token: sessionStorage.getItem('permissionToken')
+      }
+    };
     findSexCoding(configs).then((res) => {
       if (res.data.msgId === "C200") {
         this.sexList = res.data.result

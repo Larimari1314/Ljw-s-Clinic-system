@@ -2,6 +2,7 @@ package sale.ljw.clinicsystem.backend.dao.personnel;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.basic.patient.FindDoctorListByMedical;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.FindDoctorByAdmin;
 import sale.ljw.clinicsystem.backend.pojo.personnel.Doctorinformation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -39,6 +40,9 @@ public interface DoctorinformationMapper extends BaseMapper<Doctorinformation> {
     Integer recoveryData(String id);
 
     List<Map<String, Object>> getDoctorListByDepartment(String departmentId);
+
+    ArrayList<Map<String, Object>> findDoctorListByDepartmentId(FindDoctorListByMedical doctorListByMedical);
+    String findDoctorDutyTime(String doctorId);
 }
 
 

@@ -24,9 +24,15 @@ public class PermissionCheck implements HandlerInterceptor {
         }
         //获取token值
         String token = request.getHeader("token");
+        //单纯请求未挂在token，考虑前端代码编写错误、或用户界面卡顿请求出错问题所以只给拦截
+       if(token==null){
+            loginFailureResponse(response);
+            return false;
+        }
         //检测token值是否还在有效期
         if(!JwtUtils.verify(token)){
-            //401登录失效
+            //401登录失效,token请求头中存储false
+            response.setHeader("token", "false");
             loginFailureResponse(response);
             return false;
         }
@@ -38,7 +44,7 @@ public class PermissionCheck implements HandlerInterceptor {
         response.setStatus(401);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"insufficientPermissions\":\"false\"}");
+        response.getWriter().write("{\"loginFailure\":\"false\"}");
         response.getWriter().flush();
     }
 }

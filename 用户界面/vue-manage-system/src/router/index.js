@@ -24,6 +24,13 @@ const routes = [
                     title: '当前预约'
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/appointment/currentAppointment.vue")
+            }, {
+                path: "/medicalTechnologyAppointment",
+                name: "medicalTechnologyAppointment",
+                meta: {
+                    title: '医技预约'
+                },
+                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/medicaltechnology/medicalTechnologyAppointment.vue")
             },{
                 path: "/appointmentDoctor",
                 name: "appointmentDoctor",
@@ -59,6 +66,13 @@ const routes = [
                     title: '个人中心'
                 },
                 component: () => import (/* webpackChunkName: "user" */ '../views/User.vue')
+            }, {
+                path: '/medicalTechnologyOrder',
+                name: 'medicalTechnologyOrder',
+                meta: {
+                    title: '医技历史订单'
+                },
+                component: () => import (/* webpackChunkName: "user" */ '../views/medicaltechnology/medicalTechnologyOrder.vue')
             }
         ]
     }, {
@@ -109,6 +123,27 @@ const routes = [
             title: '支付'
         },
         component: () => import ( /* webpackChunkName: "login" */ "../views/pay/payingOrder.vue")
+    },{
+        path: "/payMedicalTechnology/:id",
+        name: "payMedicalTechnology",
+        meta: {
+            title: '支付'
+        },
+        component: () => import ( /* webpackChunkName: "login" */ "../views/medicaltechnology/payMedicalTechnology.vue")
+    },{
+        path: "/payingMedical/:id",
+        name: "payingMedical",
+        meta: {
+            title: '支付'
+        },
+        component: () => import ( /* webpackChunkName: "login" */ "../views/medicaltechnology/payingMedical.vue")
+    },{
+        path: '/viewTestReport/:id',
+        name: 'viewTestReport',
+        meta: {
+            title: '医技报告'
+        },
+        component: () => import (/* webpackChunkName: "user" */ '../views/medicaltechnology/viewTestReport.vue')
     }
 ];
 

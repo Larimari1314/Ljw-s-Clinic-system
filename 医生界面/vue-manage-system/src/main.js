@@ -24,10 +24,15 @@ axios.interceptors.response.use(
         if(error.response.status === 403){
             window.location.href='http://localhost:3000/#/403'
             return Promise.reject(error);
-        }/*if(error.response.status === 401){
-            ElMessage.error('登录失效请重新登录.')
-            window.location.href='http://localhost:3000/#/login'
-            return Promise.reject(error);
-        }*/
+        }if(error.response.status === 401){
+            if(error.response.headers['token']==='false'){
+                ElMessage.error('登录失效请重新登录.')
+                window.location.href='http://localhost:3000/#/login'
+                return Promise.reject(error);
+            }else{
+                ElMessage.error('登录状态异常，请稍后重新登录.')
+                return Promise.reject(error);
+            }
+        }
     }
 );

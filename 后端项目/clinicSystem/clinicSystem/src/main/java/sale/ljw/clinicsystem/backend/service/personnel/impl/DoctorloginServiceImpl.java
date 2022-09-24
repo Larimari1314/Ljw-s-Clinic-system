@@ -37,19 +37,20 @@ public class DoctorloginServiceImpl extends ServiceImpl<DoctorloginMapper, Docto
     private DoctorloginMapper doctorloginMapper;
     @Autowired
     private DoctorinformationMapper doctorinformationMapper;
-    @Autowired
-    private RedisTemplate redisTemplate;
+
     @Override
     public String login(LoginFrom login, HttpServletResponse response) {
-        QueryWrapper<Doctorlogin> queryWrapper = new QueryWrapper<>();
+       /* QueryWrapper<Doctorlogin> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("password", DigestUtils.md5DigestAsHex(login.getPassword().getBytes(StandardCharsets.UTF_8)))
-                .eq("LoginName", login.getLoginCredentials())
-                .or().eq("LoginPhone", login.getLoginCredentials())
-                .or().eq("LoginEmail", login.getLoginCredentials());
-        Doctorlogin doctorlogin = doctorloginMapper.selectOne(queryWrapper);
+                .and(s->s.eq("LoginName", login.getLoginCredentials()).or()
+                        .eq("LoginPhone", login.getLoginCredentials()).or()
+                        .eq("LoginEmail", login.getLoginCredentials()));
+        Doctorlogin doctorlogin = doctorloginMapper.selectOne(queryWrapper);*/
+        login.setPassword(DigestUtils.md5DigestAsHex(login.getPassword().getBytes(StandardCharsets.UTF_8)));
+        Doctorlogin doctorlogin = doctorloginMapper.login(login);
         if (doctorlogin != null) {
             //设置cookie
-           /* String cookieValue = UUID.randomUUID().toString();
+           /*String cookieValue = UUID.randomUUID().toString();
             Cookie cookie = new Cookie("_web_admin", cookieValue);
             cookie.setPath("/");
             response.addCookie(cookie);

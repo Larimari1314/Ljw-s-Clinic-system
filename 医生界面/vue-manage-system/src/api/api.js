@@ -27,3 +27,14 @@ export const dispensingMedicine = (params,config)  => { return axios.post(`${bas
 export const editDoctorInformation = (params,config)  => { return axios.post(`${bases}/doctorInformationByDoctor/editDoctorInformation`,params,config); };
 export const editDoctorLogin = (params,config)  => { return axios.post(`${bases}/doctorInformationByDoctor/editDoctorLogin`,params,config); };
 export const getAppointmentNumber = (params,config)  => { return axios.get(`${bases}/doctorHome/getAppointmentNumber/`+params,config); };
+export const findCurrentAppointmentMedicalTechnology = (config)  => { return axios.get(`${bases}/medicalTechnology/findCurrentAppointmentMedicalTechnology`,config); };
+export const getAppointmentNumberMedicalTechnology = (config)  => { return axios.get(`${bases}/medicalTechnology/getAppointmentNumber`,config); };
+export const findAllReserveMedicalTechnology = (params,config)  => { return axios.post(`${bases}/medicalTechnology/findAllReserveMedicalTechnology`,params,config); };
+export const judgmentStatusPaid = (params,config)  => { return axios.get(`${bases}/medicalTechnology/judgmentStatusPaid/`+params,config); };
+export const findDiagnoseReportData = (params,config)  => { return axios.get(`${bases}/medicalTechnology/findDiagnoseReportData/`+params,config); };
+export const medicalTechnologyCancelAppointment = (params,config)  => { return axios.get(`${bases}/medicalTechnology/cancelAppointment/`+params,config); };
+export const findHistoricalAppointments = (params,config)  => { return axios.post(`${bases}/medicalTechnology/findHistoricalAppointments`,params,config); };
+export const viewReport = (params,config)  => { return axios.get(`${bases}/medicalTechnology/viewReport/`+params,config); };
+export const endOfVisit = (params,config)  => { return axios.post(`${bases}/medicalTechnology/endOfVisit`,params,config); };
+export const findBindOrderIdMedicalList = (params,config)  => { return axios.post(`${bases}/attendingPhysicianViewMedicalTechnology/findBindOrderIdMedicalList`,params,config); };
+export const findHistoryBingOrderIdMedicalList = (params,config)  => { return axios.get(`${bases}/attendingPhysicianViewMedicalTechnology/findHistoryBingOrderIdMedicalList/`+params,config); };
