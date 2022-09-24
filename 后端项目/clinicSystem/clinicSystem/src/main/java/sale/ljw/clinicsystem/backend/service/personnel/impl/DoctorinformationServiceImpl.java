@@ -30,6 +30,7 @@ import sale.ljw.clinicsystem.backend.dao.basic.DoctordutyMapper;
 import sale.ljw.clinicsystem.backend.dao.order.ReserveMapper;
 import sale.ljw.clinicsystem.backend.dao.personnel.DoctorinformationMapper;
 import sale.ljw.clinicsystem.backend.dao.personnel.DoctorloginMapper;
+import sale.ljw.clinicsystem.backend.form.basic.patient.FindDoctorListByMedical;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.AddDoctorInformationByAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.DeleteIdsBYAdmin;
 import sale.ljw.clinicsystem.backend.form.personnel.admin.EditDoctorInformation;
@@ -582,6 +583,12 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
             JSON.toJSONString(ResponseResult.getErrorResult("C403"));
         }
         return JSON.toJSONString(ResponseResult.getSuccessResult(doctorListByDepartment));
+    }
+
+    @Override
+    public String findDoctorListByDepartmentId(FindDoctorListByMedical doctorListByMedical) {
+        ArrayList<Map<String,Object>> lists=doctorinformationMapper.findDoctorListByDepartmentId(doctorListByMedical);
+        return JSON.toJSONString(ResponseResult.getSuccessResult(lists));
     }
 }
 

@@ -19,6 +19,18 @@
                  INNER JOIN registrationLevel ON name = coding;
     </select>
     <select id="selectAllByAllDuty" resultType="java.util.Map">
-        SELECT id,value FROM dutyTime INNER JOIN general ON id=coding;
+        SELECT id, value
+        FROM dutyTime
+                 INNER JOIN general ON id = coding;
+    </select>
+
+    <select id="findDutyTimeByCoding" resultType="java.util.Map">
+        SELECT coding id,value
+        FROM general
+        WHERE
+            coding NOT LIKE CONCAT('%','GT','%','4') AND coding LIKE CONCAT('%','GT','%')
+        <if test="coding!=null">
+               AND coding=#{coding}
+            </if>
     </select>
 </mapper>

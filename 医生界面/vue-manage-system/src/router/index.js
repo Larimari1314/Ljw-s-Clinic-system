@@ -24,6 +24,20 @@ const routes = [
                     title: '当前预约患者'
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/patientAppointment/currentAppointment.vue")
+            }, {
+                path: "/medicalTechnologyCurrentAppointment",
+                name: "medicalTechnologyCurrentAppointment",
+                meta: {
+                    title: '医技预约患者'
+                },
+                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/medicalTechnology/medicalTechnologyCurrentAppointment.vue")
+            },{
+                path: "/medicalTechnologyHistoryAppointment",
+                name: "medicalTechnologyHistoryAppointment",
+                meta: {
+                    title: '医技历史预约'
+                },
+                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/medicalTechnology/medicalTechnologyHistoryAppointment.vue")
             },{
                 path: "/dspensingMedicine",
                 name: "dspensingMedicine",
@@ -75,6 +89,22 @@ const routes = [
             title: '找不到页面'
         },
         component: () => import (/* webpackChunkName: "404" */ '../views/errorInterface/404.vue'),
+        hidden: true
+    } , {
+        path: '/diagnoseReport/:id',
+        name: 'diagnoseReport',
+        meta: {
+            title: '为患者编写诊断报告'
+        },
+        component: () => import (/* webpackChunkName: "404" */ '../views/medicalTechnology/diagnoseReport.vue'),
+        hidden: true
+    },{
+        path: '/viewTestReport/:id',
+        name: 'viewTestReport',
+        meta: {
+            title: '查看诊断报告'
+        },
+        component: () => import (/* webpackChunkName: "404" */ '../views/medicalTechnology/viewTestReport.vue'),
         hidden: true
     },
     {

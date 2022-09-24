@@ -3,7 +3,9 @@ package sale.ljw.clinicsystem.backend.api.patient.basic;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sale.ljw.clinicsystem.backend.form.basic.admin.FindDepartmentByAdmin;
 import sale.ljw.clinicsystem.backend.form.order.doctor.ConfirmAppointmentByDoctor;
+import sale.ljw.clinicsystem.backend.service.basic.DepartmentService;
 import sale.ljw.clinicsystem.backend.service.order.ReserveService;
 import sale.ljw.clinicsystem.backend.service.personnel.DoctorinformationService;
 
@@ -17,6 +19,16 @@ public class DepartmentServletByPatient {
     private DoctorinformationService doctorinformationService;
     @Autowired
     private ReserveService reserveService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @ApiOperation(value = "获取科室列表")
+    @PostMapping("/findAllReserveDepartmentList")
+    public String findAllReserveDepartmentList(@RequestBody @Valid FindDepartmentByAdmin department){
+      return  departmentService.findAllReserveDepartmentList(department);
+    }
+
     //获取科室对应的医生
     @ApiOperation("获取科室对应的医师")
     @GetMapping("/getDoctorListByDepartment/{departmentId}")

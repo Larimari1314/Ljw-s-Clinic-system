@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.order.MedicaltechnologyreserveMapper">
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.order.Medicaltechnologyreserve">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="doctorid" column="doctorId" jdbcType="VARCHAR"/>
+        <result property="patientid" column="patientId" jdbcType="VARCHAR"/>
+        <result property="reserveid" column="reserveId" jdbcType="VARCHAR"/>
+        <result property="medicalid" column="medicalId" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="inspectionreport" column="inspectionReport" jdbcType="VARCHAR"/>
+        <result property="reservedate" column="reserveDate" jdbcType="DATE"/>
+        <result property="reservetime" column="reserveTime" jdbcType="CHAR"/>
+        <result property="queuenumber" column="queueNumber" jdbcType="INTEGER"/>
+        <result property="checkparts" column="checkParts" jdbcType="VARCHAR"/>
+        <result property="appointmenttime" column="appointmentTime" jdbcType="TIMESTAMP"/>
+        <result property="money" column="money" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,doctorId,patientId,
+        reserveId,medicalId,status,
+        inspectionReport,reserveDate,reserveTime,
+        queueNumber,checkParts,appointmentTime,money
+    </sql>
+    <select id="findCurrentAppointmentMedicalTechnology" resultType="java.util.Map">
+        SELECT pa.name patientName,DATE_FORMAT(me.reserveDate,'%Y年%m月%d日') reserveTime
+        FROM medicalTechnologyReserve me
+                 INNER JOIN patientInformation pa ON me.patientId=pa.id
+        WHERE me.doctorId=#{doctorId} AND me.status=#{status}
+    </select>
+    <select id="getAppointmentNumber" resultType="map">
+        SELECT (SELECT COUNT(id) FROM medicalTechnologyReserve WHERE doctorId=#{doctorId}) allAppointmentNumber
+                ,(SELECT COUNT(id) FROM medicalTechnologyReserve WHERE doctorId=#{doctorId} AND STATUS='GST04') appointmentNumber,
+               COUNT(me.id) overAppointmentNumber
+        FROM medicalTechnologyReserve me
+        WHERE me.doctorId=#{doctorId} AND STATUS='GST03'
+    </select>
+    <select id="findAllReserveMedicalTechnology" resultType="java.util.Map">
+        SELECT medical.id,patient.name patientName,CONCAT(DATE_FORMAT(medical.reserveDate,'%Y年%m月%d日'),general.value) reserveTime
+             ,medical.queueNumber,medical.checkParts,generalOrder.value status,medical.reserveId
+        FROM medicalTechnologyReserve medical
+                 INNER JOIN patientInformation patient ON medical.patientId=patient.id
+        <if test="medicalTechnology.patientName!=null">
+            AND patient.name LIKE CONCAT('%',#{medicalTechnology.patientName},'%')
+        </if>
+                 INNER JOIN general ON medical.reserveTime=general.coding
+                 INNER JOIN general generalOrder ON medical.status=generalOrder.coding
+        WHERE medical.doctorId=#{doctorId} AND medical.status IN ('GST01','GST02')
+          <if test="medicalTechnology.checkParts!=null">
+              AND medical.checkParts LIKE CONCAT('%',#{medicalTechnology.checkParts},'%')
+          </if>
+        ORDER BY medical.status DESC
+    </select>
+
+    <select id="findDiagnoseReportData" resultType="map">
+        SELECT general.value projectName,medicalTechnology.technologyname,medicalClass.name,patient.name patientName,patient.age patientAge,generalSex.value patientSex,
+               doctor.name doctorName,patient.identityNumber,medical.inspectionReport,medical.checkParts
+        FROM medicalTechnologyReserve medical
+                 INNER JOIN patientInformation patient ON medical.patientId=patient.id
+                 INNER JOIN doctorInformation doctor ON doctor.id=medical.doctorId
+                 INNER JOIN medicalClassification medicalClass ON medicalClass.id=medical.medicalId
+                 INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClass.medicalId
+                 INNER JOIN general ON medicalTechnology.projectName=general.coding
+                 INNER JOIN general generalSex ON generalSex.coding=patient.sex
+        WHERE medical.id=#{id}
+    </select>
+
+    <select id="findHistoricalAppointments" resultType="map">
+        SELECT medical.id,patient.name patientName,CONCAT(DATE_FORMAT(medical.reserveDate,'%Y年%m月%d日'),general.value) reserveTime
+             ,medical.queueNumber,medical.checkParts,generalOrder.value status,medical.reserveId
+        FROM medicalTechnologyReserve medical
+                 INNER JOIN patientInformation patient ON medical.patientId=patient.id
+        <if test="medicalTechnology.patientName!=null">
+            AND patient.name LIKE CONCAT('%',#{medicalTechnology.patientName},'%')
+        </if>
+                 INNER JOIN general ON medical.reserveTime=general.coding
+                 INNER JOIN general generalOrder ON medical.status=generalOrder.coding
+        WHERE medical.doctorId=#{doctorId} AND medical.status IN ('GST03','GST04')
+        <if test="medicalTechnology.checkParts!=null">
+            AND medical.checkParts LIKE CONCAT('%',#{medicalTechnology.checkParts},'%')
+        </if>
+        ORDER BY medical.status
+    </select>
+
+    <select id="queryBindingAppointment" resultType="map">
+        SELECT reserve.id,DATE_FORMAT(reserveTime,'%Y年%m月%d日 %H时%i分') reserveTime,doctor.name doctorName,department.name departmentName
+        FROM reserve
+                 INNER JOIN doctorInformation doctor ON doctor.id=reserve.doctorId
+                 INNER JOIN department ON doctor.did=department.id
+        WHERE patientId=#{patientId} AND state=0
+        ORDER BY ABS(UNIX_TIMESTAMP(reserveTime)-UNIX_TIMESTAMP(NOW()))
+    </select>
+    <select id="confirmPayment" resultType="java.util.Map">
+        SELECT general.value doctorRegis,me.id,doctor.name,registrationLevel.price regisMoney,medicalClassification.money medicalMoney,
+               (registrationLevel.price+medicalClassification.money) totalMoney,CONCAT(DATE_FORMAT(me.reserveDate,'%Y年%m月%d日'),doctorTime.value) reserveTime,
+               me.queueNumber,DATE_FORMAT(me.appointmentTime,'%Y年%m月%d日 %H时%i分') appointmentTime
+        FROM medicalTechnologyReserve me
+                 INNER JOIN doctorInformation doctor ON doctor.id=me.doctorId
+                 INNER JOIN registrationLevel ON registrationLevel.id=doctor.registereId
+                 INNER JOIN general ON registrationLevel.name=general.coding
+                 INNER JOIN medicalClassification ON medicalClassification.id=me.medicalId
+                 INNER JOIN general doctorTime ON me.reserveTime=doctorTime.coding
+        WHERE me.id=#{id}
+    </select>
+    <select id="getTotalPrice" resultType="java.lang.Double">
+        SELECT (registrationLevel.price+medicalClassification.money) totalMoney
+        FROM medicalTechnologyReserve me
+                 INNER JOIN doctorInformation doctor ON doctor.id=me.doctorId
+                 INNER JOIN registrationLevel ON registrationLevel.id=doctor.registereId
+                 INNER JOIN medicalClassification ON medicalClassification.id=me.medicalId
+        WHERE me.id=#{id}
+    </select>
+    <select id="findAllUnpaidOrder" resultType="java.util.Map">
+        SELECT general.value doctorRegis,me.id,doctor.name,registrationLevel.price regisMoney,medicalClassification.money medicalMoney,
+               (registrationLevel.price+medicalClassification.money) totalMoney,CONCAT(DATE_FORMAT(me.reserveDate,'%Y年%m月%d日'),doctorTime.value) reserveTime,
+               me.queueNumber,DATE_FORMAT(me.appointmentTime,'%Y年%m月%d日 %H时%i分') appointmentTime,me.status statusCoding,generalStatus.value status
+        FROM medicalTechnologyReserve me
+                 INNER JOIN doctorInformation doctor ON doctor.id=me.doctorId
+                 INNER JOIN registrationLevel ON registrationLevel.id=doctor.registereId
+                 INNER JOIN general ON registrationLevel.name=general.coding
+                 INNER JOIN medicalClassification ON medicalClassification.id=me.medicalId
+        <if test="medicalTechnology.name!=null">
+            AND medicalClassification.name=#{medicalTechnology.name}
+        </if>
+                INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClassification.medicalId
+        <if test="medicalTechnology.medicalId!=null">
+            AND medicalTechnology.projectName=#{medicalTechnology.medicalId}
+        </if>
+                 INNER JOIN general doctorTime ON me.reserveTime=doctorTime.coding
+                INNER JOIN general generalStatus ON generalStatus.coding=me.status
+        WHERE me.status NOT IN ('GST03','GST04') AND me.patientId=#{patientId}
+    </select>
+    <select id="findAllHistoryMedicalTechnology" resultType="java.util.Map">
+        SELECT general.value doctorRegis,me.id,doctor.name,registrationLevel.price regisMoney,medicalClassification.money medicalMoney,
+               (registrationLevel.price+medicalClassification.money) totalMoney,CONCAT(DATE_FORMAT(me.reserveDate,'%Y年%m月%d日'),doctorTime.value) reserveTime,
+               me.queueNumber,DATE_FORMAT(me.appointmentTime,'%Y年%m月%d日 %H时%i分') appointmentTime,me.status statusCoding,generalStatus.value status
+        FROM medicalTechnologyReserve me
+                 INNER JOIN doctorInformation doctor ON doctor.id=me.doctorId
+                <if test="historyMedical.doctorName!=null">
+                    AND doctor.name LIKE CONCAT('%',#{historyMedical.doctorName},'%')
+                </if>
+                 INNER JOIN registrationLevel ON registrationLevel.id=doctor.registereId
+                 INNER JOIN general ON registrationLevel.name=general.coding
+                 INNER JOIN medicalClassification ON medicalClassification.id=me.medicalId
+                 INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClassification.medicalId
+                 INNER JOIN general doctorTime ON me.reserveTime=doctorTime.coding
+                 INNER JOIN general generalStatus ON generalStatus.coding=me.status
+        WHERE me.status IN ('GST03','GST04') AND me.patientId=#{patientId}
+    </select>
+    <select id="findDiagnoseReportDataByPatient" resultType="java.util.Map">
+        SELECT general.value projectName,medicalTechnology.technologyname,medicalClass.name,patient.name patientName,patient.age patientAge,generalSex.value patientSex,
+               doctor.name doctorName,patient.identityNumber,medical.inspectionReport,medical.checkParts
+        FROM medicalTechnologyReserve medical
+                 INNER JOIN patientInformation patient ON medical.patientId=patient.id
+                 INNER JOIN doctorInformation doctor ON doctor.id=medical.doctorId
+                 INNER JOIN medicalClassification medicalClass ON medicalClass.id=medical.medicalId
+                 INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClass.medicalId
+                 INNER JOIN general ON medicalTechnology.projectName=general.coding
+                 INNER JOIN general generalSex ON generalSex.coding=patient.sex
+        WHERE medical.id=#{id} AND medical.patientId=#{patientId}
+    </select>
+    <select id="findBindOrderIdMedicalList" resultType="java.util.Map">
+        SELECT general.value doctorRegis,me.id,doctor.name,registrationLevel.price regisMoney,medicalClassification.money medicalMoney,
+               (registrationLevel.price+medicalClassification.money) totalMoney,CONCAT(DATE_FORMAT(me.reserveDate,'%Y年%m月%d日'),doctorTime.value) reserveTime,
+               me.queueNumber,DATE_FORMAT(me.appointmentTime,'%Y年%m月%d日 %H时%i分') appointmentTime,me.status statusCoding,generalStatus.value status
+        FROM medicalTechnologyReserve me
+                 INNER JOIN doctorInformation doctor ON doctor.id=me.doctorId
+                 INNER JOIN registrationLevel ON registrationLevel.id=doctor.registereId
+                 INNER JOIN general ON registrationLevel.name=general.coding
+                 INNER JOIN medicalClassification ON medicalClassification.id=me.medicalId
+                 INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClassification.medicalId
+                 INNER JOIN general doctorTime ON me.reserveTime=doctorTime.coding
+                 INNER JOIN general generalStatus ON generalStatus.coding=me.status
+        WHERE me.reserveId=#{orderId} AND me.status NOT IN ('GST02','GST04') AND me.patientId=#{patientId}
+        ORDER BY statusCoding DESC
+    </select>
+
+    <select id="findHistoryBingOrderIdMedicalList" resultType="java.util.Map">
+        SELECT general.value doctorRegis,me.id,doctor.name,registrationLevel.price regisMoney,medicalClassification.money medicalMoney,
+               (registrationLevel.price+medicalClassification.money) totalMoney,CONCAT(DATE_FORMAT(me.reserveDate,'%Y年%m月%d日'),doctorTime.value) reserveTime,
+               me.queueNumber,DATE_FORMAT(me.appointmentTime,'%Y年%m月%d日 %H时%i分') appointmentTime,me.status statusCoding,generalStatus.value status
+        FROM medicalTechnologyReserve me
+                 INNER JOIN doctorInformation doctor ON doctor.id=me.doctorId
+                 INNER JOIN registrationLevel ON registrationLevel.id=doctor.registereId
+                 INNER JOIN general ON registrationLevel.name=general.coding
+                 INNER JOIN medicalClassification ON medicalClassification.id=me.medicalId
+                 INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClassification.medicalId
+                 INNER JOIN general doctorTime ON me.reserveTime=doctorTime.coding
+                 INNER JOIN general generalStatus ON generalStatus.coding=me.status
+        WHERE  me.status NOT IN ('GST02','GST04') AND me.patientId=#{patientId}
+        ORDER BY statusCoding DESC
+    </select>
+
+
+</mapper>

@@ -43,7 +43,7 @@
 import { computed, onMounted } from "vue";
 import { useSidebarStore } from '../store/sidebar'
 import { useRouter } from "vue-router";
-import {getAppointmentNumber} from "../api/api";
+import {findCurrentAppointment, getAppointmentNumber, getAppointmentNumberMedicalTechnology} from "../api/api";
 export default {
     setup() {
         const user = JSON.parse(localStorage.getItem("doctor"));
@@ -80,11 +80,24 @@ export default {
             handleCommand,
         };
     },mounted() {
-    getAppointmentNumber(JSON.parse(localStorage.getItem("doctor")).id).then((res) => {
-      if (res.data.msgId == 'C200') {
-        localStorage.setItem('appointmentNumber', res.data.result.allAppointmentNumber-res.data.result.appointmentNumber-res.data.result.overAppointmentNumber)
+    let configs={
+      headers: {
+        token: sessionStorage.getItem('permissionToken')
       }
-    })
+    };
+    if(this.user.did==='DE006'){
+      getAppointmentNumberMedicalTechnology(configs).then((res) => {
+        if (res.data.msgId == 'C200') {
+          localStorage.setItem('appointmentNumber', res.data.result.allAppointmentNumber-res.data.result.appointmentNumber-res.data.result.overAppointmentNumber)
+        }
+      })
+    }else{
+      getAppointmentNumber(JSON.parse(localStorage.getItem("doctor")).id,configs).then((res) => {
+        if (res.data.msgId == 'C200') {
+          localStorage.setItem('appointmentNumber', res.data.result.allAppointmentNumber-res.data.result.appointmentNumber-res.data.result.overAppointmentNumber)
+        }
+      })
+    }
   }
 };
 </script>

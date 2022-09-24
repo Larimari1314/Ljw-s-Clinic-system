@@ -61,6 +61,10 @@ export default {
     submitForm() {
       this.$refs.param.validate((valid) => {
         if (valid) {
+          sessionStorage.removeItem('permissionToken');
+          localStorage.removeItem('doctor');
+          localStorage.removeItem('loginTime');
+          localStorage.removeItem('appointmentNumber');
           loginDoctor(this.param).then((res)=>{
             if(res.data.msgId==='C200'){
               ElMessage.success("登录成功");

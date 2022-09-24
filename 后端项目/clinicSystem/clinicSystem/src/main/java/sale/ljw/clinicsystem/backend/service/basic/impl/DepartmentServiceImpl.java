@@ -108,6 +108,17 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             return JSON.toJSONString(ResponseResult.getErrorResult("C405"));
         }
     }
+
+    @Override
+    public String findAllReserveDepartmentList(FindDepartmentByAdmin department) {
+        QueryWrapper<Department> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNoneBlank(department.getName()), "name", department.getName())
+                .notIn("id","DE006","DE005","DE007");
+        PageHelper.startPage(department.getPage(), 5);
+        List<Department> list = list(queryWrapper);
+        PageInfo pageInfo = new PageInfo(list);
+        return JSON.toJSONString(ResponseResult.getSuccessResult(pageInfo));
+    }
 }
 
 

@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column prop="name" label="医生姓名">
       </el-table-column>
-      <el-table-column prop="reserveTime" label="预约时间" sortable>
+      <el-table-column prop="reserveTime" label="预约时间" width="200px" sortable>
       </el-table-column>
       <el-table-column prop="departmentName" label="预约科室">
       </el-table-column>

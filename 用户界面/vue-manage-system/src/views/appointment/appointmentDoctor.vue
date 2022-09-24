@@ -108,7 +108,11 @@
 <script>
 import {
   confirmAppointment,
-  findAllDepartment, getAppointmentInformation, getAppointmentTime, getDoctorListByDepartment, getOnDutyHours,
+  findAllReserveDepartmentList,
+  getAppointmentInformation,
+  getAppointmentTime,
+  getDoctorListByDepartment,
+  getOnDutyHours,
 } from '../../api/api';
 import {ElMessage, ElMessageBox} from "element-plus";
 
@@ -335,7 +339,7 @@ export default {
           token: sessionStorage.getItem('permissionToken')
         }
       };
-      findAllDepartment(para,configs).then((res) => {
+      findAllReserveDepartmentList(para,configs).then((res) => {
         if (res.data.msgId == 'C200') {
           this.department = res.data.result.list;
           this.total = res.data.result.total

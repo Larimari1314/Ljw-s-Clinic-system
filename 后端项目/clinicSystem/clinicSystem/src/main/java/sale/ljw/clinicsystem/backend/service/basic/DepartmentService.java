@@ -20,4 +20,6 @@ public interface DepartmentService extends IService<Department> {
     String editDepartment(EditDepartmentByAdmin department, MultipartFile multipartFile);
 
     String addDepartment(AddDepartmentByAdmin department, MultipartFile multipartFile);
+
+    String findAllReserveDepartmentList(FindDepartmentByAdmin department);
 }

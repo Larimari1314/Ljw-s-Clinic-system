@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.order.MedicaltechnologyMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.order.Medicaltechnology">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="departmentid" column="departmentId" jdbcType="VARCHAR"/>
+            <result property="projectname" column="projectName" jdbcType="CHAR"/>
+            <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
+            <result property="technologyname" column="technologyname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,departmentId,projectName,
+        introduce,technologyname
+    </sql>
+    <select id="getMedicalProjectNameList" resultType="java.util.Map">
+        SELECT coding id,value
+        FROM general
+        WHERE coding LIKE 'GM%';
+    </select>
+
+    <select id="findMedicalTechnologyList" resultType="map">
+        SELECT medicalTechnology.id,department.name,general.value
+        projectName,medicalTechnology.introduce,medicalTechnology.technologyname,department.id did
+        FROM medicalTechnology
+        INNER JOIN department ON department.id=medicalTechnology.departmentId
+        INNER JOIN general ON general.coding=medicalTechnology.projectName
+        <where>
+            <if test="name!=null &amp;&amp; name!=''">
+                technologyname LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="(name!=null &amp;&amp; name!='') &amp;&amp; (medicalId!=null &amp;&amp; medicalId!='')">
+                AND
+            </if>
+            <if test="medicalId!=null &amp;&amp; medicalId!=''">
+                projectName=#{medicalId}
+            </if>
+        </where>
+
+    </select>
+</mapper>

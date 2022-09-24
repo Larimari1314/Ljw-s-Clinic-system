@@ -53,8 +53,16 @@
           <el-tooltip
               class="box-item"
               effect="dark"
-              content="配药"
+              content="查看患者医技报告单"
               placement="left-start">
+            <el-button  round size="small" :disabled="users[scope.$index].COUNT==0" @click="viewTheReport(scope.$index, scope.row)" icon="el-icon-view" circle>
+            </el-button>
+          </el-tooltip>
+          <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="配药"
+              placement="top">
           <el-button  type="primary" round size="small" @click="editAppointmentPatient(scope.$index, scope.row)" icon="el-icon-edit" circle>
           </el-button>
           </el-tooltip>
@@ -77,6 +85,51 @@
                      style="float:right;">
       </el-pagination>
     </el-col>
+
+
+    <el-dialog title="当前患者报告" v-model="viewReportDialog" width="60%">
+      <el-tabs v-model="activeTopName" class="demo-tabs" @tab-click="handleClick">
+        <el-tab-pane label="当前订单绑定报告" name="first" :disabled="top1">
+          <el-table :data="medicalTableData" style="width: 100%">
+            <el-table-column prop="id" label="报告id" />
+            <el-table-column prop="name" label="就诊医师"  />
+            <el-table-column prop="reserveTime" label="预约时间" />
+            <el-table-column prop="totalMoney" label="总金额" />
+            <el-table-column prop="status" label="订单状态">
+              <template v-slot="scope">
+                <el-tag class="ml-2" type="success" v-if="medicalTableData[scope.$index].statusCoding==='GST03'">已完成</el-tag>
+                <el-tag class="ml-2" type="warning"  v-if="medicalTableData[scope.$index].statusCoding==='GST01'">订单未付款</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template v-slot="scope">
+                <el-button type="success" size="small" @click="viewReport(scope.$index, scope.row)" icon="el-icon-view" :disabled="medicalTableData[scope.$index].statusCoding==='GST01'">查看报告</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="历史报告" name="second" :disabled="top2">
+          <el-table :data="medicalTableDataHistory" style="width: 100%">
+            <el-table-column prop="id" label="报告id" />
+            <el-table-column prop="name" label="就诊医师"  />
+            <el-table-column prop="reserveTime" label="预约时间" />
+            <el-table-column prop="totalMoney" label="总金额" />
+            <el-table-column prop="status" label="订单状态">
+              <template v-slot="scope">
+                <el-tag class="ml-2" type="success" v-if="medicalTableDataHistory[scope.$index].statusCoding==='GST03'">已完成</el-tag>
+                <el-tag class="ml-2" type="warning"  v-if="medicalTableDataHistory[scope.$index].statusCoding==='GST01'">订单未付款</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template v-slot="scope">
+                <el-button type="success" size="small" @click="viewReport(scope.$index, scope.row)" icon="el-icon-view" :disabled="medicalTableDataHistory[scope.$index].statusCoding==='GST01'">查看报告</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+
 
     <el-dialog title="为预约患者配药" v-model="viewAppointmentPatients" width="60%">
       <el-select
@@ -168,8 +221,8 @@ import {
   addDrugByPatient,
   cancelAppointment,
   checkOrderDrug, checkOrderInformation, confirmAppointment, endAppointmentByDoctor,
-  findAllByAllDuty, findCurrentAppointment, findDepartmentCoding, findDrugByDrugName,
-  findDutyTimeCoding, getAppointmentTime, getOnDutyHours,
+  findAllByAllDuty, findBindOrderIdMedicalList, findCurrentAppointment, findDepartmentCoding, findDrugByDrugName,
+  findDutyTimeCoding, findHistoryBingOrderIdMedicalList, getAppointmentTime, getOnDutyHours,
   getTotalPrice, remindPatientNumber, removeDrug, searchMedicinesRemotely
 } from '../../api/api';
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -177,6 +230,12 @@ import {ElMessage, ElMessageBox} from "element-plus";
 export default {
   data() {
     return {
+      medicalTableDataHistory:[],
+      medicalTableData:[],
+      top1:true,
+      top2:true,
+      activeTopName:'',
+      viewReportDialog:false,
       newDrugList:[],
       reserveId:'',
       drugNumber:0,
@@ -216,6 +275,50 @@ export default {
     }
   },
   methods: {
+    viewReport(index,row){
+      window.open("http://localhost:3000/#/viewTestReport/"+row.id,"_blank");
+    },
+    viewTheReport(index,row){
+      let para={
+        orderId:row.id,
+        patientId:row.patientId
+      }
+      let configs={
+        headers: {
+          token: sessionStorage.getItem('permissionToken')
+        }
+      };
+      findBindOrderIdMedicalList(para,configs).then((res)=>{
+        if(res.data.msgId==='C200'){
+          //表示当前患者存在医技报告，开启按钮
+          this.top1=false;
+          this.top2=false;
+          this.activeTopName='first';
+          this.medicalTableData=res.data.result;
+          this.viewReportDialog=true;
+        }else if(res.data.msgId==='C404'){
+          //不存在将页面转移到第二个界面，并查询历史订单
+          findHistoryBingOrderIdMedicalList(row.patientId,configs).then((res)=>{
+            if(res.data.msgId==='C404'){
+              this.viewReportDialog=false;
+              ElMessage({
+                type: 'error',
+                message: '报告状态异常',
+              })
+            }else if(res.data.msgId==='C200'){
+              this.viewReportDialog=true;
+              this.top1=true;
+              this.top2=false;
+              this.activeTopName='second';
+              this.medicalTableDataHistory=res.data.result
+            }
+          })
+        }
+      })
+    },
+    handleClick (tab,event)  {
+      console.log(tab, event)
+    },
     removeDrug(index,row){
       ElMessageBox.confirm(
           '确定为该订单删除此药品吗?',

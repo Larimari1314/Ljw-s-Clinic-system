@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.order.MedicalclassificationMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.order.Medicalclassification">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="medicalid" column="medicalId" jdbcType="VARCHAR"/>
+            <result property="money" column="money" jdbcType="DOUBLE"/>
+            <result property="maxnumber" column="maxNumber" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,medicalId,money,
+        maxNumber,name
+    </sql>
+    <select id="getMedicalClassificationList" resultType="java.util.Map">
+        SELECT medicalTechnology.technologyname,medicalClassification.id,medicalClassification.money,medicalClassification.name
+        FROM medicalClassification
+                 INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClassification.medicalId
+        WHERE medicalClassification.medicalId=#{id}
+    </select>
+</mapper>

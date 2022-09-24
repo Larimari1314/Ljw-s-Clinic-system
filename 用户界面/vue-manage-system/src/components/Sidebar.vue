@@ -45,6 +45,10 @@ export default {
         index: "/appointmentDoctor",
         title: "预约医生",
       },  {
+        icon: "el-icon-connection",
+        index: "/medicalTechnologyAppointment",
+        title: "医技预约",
+      },  {
         icon: "el-icon-lx-calendar",
         index: "3",
         title: "当前信息",
@@ -64,7 +68,10 @@ export default {
         subs: [
           {
             index: "/historyOrder",
-            title: "历史订单",
+            title: "预约历史订单",
+          },{
+          index: "/medicalTechnologyOrder",
+            title: "医技预约历史订单",
           },
           {
             index: "/unpaidOrder",

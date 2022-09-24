@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sale.ljw.clinicsystem.backend.dao.basic.MedicaldoctorMapper">
+
+    <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.basic.Medicaldoctor">
+        <result property="medicalid" column="medicalId" jdbcType="VARCHAR"/>
+        <result property="doctorid" column="doctorId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        medicalId
+        ,doctorId
+    </sql>
+    <select id="findMedicalResultCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM medicalDoctor
+        WHERE medicalDoctor.doctorId = #{doctorid}
+          AND medicalDoctor.medicalId =
+              (SELECT medicalId FROM medicalClassification WHERE medicalClassification.id = #{medicalid})
+    </select>
+</mapper>

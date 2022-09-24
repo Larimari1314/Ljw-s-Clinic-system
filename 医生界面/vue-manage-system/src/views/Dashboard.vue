@@ -72,7 +72,7 @@
                 <span style="text-align: left">
                   患者：{{ item.patientName }}，将于{{ item.reserveTime }}进行预约，请医生提前准备 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
-                <span style="text-align: right"><el-link type="info" href="http://localhost:3000/#/currentAppointment">前往就诊界面</el-link></span>
+                <span style="text-align: right"><el-link type="info" :href="httpServlet">前往就诊界面</el-link></span>
               </p>
             </el-scrollbar>
           </template>
@@ -83,40 +83,61 @@
 </template>
 
 <script>
-import {findCurrentAppointment, getAppointmentNumber} from "../api/api";
+import {
+  findCurrentAppointment,
+  findCurrentAppointmentMedicalTechnology,
+  getAppointmentNumber,
+  getAppointmentNumberMedicalTechnology
+} from "../api/api";
 
 export default {
   data() {
     return {
+      httpServlet:'',
       loginTime: localStorage.getItem("loginTime"),
       user: JSON.parse(localStorage.getItem("doctor")),
       appointmentNumber: [],
       appointmentList: []
     }
   },
-  methods: {}, mounted() {
+  methods: {},
+  mounted() {
     let configs={
       headers: {
         token: sessionStorage.getItem('permissionToken')
       }
     };
-    getAppointmentNumber(this.user.id,configs).then((res) => {
-      if (res.data.msgId == 'C200') {
-        this.appointmentNumber = res.data.result
+    if(this.user.did=='DE006'){
+      this.httpServlet='http://localhost:3000/#/medicalTechnologyCurrentAppointment';
+      findCurrentAppointmentMedicalTechnology(configs).then((res)=>{
+        if (res.data.msgId === "C200") {
+          this.appointmentList = res.data.result.list
+        }
+      })
+      getAppointmentNumberMedicalTechnology(configs).then((res)=>{
+        if (res.data.msgId == 'C200') {
+          this.appointmentNumber = res.data.result
+        }
+      })
+    }else{
+      this.httpServlet='http://localhost:3000/#/currentAppointment';
+      getAppointmentNumber(this.user.id,configs).then((res) => {
+        if (res.data.msgId == 'C200') {
+          this.appointmentNumber = res.data.result
+        }
+      })
+      let para = {
+        page: 1,
+        patientName: '',
+        doctorId: JSON.parse(localStorage.getItem("doctor")).id,
+        orderId: ''
       }
-    })
-
-    let para = {
-      page: 1,
-      patientName: '',
-      doctorId: JSON.parse(localStorage.getItem("doctor")).id,
-      orderId: ''
+      findCurrentAppointment(para,configs).then((res) => {
+        if (res.data.msgId === "C200") {
+          this.appointmentList = res.data.result.list
+        }
+      })
     }
-    findCurrentAppointment(para,configs).then((res) => {
-      if (res.data.msgId === "C200") {
-        this.appointmentList = res.data.result.list
-      }
-    })
   }
 };
 </script>

@@ -21,4 +21,9 @@
     <update id="updateByIdToPermission" parameterType="string">
         UPDATE doctorLogin SET permission=0 WHERE id=#{id}
     </update>
+
+    <select id="login" resultType="doctorlogin">
+        SELECT id,loginName,loginPhone,loginEmail,password,permission FROM doctorLogin WHERE (password = #{password}
+            AND (LoginName = #{loginCredentials} OR LoginPhone = #{loginCredentials} OR LoginEmail = #{loginCredentials}))
+    </select>
 </mapper>

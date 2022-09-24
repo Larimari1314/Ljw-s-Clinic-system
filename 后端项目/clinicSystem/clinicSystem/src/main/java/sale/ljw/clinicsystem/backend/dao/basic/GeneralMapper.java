@@ -20,7 +20,7 @@ import java.util.Objects;
 public interface GeneralMapper extends BaseMapper<General> {
     public abstract ArrayList<Map<String, Objects>> findDutyTimeCoding();
     public abstract ArrayList<Map<String, Objects>> selectAllByAllDuty();
-
+    public abstract ArrayList<Map<String,Objects>> findDutyTimeByCoding(String coding);
 }
 
 

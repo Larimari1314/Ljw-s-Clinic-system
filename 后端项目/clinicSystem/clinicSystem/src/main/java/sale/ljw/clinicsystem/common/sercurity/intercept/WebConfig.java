@@ -16,6 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(permissionCheck).addPathPatterns("/**").excludePathPatterns(
                 "/loginAdmin/GetAllAds",
                 "/loginAdmin/getAdminImgUrl/**",
+                "/patientInformationByPatient/upload",
+                "/patientInformationByPatient/registerAccountByPatient",
                 "/loginAdmin/login",
                 "/loginAdmin/logout",
                 "/loginAdmin/upload",
@@ -38,8 +40,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "/departmentByPatient/scanPayStatus/**",
                 "/orderByPatient/scanPayStatusOrder/**",
                 "/orderByPatient/payingOrder/**",
-                "/patientInformationByPatient/upload",
-                "/patientInformationByPatient/registerAccountByPatient"
+                "/medicalTechnologyByPatient/scanPayStatusMedical/**",
+                "/medicalTechnologyByPatient/paying/**"
         );
     }
 }
