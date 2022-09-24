@@ -2,9 +2,12 @@ package sale.ljw.clinicsystem.backend.dao.basic;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.basic.admin.DisplayDataDoctorInformation;
 import sale.ljw.clinicsystem.backend.form.basic.patient.MedicalTechnologyAppointmentForm;
 import sale.ljw.clinicsystem.backend.pojo.basic.Medicaldoctor;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.ArrayList;
 
 /**
 * @author 86155
@@ -16,6 +19,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @Repository
 public interface MedicaldoctorMapper extends BaseMapper<Medicaldoctor> {
     Integer findMedicalResultCount(MedicalTechnologyAppointmentForm medicalTechnology);
+
+    ArrayList<DisplayDataDoctorInformation> findDoctorByMedicalId(String id);
 }
 
 

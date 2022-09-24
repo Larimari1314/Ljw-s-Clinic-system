@@ -296,8 +296,6 @@ export default {
           this.activeTopName='first';
           this.medicalTableData=res.data.result;
           this.viewReportDialog=true;
-        }else if(res.data.msgId==='C404'){
-          //不存在将页面转移到第二个界面，并查询历史订单
           findHistoryBingOrderIdMedicalList(row.patientId,configs).then((res)=>{
             if(res.data.msgId==='C404'){
               this.viewReportDialog=false;
@@ -306,13 +304,15 @@ export default {
                 message: '报告状态异常',
               })
             }else if(res.data.msgId==='C200'){
-              this.viewReportDialog=true;
-              this.top1=true;
-              this.top2=false;
-              this.activeTopName='second';
               this.medicalTableDataHistory=res.data.result
             }
           })
+        }else if(res.data.msgId==='C404'){
+          //不存在将页面转移到第二个界面，并查询历史订单
+          this.viewReportDialog=true;
+          this.top1=true;
+          this.top2=false;
+          this.activeTopName='second';
         }
       })
     },

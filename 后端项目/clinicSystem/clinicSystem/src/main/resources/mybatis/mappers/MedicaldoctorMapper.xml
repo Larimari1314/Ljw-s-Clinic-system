@@ -7,6 +7,7 @@
     <resultMap id="BaseResultMap" type="sale.ljw.clinicsystem.backend.pojo.basic.Medicaldoctor">
         <result property="medicalid" column="medicalId" jdbcType="VARCHAR"/>
         <result property="doctorid" column="doctorId" jdbcType="VARCHAR"/>
+        <result property="optimisticLocking" column="optimisticLocking" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -19,5 +20,12 @@
         WHERE medicalDoctor.doctorId = #{doctorid}
           AND medicalDoctor.medicalId =
               (SELECT medicalId FROM medicalClassification WHERE medicalClassification.id = #{medicalid})
+    </select>
+    <select id="findDoctorByMedicalId"
+            resultType="sale.ljw.clinicsystem.backend.form.basic.admin.DisplayDataDoctorInformation">
+        SELECT doctor.name,doctor.id
+        FROM medicalDoctor
+                 INNER JOIN doctorInformation doctor ON medicalDoctor.doctorId=doctor.id
+        WHERE medicalDoctor.medicalId=#{id}
     </select>
 </mapper>

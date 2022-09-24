@@ -87,3 +87,13 @@ export const dataRecoveryDrug = (params,config) => { return axios.get(`${bases}/
 export const getDeleteUser = (params,config) => { return axios.post(`${bases}/patientInformation/getDeleteData`,params,config); };
 export const deletePermanentlyUser = (params,config) => { return axios.get(`${bases}/patientInformation/deleteById/`+params,config); };
 export const dataRecoveryUser = (params,config) => { return axios.get(`${bases}/patientInformation/recoveryData/`+params,config); };
+
+/*医技表数据*/
+export const findAllMedicalTechnology = (params,config) => { return axios.post(`${bases}/medicalTechnologyByAdmin/findAllMedicalTechnology`,params,config); };
+export const getMedicalProjectNameList = (config) => { return axios.get(`${bases}/medicalTechnologyByPatient/getMedicalProjectNameList`,config); };
+export const findAllMedicalDoctor = (config) => { return axios.get(`${bases}/medicalTechnologyByAdmin/findAllMedicalDoctor`,config); };
+export const editMedicalTechnology = (params,config) => { return axios.post(`${bases}/medicalTechnologyByAdmin/editMedicalTechnology`,params,config); };
+export const findAllMedicalClassification = (params,config) => { return axios.post(`${bases}/medicalTechnologyByAdmin/findAllMedicalClassification`,params,config); };
+export const editMedicalClassification = (params,config) => { return axios.post(`${bases}/medicalTechnologyByAdmin/editMedicalClassification`,params,config); };
+export const findMedicalTechnologyOrder = (params,config) => { return axios.post(`${bases}/medicalTechnologyByAdmin/findMedicalTechnologyOrder`,params,config); };
+export const viewTheReport = (params,config) => { return axios.get(`${bases}/medicalTechnologyOrderByPatient/viewTheReport/` + params,config); };

@@ -22,4 +22,16 @@
                  INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClassification.medicalId
         WHERE medicalClassification.medicalId=#{id}
     </select>
+    <select id="findAllMedicalClassification" resultType="java.util.Map">
+        SELECT medicalTechnology.technologyname,medicalTechnology.id medicalId,medicalClassification.id,medicalClassification.money,medicalClassification.maxNumber,medicalClassification.name
+        FROM medicalClassification
+        INNER JOIN medicalTechnology ON medicalClassification.medicalId=medicalTechnology.id
+            <where>
+                <if test="medicalName!=null">
+                <bind name="medicalNames" value="'%'+medicalName+'%'"/>
+                    medicalClassification.name LIKE #{medicalNames}
+                </if>
+            </where>
+        ORDER BY medicalClassification.id
+    </select>
 </mapper>
