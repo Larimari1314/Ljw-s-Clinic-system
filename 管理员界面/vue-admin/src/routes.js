@@ -15,6 +15,10 @@ import department from "./views/basicInformationMaintenance/department";
 import drug from "./views/basicInformationMaintenance/drug";
 import homeMain from "./views/home/homeMain";
 import dataRecovery from "./views/basicInformationMaintenance/dataRecovery";
+import medicalTechnologyManager from "./views/basicInformationMaintenance/medicalTechnologyManager";
+import medicalClassificationManager from "./views/basicInformationMaintenance/medicalClassificationManager";
+import medicalTechnologyOrderManager from "./views/basicInformationMaintenance/medicalTechnologyOrderManager";
+import viewTestReport from "./views/basicInformationMaintenance/viewTestReport";
 let routes = [
     {
         path: '/login',
@@ -26,6 +30,11 @@ let routes = [
         path: '/404',
         component: NotFound,
         name: '',
+        hidden: true
+    },{
+    path: '/viewTestReport/:id',
+        component: viewTestReport,
+        name:'',
         hidden: true
     },
     {
@@ -63,6 +72,7 @@ let routes = [
         children: [
             { path: '/reserveNotViewed', component: reserveNotViewed, name: '已预约信息查看' },
             { path: '/cancelAppointmentView', component: cancelAppointmentView, name: '撤销预约信息查看' },
+            {path: '/medicalTechnologyOrderManager',component: medicalTechnologyOrderManager,name: '医技订单管理'},
             { path: '/orderViewed', component: orderViewed, name: '查看全部订单情况' }
         ]
     },
@@ -78,6 +88,8 @@ let routes = [
             { path: '/dutyTime', component: dutyTime, name: '预约时间管理' },
             { path: '/registrationLevel', component: registrationLevel, name: '挂号级别管理' },
             { path: '/department', component: department, name: '科室管理' },
+            {path: '/medicalTechnologyManager',component: medicalTechnologyManager,name: '医技管理'},
+            {path: '/medicalClassificationManager',component: medicalClassificationManager,name: '医技技术管理'},
             { path: '/dataRecovery', component: dataRecovery, name: '数据恢复' }
         ]
     },

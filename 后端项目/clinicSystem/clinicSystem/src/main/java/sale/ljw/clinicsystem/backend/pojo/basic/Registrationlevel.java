@@ -33,6 +33,7 @@ public class Registrationlevel implements Serializable {
     /**
      * 版本号
      */
+
     private Integer version;
 
     @TableField(exist = false)

@@ -2,6 +2,9 @@ package sale.ljw.clinicsystem.backend.dao.order;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.basic.admin.DisplayDataMedicalTechnologyByAdmin;
+import sale.ljw.clinicsystem.backend.form.basic.admin.FindAllMedicalTechnologyByAdmin;
+import sale.ljw.clinicsystem.backend.form.basic.admin.FindMedicalTechnologyOrderByAdmin;
 import sale.ljw.clinicsystem.backend.form.basic.patient.FindMedicalTechnologyListByPatient;
 import sale.ljw.clinicsystem.backend.pojo.order.Medicaltechnology;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -22,6 +25,9 @@ public interface MedicaltechnologyMapper extends BaseMapper<Medicaltechnology> {
     ArrayList<Map<String, Object>> getMedicalProjectNameList();
     ArrayList<Map<String, Object>> findMedicalTechnologyList(FindMedicalTechnologyListByPatient medicalTechnology);
 
+    ArrayList<DisplayDataMedicalTechnologyByAdmin> findAllMedicalTechnology(FindAllMedicalTechnologyByAdmin medicalTechnology);
+
+    ArrayList<Map<String, Object>> findMedicalTechnologyOrder(FindMedicalTechnologyOrderByAdmin medicalTechnologyOrder);
 }
 
 

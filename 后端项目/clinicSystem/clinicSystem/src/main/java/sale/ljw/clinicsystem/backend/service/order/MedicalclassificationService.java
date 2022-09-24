@@ -1,5 +1,7 @@
 package sale.ljw.clinicsystem.backend.service.order;
 
+import sale.ljw.clinicsystem.backend.form.basic.admin.EditMedicalClassificationByAdmin;
+import sale.ljw.clinicsystem.backend.form.basic.admin.FindAllMedicalClassificationByAdmin;
 import sale.ljw.clinicsystem.backend.pojo.order.Medicalclassification;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -11,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface MedicalclassificationService extends IService<Medicalclassification> {
 
     String getMedicalClassificationList(String id);
+
+    String findAllMedicalClassification(FindAllMedicalClassificationByAdmin medicalClassification);
+
+    String editMedicalClassification(EditMedicalClassificationByAdmin medicalClassification);
 }

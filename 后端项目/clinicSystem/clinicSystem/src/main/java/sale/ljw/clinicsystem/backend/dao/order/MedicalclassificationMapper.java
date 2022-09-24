@@ -2,6 +2,7 @@ package sale.ljw.clinicsystem.backend.dao.order;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
+import sale.ljw.clinicsystem.backend.form.basic.admin.FindAllMedicalClassificationByAdmin;
 import sale.ljw.clinicsystem.backend.pojo.order.Medicalclassification;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -18,6 +19,8 @@ import java.util.Map;
 @Repository
 public interface MedicalclassificationMapper extends BaseMapper<Medicalclassification> {
     ArrayList<Map<String,Object>> getMedicalClassificationList(String id);
+
+    ArrayList<Map<String, Object>> findAllMedicalClassification(FindAllMedicalClassificationByAdmin medicalClassification);
 }
 
 

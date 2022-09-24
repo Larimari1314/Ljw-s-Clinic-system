@@ -11,6 +11,23 @@
             <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
             <result property="technologyname" column="technologyname" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap id="DisplayDataMedicalTechnology"
+               type="sale.ljw.clinicsystem.backend.form.basic.admin.DisplayDataMedicalTechnologyByAdmin">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="projectName" column="projectName" jdbcType="VARCHAR"/>
+        <result property="projectCoding" column="projectCoding" jdbcType="VARCHAR"/>
+        <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
+        <result property="technologyname" column="technologyname" jdbcType="VARCHAR"/>
+        <collection property="doctor"
+                    javaType="arrayList"
+                    ofType="sale.ljw.clinicsystem.backend.form.basic.admin.DisplayDataDoctorInformation"
+                    column="id"
+                    select="sale.ljw.clinicsystem.backend.dao.basic.MedicaldoctorMapper.findDoctorByMedicalId">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+        </collection>
+
+    </resultMap>
 
     <sql id="Base_Column_List">
         id,departmentId,projectName,
@@ -40,5 +57,42 @@
             </if>
         </where>
 
+    </select>
+    <select id="findAllMedicalTechnology"
+            resultMap="DisplayDataMedicalTechnology">
+        SELECT id,introduce,technologyname,general.value projectName,medicalTechnology.projectName projectCoding
+        FROM medicalTechnology
+                 INNER JOIN general ON medicalTechnology.projectName=general.coding
+        <where>
+            <if test="medicalName!=null">
+                medicalTechnology.technologyname LIKE CONCAT('%',#{medicalName},'%')
+            </if>
+            <if test="medicalName!=null &amp;&amp; medicalId!=null">
+                AND
+            </if>
+            <if test="medicalId!=null">
+                medicalTechnology.projectName=#{medicalId}
+            </if>
+        </where>
+    </select>
+    <select id="findMedicalTechnologyOrder" resultType="java.util.Map">
+        SELECT general.value doctorRegis,me.id,doctor.name,registrationLevel.price regisMoney,medicalClassification.money medicalMoney,
+               (registrationLevel.price+medicalClassification.money) totalMoney,CONCAT(DATE_FORMAT(me.reserveDate,'%Y年%m月%d日'),doctorTime.value) reserveTime,
+               me.queueNumber,DATE_FORMAT(me.appointmentTime,'%Y年%m月%d日 %H时%i分') appointmentTime,me.status statusCoding,generalStatus.value status
+        FROM medicalTechnologyReserve me
+                 INNER JOIN doctorInformation doctor ON doctor.id=me.doctorId
+                 INNER JOIN registrationLevel ON registrationLevel.id=doctor.registereId
+                 INNER JOIN general ON registrationLevel.name=general.coding
+                 INNER JOIN medicalClassification ON medicalClassification.id=me.medicalId
+                 INNER JOIN medicalTechnology ON medicalTechnology.id=medicalClassification.medicalId
+                 INNER JOIN general doctorTime ON me.reserveTime=doctorTime.coding
+                 INNER JOIN general generalStatus ON generalStatus.coding=me.status
+        <where>
+            <if test="orderId!=null">
+                <bind name="orderIds" value="'%'+orderId+'%'"/>
+                    me.id LIKE #{orderIds}
+            </if>
+        </where>
+        ORDER BY statusCoding DESC
     </select>
 </mapper>

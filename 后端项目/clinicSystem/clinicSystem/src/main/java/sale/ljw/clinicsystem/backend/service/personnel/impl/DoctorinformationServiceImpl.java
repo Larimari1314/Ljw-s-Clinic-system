@@ -590,6 +590,14 @@ public class DoctorinformationServiceImpl extends ServiceImpl<DoctorinformationM
         ArrayList<Map<String,Object>> lists=doctorinformationMapper.findDoctorListByDepartmentId(doctorListByMedical);
         return JSON.toJSONString(ResponseResult.getSuccessResult(lists));
     }
+
+    @Override
+    public String findAllMedicalDoctor() {
+        QueryWrapper<Doctorinformation> queryWrapper_0=new QueryWrapper<>();
+        queryWrapper_0.eq("did", "DE006").select("id","name");
+        List<Map<String, Object>> maps = doctorinformationMapper.selectMaps(queryWrapper_0);
+        return JSON.toJSONString(ResponseResult.getSuccessResult(maps));
+    }
 }
 
 

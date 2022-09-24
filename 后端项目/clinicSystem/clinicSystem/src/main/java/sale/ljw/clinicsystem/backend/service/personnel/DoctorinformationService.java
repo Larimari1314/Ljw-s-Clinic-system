@@ -55,4 +55,7 @@ public interface DoctorinformationService extends IService<Doctorinformation> {
     public abstract String getDoctorListByDepartment(String departmentId);
 
     public abstract String findDoctorListByDepartmentId(FindDoctorListByMedical doctorListByMedical);
+
+    String findAllMedicalDoctor();
+
 }
