@@ -75,3 +75,30 @@
 ![image](https://user-images.githubusercontent.com/87918586/188301330-e2f72b6c-9948-44b9-904c-757ae4b5188c.png)
 ### 数据恢复删除
 ![image](https://user-images.githubusercontent.com/87918586/188301344-347d03a1-5dde-41a5-a9f4-04a942832df2.png)
+
+## v1.1更新界面截图
+医生医技角色主页
+![image](https://user-images.githubusercontent.com/87918586/192399128-ec27ebab-65bb-41bb-bfc5-ff06fc448b7d.png)
+
+普通医生角色主页
+![image](https://user-images.githubusercontent.com/87918586/192399195-d010861a-02b2-4822-b7b1-79df681fde22.png)
+
+患者预约医技
+![image](https://user-images.githubusercontent.com/87918586/192399258-ac94578c-82a3-4a25-87f9-4d58bb70bb5b.png)
+![image](https://user-images.githubusercontent.com/87918586/192399276-76288965-8c78-40d8-afe3-e482062a8d3b.png)
+![image](https://user-images.githubusercontent.com/87918586/192399321-a4c803eb-ad67-4613-b1ff-598a240a568b.png)
+
+普通医生可查看患者历史报告
+![image](https://user-images.githubusercontent.com/87918586/192399419-e87a9679-404b-4918-ae20-a661dc891d89.png)
+
+医技医生为患者填写报告
+![image](https://user-images.githubusercontent.com/87918586/192399782-a41594f3-9057-418a-ad61-53f007a33845.png)
+
+患者查看并下载报告
+![image](https://user-images.githubusercontent.com/87918586/192399846-4a34ea24-5c86-4d38-b5b5-903cffbe97f5.png)
+
+管理员主页
+![image](https://user-images.githubusercontent.com/87918586/192399889-50deb03f-2264-4b54-a6c2-3476080dff89.png)
+管理员部分页面重复度偏高不再展示
+
+
