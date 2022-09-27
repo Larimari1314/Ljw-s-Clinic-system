@@ -36,7 +36,7 @@
 3、后端使用redis和mysql，修改application.yml中的参数文件，修改mysql地址和密码
 
 ## 网站展示图片
-
+### 患者、医生端部分展示界面
 患者登录端
 ![image](https://user-images.githubusercontent.com/87918586/188300980-dc36acf1-eefd-4ee1-b3ba-74c380cac86a.png)
 
