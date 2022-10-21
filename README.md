@@ -1,4 +1,5 @@
 # 诊所管理系统
+英文： [英文介绍](https://github.com/Larimari1314/Ljw-s-Clinic-system/edit/main/README.md)
 ## 目录
 <!--ts-->
 * [诊所管理系统](#诊所管理系统)
