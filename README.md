@@ -28,14 +28,14 @@ English： [English introduction](https://github.com/Larimari1314/Ljw-s-Clinic-s
 本系统完全由本人开发，现发布github作为技术交流使用，严禁向公众出租、发售该系统。如若违规，本人依法追究民事责任。
 
 ## 软件架构
-后端：后端使用Spring boot搭建环境，后台需开启redis
-前端：使用vue、element plus、axios等
-前后端分离项目
+后端：后端使用Spring boot搭建环境，后台需开启redis  
+前端：使用vue、element plus、axios等  
+前后端分离项目  
 
 ## 运行
-1、下载前端和后端文件
-2、前端运行前需要 npm i --legacy-peer-deps 命令
-3、后端使用redis和mysql，修改application.yml中的参数文件，修改mysql地址和密码
+1、下载前端和后端文件  
+2、前端运行前需要 npm i --legacy-peer-deps 命令  
+3、后端使用redis和mysql，修改application.yml中的参数文件，修改mysql地址和密码  
 
 ## 网站展示图片
 ### 患者、医生端部分展示界面
