@@ -71,7 +71,8 @@ export default {
               sessionStorage.setItem('permissionToken',res.headers['token'])
               localStorage.setItem("doctor", JSON.stringify(res.data.result));
               localStorage.setItem("loginTime",new Date().getFullYear() + "-" + (new Date().getMonth() + 1) +'-'+new Date().getDate() +'  '+new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds())
-              window.location.href = 'http://localhost:3000/#/dashboard';
+
+              window.location.href = 'http://'+window.location.host+'/#/dashboard';
             }else if(res.data.msgId==='C404'){
               ElMessage.error("账号不存在或密码错误请检查后输入");
             }
