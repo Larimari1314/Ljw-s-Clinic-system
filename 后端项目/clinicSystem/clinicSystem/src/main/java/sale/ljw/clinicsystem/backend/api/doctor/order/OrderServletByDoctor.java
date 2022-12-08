@@ -2,6 +2,8 @@ package sale.ljw.clinicsystem.backend.api.doctor.order;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.web.bind.annotation.*;
 import sale.ljw.clinicsystem.backend.form.basic.doctor.*;
 import sale.ljw.clinicsystem.backend.form.order.doctor.*;
@@ -111,5 +113,11 @@ public class OrderServletByDoctor {
     @PostMapping("/dispensingMedicine")
     public String dispensingMedicine(@RequestBody DispensingMedicineByDoctor checkOrder){
         return reserveService.dispensingMedicine(checkOrder);
+    }
+
+    @ApiOperation(value = "定时检测时候存在超时患者")
+    @Scheduled(cron = "0 0/30 * * * ?")
+    public void testingPatientsAppointments(){
+        reserveService.testingPatientsAppointments();
     }
 }

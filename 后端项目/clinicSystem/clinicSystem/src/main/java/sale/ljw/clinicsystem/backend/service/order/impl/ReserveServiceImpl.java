@@ -718,6 +718,11 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
         Integer number=reserveMapper.getRemindersNumber(patientId);
         return JSON.toJSONString(ResponseResult.getSuccessResult(number));
     }
+
+    @Override
+    public void testingPatientsAppointments() {
+        reserveMapper.testingPatientsAppointments();
+    }
 }
 
 
