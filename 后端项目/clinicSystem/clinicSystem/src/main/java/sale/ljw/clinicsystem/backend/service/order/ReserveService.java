@@ -93,4 +93,7 @@ public interface ReserveService extends IService<Reserve> {
     public abstract String cancelAppointmentBypatient(String orderId);
 
     public abstract String getRemindersNumber(String patientId);
+
+    void testingPatientsAppointments();
+
 }

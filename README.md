@@ -1,23 +1,4 @@
 # 诊所管理系统
-English： [English introduction](https://github.com/Larimari1314/Ljw-s-Clinic-system/blob/main/README-EN.md)
-## 目录
-<!--ts-->
-* [诊所管理系统](#诊所管理系统)
-   * [目录](#目录)
-   * [功能介绍：](#功能介绍)
-         * [V-1.1 更新说明](#v-11-更新说明)
-            * [注意](#注意)
-   * [软件架构](#软件架构)
-   * [运行](#运行)
-   * [网站展示图片](#网站展示图片)
-      * [患者、医生端部分展示界面](#患者医生端部分展示界面)
-      * [管理员端界面](#管理员端界面)
-      * [v1.1更新界面截图](#v11更新界面截图)
-
-<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
-<!-- Added by: runner, at: Fri Nov 11 00:02:56 UTC 2022 -->
-
-<!--te-->
 ## 功能介绍：
 诊所管理系统功能包括：患者预约、购药、订单查看、订单管理等，医生处理预约、发药、预约管理、订单处理等，管理员管理全部基本信息
 
@@ -33,12 +14,6 @@ English： [English introduction](https://github.com/Larimari1314/Ljw-s-Clinic-s
 前后端分离项目  
 
 ## 运行
-1、下载前端和后端文件  
-2、前端运行前需要 npm i --legacy-peer-deps 命令  
-3、后端使用redis和mysql，修改application.yml中的参数文件，修改mysql地址和密码  
-
-## 网站展示图片
-### 患者、医生端部分展示界面
 患者登录端
 ![image](https://user-images.githubusercontent.com/87918586/188300980-dc36acf1-eefd-4ee1-b3ba-74c380cac86a.png)
 
@@ -120,4 +95,3 @@ English： [English introduction](https://github.com/Larimari1314/Ljw-s-Clinic-s
 管理员主页
 ![image](https://user-images.githubusercontent.com/87918586/192399889-50deb03f-2264-4b54-a6c2-3476080dff89.png)
 管理员部分页面重复度偏高不再展示
-

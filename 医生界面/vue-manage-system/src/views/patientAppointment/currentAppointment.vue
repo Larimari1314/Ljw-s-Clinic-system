@@ -276,7 +276,7 @@ export default {
   },
   methods: {
     viewReport(index,row){
-      window.open("http://localhost:3000/#/viewTestReport/"+row.id,"_blank");
+      window.open('http://'+window.location.host+'/#/viewTestReport/'+row.id,"_blank");
     },
     viewTheReport(index,row){
       let para={

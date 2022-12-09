@@ -55,6 +55,8 @@ public interface ReserveMapper extends BaseMapper<Reserve> {
     ArrayList<Map<String, Object>> getAllCurrentAppointment(FindAllCurrentAppointmentByPatient currentAppointment);
 
     Integer getRemindersNumber(String patientId);
+
+    Integer testingPatientsAppointments();
 }
 
 

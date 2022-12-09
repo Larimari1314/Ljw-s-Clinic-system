@@ -108,7 +108,9 @@
             </foreach>
         </if>
     </update>
-
+    <update id="testingPatientsAppointments">
+        UPDATE reserve SET state=2 WHERE state=0 AND DATEDIFF(NOW(),reserveTime) > 1
+    </update>
     <select id="historyAppointment" resultType="java.util.Map">
         SELECT reserve.id,doctor.name doctorName,patient.name patientName,
         DATE_FORMAT(reserve.reserveTime, '%Y年%m月%d日 %H:%i') reserveTime,
