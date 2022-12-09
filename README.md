@@ -1,6 +1,4 @@
 # 诊所管理系统
-## 目录
-[TOC]
 ## 功能介绍：
 诊所管理系统功能包括：患者预约、购药、订单查看、订单管理等，医生处理预约、发药、预约管理、订单处理等，管理员管理全部基本信息
 
@@ -11,17 +9,11 @@
 本系统完全由本人开发，现发布github作为技术交流使用，严禁向公众出租、发售该系统。如若违规，本人依法追究民事责任。
 
 ## 软件架构
-后端：后端使用Spring boot搭建环境，后台需开启redis
-前端：使用vue、element plus、axios等
-前后端分离项目
+后端：后端使用Spring boot搭建环境，后台需开启redis  
+前端：使用vue、element plus、axios等  
+前后端分离项目  
 
 ## 运行
-1、下载前端和后端文件
-2、前端运行前需要 npm i --legacy-peer-deps 命令
-3、后端使用redis和mysql，修改application.yml中的参数文件，修改mysql地址和密码
-
-## 网站展示图片
-
 患者登录端
 ![image](https://user-images.githubusercontent.com/87918586/188300980-dc36acf1-eefd-4ee1-b3ba-74c380cac86a.png)
 
@@ -103,5 +95,3 @@
 管理员主页
 ![image](https://user-images.githubusercontent.com/87918586/192399889-50deb03f-2264-4b54-a6c2-3476080dff89.png)
 管理员部分页面重复度偏高不再展示
-
-
