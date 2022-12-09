@@ -240,7 +240,7 @@ export default {
               sessionStorage.setItem('permissionToken',token);
               localStorage.setItem("patient", JSON.stringify(res.data.result));
               localStorage.setItem("loginTime",new Date().getFullYear() + "-" + (new Date().getMonth() + 1) +'-'+new Date().getDate() +'  '+new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds())
-              window.location.href = 'http://192.168.1.106:3088/#/appointmentDoctor';
+              window.location.href = window.location.host+'/#/appointmentDoctor';
             }else if(res.data.msgId==='C404'){
               ElMessage.error("账号不存在或密码错误请检查后输入");
             }
